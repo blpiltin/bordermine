@@ -1,15 +1,16 @@
 {
   "all": {
+    "TEST_PUBLIC_ALL": "variable-for-public-all",
     "SITE_TITLE": "Bordermine",
-    "COPYRIGHT_URL": "http://www.bordermine.com",
-    "HOME_HOST": "localhost",
-    "TEST_PUBLIC_ALL": "variable-for-public-all"
+    "COPYRIGHT_URL": "http://www.bordermine.com"
   },
   "test": {
-    "TEST_PUBLIC_TEST": "variable-for-public-test"
+    "TEST_PUBLIC_TEST": "variable-for-public-test",
+    "HOME_HOST": "localhost"
   },
   "development": {
-    "TEST_PUBLIC_DEVELOPMENT": "variable-for-public-development"
+    "TEST_PUBLIC_DEVELOPMENT": "variable-for-public-development",
+    "HOME_HOST": "localhost"
   },
   "production": {
   }
