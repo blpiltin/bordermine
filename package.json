@@ -1,0 +1,53 @@
+{
+  "name": "bordermine",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENG=test\" && mocha \"./**/*$MATCH*_tests.js\" --exit",
+    "test-watch": "nodemon --exec 'npm test'"
+  },
+  "engines": {
+    "node": "10.15.0"
+  },
+  "author": "Brian Piltin",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "chai": "^4.2.0",
+    "chai-sorted": "^0.2.0",
+    "chromedriver": "^2.45.0",
+    "faker": "^4.1.0",
+    "gulp": "^4.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-svg-sprites": "^4.1.2",
+    "mocha": "^5.2.0",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "sinon": "^7.2.4",
+    "supertest": "^3.4.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.3.1",
+    "cookie-session": "^2.0.0-beta.3",
+    "express": "^4.16.4",
+    "express-flash-2": "^1.0.1",
+    "express-formidable": "^1.2.0",
+    "express-handlebars": "^3.0.0",
+    "fs-extra": "^7.0.1",
+    "handlebars": "^4.1.2",
+    "handlebars-helpers": "^0.10.0",
+    "http-errors": "^1.7.2",
+    "jquery": "^3.4.1",
+    "knex": "^0.16.3",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "nodemailer": "^5.1.1",
+    "objection": "^1.6.6",
+    "popper.js": "^1.14.7",
+    "sqlite3": "^4.0.6",
+    "uuid": "^3.3.2",
+    "yargs": "^13.2.1"
+  }
+}

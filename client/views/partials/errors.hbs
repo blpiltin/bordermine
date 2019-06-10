@@ -1,0 +1,20 @@
+
+  {{#if error}}
+    <div class="alert alert-danger" role="alert">
+      <strong>Danger Will Robinson, we've encountered the following problem:<br>
+      <ul><li>{{error}}</li></ul>
+      </strong>
+    </div>
+  {{/if}}
+
+  {{#if errors}}
+    <div class="alert alert-danger" role="alert">
+        <strong>Danger Will Robinson, we've encountered the following problems:<br>
+        <ul>
+          {{#each errors}}
+            <li>{{this.message}}</li>
+          {{/each}}
+        </ul>
+        </strong>
+    </div>
+  {{/if}}

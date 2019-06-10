@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col">
+    <h1>This is your course curriculum edit page.</h1>
+    <ul class="dashboard-instructions">
+    {{#unless course.objectives}}
+      <li>
+        A good place to start is by creating some course objectives. 
+        You can do this by <a href="{{user.editPath}}/course/{{course.id}}/objectives">clicking here</a>
+        or using the Objectives menu to the left.
+      </li>
+    {{/unless}}
+    {{#unless course.vocabularys}}
+      <li>
+        Another option is to creating some course vocabulary. 
+        You can do this by <a href="{{user.editPath}}/course/{{course.id}}/vocabularys">clicking here</a>
+        or using the Vocabluary menu to the left.
+      </li>
+    {{/unless}}
+    </ul>
+  </div>
+</div>

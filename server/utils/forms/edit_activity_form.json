@@ -1,0 +1,49 @@
+{
+  "edit_activity": {
+    "action": "{{user.editPath}}/course/{{fields.course_id}}/{{fields.type}}{{#if fields._id}}/{{fields._id}}{{/if}}",
+    "method": "post",
+    "submit": "Save",
+    "enctype": "multipart/form-data",
+    "fields": {
+      "title": {
+        "type": "text",
+        "label": "Title",
+        "placeholder": "Enter a {{fields.type}} title",
+        "required": true,
+        "requiredError": "Please enter a valid {{fields.type}} title. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.",
+        "pattern": "[^\\d_-]\\w+(\\w|\\d|-|\\s)*[a-zA-Z0-9]+$"
+      },
+      "slug": {
+        "type": "text",
+        "label": "Slug",
+        "placeholder": "Enter a slug, or autogenerate",
+        "required": true,
+        "requiredError": "Please enter a valid slug. Valid slugs begin with letters and can only include letters, numbers, underscores, and dashes.",
+        "pattern": "[^\\d_-]\\w+(\\w|\\d|-)*[a-zA-Z0-9]+$"
+      },
+      "description": {
+        "type": "textarea",
+        "rows": 5,
+        "label": "Description",
+        "placeholder": "Enter a {{fields.type}} description"
+      },
+      "summary": {
+        "type": "textarea",
+        "rows": 3,
+        "label": "Home Page Summary",
+        "placeholder": "Enter a summary for this {{fields.type}}'s listing on the home page"
+      },
+      "notes": {
+        "type": "textarea",
+        "rows": 5,
+        "label": "Notes",
+        "placeholder": "Enter any notes to help with the lesson here. These can be private or displayed after a reveal time (see below)."
+      },
+      "notesRevealTime": {
+        "type": "datetime-local",
+        "label": "Notes Reveal Time",
+        "placeholder": "Enter a time to reveal notes, or leave blank to keep private."
+      }
+    }
+  }
+}

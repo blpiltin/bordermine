@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-auto">
+    <h1 class="title-heading">{{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</h1>
+  </div>
+</div>
+<form class="needs-validation" novalidate action="{{user.editPath}}/course/{{course.id}}/objective{{#if fields.id}}/{{fields.id}}{{/if}}" method="post">
+  <div class="form-group form-row">
+    <div class="col-2">
+      <label for="code">Code</label>
+      <input id="code" class="form-control" type="text" name="code" placeholder="Enter a code" value="{{fields.code}}">
+    </div>
+    <div class="col">
+      <label for="text">Text</label>
+      <input id="text" class="form-control" type="text" name="text" placeholder="Enter the objective text" value="{{fields.text}}" required>
+      <div class="invalid-feedback">Please provide the text description for this objective.</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{back}}'">Cancel</button>
+</form>

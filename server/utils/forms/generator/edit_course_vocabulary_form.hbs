@@ -1,0 +1,28 @@
+<form class="needs-validation" novalidate action="{{user.editPath}}/course/{{course.id}}/vocabulary{{#if fields.id}}/{{fields.id}}{{/if}}" method="post">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="word">Word</label>
+      <input id="word" class="form-control" type="text" name="word" placeholder="Enter the vocabulary word" value="{{fields.word}}" required>
+      <div class="invalid-feedback">Please provide the word for this vocabulary.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="definition">Definition</label>
+      <input id="definition" class="form-control" type="text" name="definition" placeholder="Enter definition" value="{{fields.definition}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="image">Image</label>
+      <input id="image" class=" form-control-file btn btn-outline-secondary" type="file" name="image" pattern="[0-9a-zA-Z\._-]+\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)" accept="image/*">
+      <div class="invalid-feedback">Only image (.bpm, .png, .gif, and .jpg) file types allowed.</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{back}}'">Cancel</button>
+</form>

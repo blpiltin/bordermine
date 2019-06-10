@@ -1,0 +1,43 @@
+.main {
+  margin-top: 70px;
+}
+
+.sidebar .hidden {
+  display: none;
+}
+
+.sidebar a.nav-link {
+  font-size: 14pt;
+  color: white;
+}
+
+.sidebar .sub-menu a.nav-link {
+  color: yellow;
+  padding: 3px 15px 5px 15px;
+  float:right;
+}
+
+.sidebar .sub-menu .dropdown-divider {
+  width: 85%;
+  padding: 2px 0px 0px 0px;
+  margin: 5px auto;
+}
+
+.sidebar .icon {
+  fill: white;
+  width: 25px;
+  margin-left: 12px;
+}
+
+.hide {
+  margin-left: 10px;
+}
+
+#btnCollapse {
+  float: right;
+}
+
+#btnExpand {
+  float: right;
+  margin-left: 0px;
+}

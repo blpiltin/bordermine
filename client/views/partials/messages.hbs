@@ -1,0 +1,16 @@
+  {{#if message}}
+    <div class="alert alert-success" role="alert">
+      <strong>{{message}}</strong>
+    </div>
+  {{/if}}
+  
+  {{#if messages}}
+    <div class="alert alert-success" role="alert">
+      <strong>For your information:</strong>
+      <ul>
+        {{#each messages}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}

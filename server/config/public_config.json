@@ -1,0 +1,16 @@
+{
+  "all": {
+    "SITE_TITLE": "Bordermine",
+    "COPYRIGHT_URL": "http://www.bordermine.com",
+    "HOME_HOST": "localhost",
+    "TEST_PUBLIC_ALL": "variable-for-public-all"
+  },
+  "test": {
+    "TEST_PUBLIC_TEST": "variable-for-public-test"
+  },
+  "development": {
+    "TEST_PUBLIC_DEVELOPMENT": "variable-for-public-development"
+  },
+  "production": {
+  }
+}

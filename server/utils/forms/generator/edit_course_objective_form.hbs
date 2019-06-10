@@ -1,0 +1,20 @@
+<form class="needs-validation" novalidate action="{{user.editPath}}/course/{{fields.course_id}}/objective{{#if fields._id}}/{{fields._id}}{{/if}}" method="post">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="code">Code</label>
+      <input id="code" class="form-control" type="text" name="code" placeholder="Enter an optional code for this objective." value="{{fields.code}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="text">Text</label>
+      <input id="text" class="form-control" type="text" name="text" placeholder="Enter the text of this objective." value="{{fields.text}}" required>
+      <div class="invalid-feedback">Please provide the text description for this objective.</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary" id="btnSpin" type="button" style="visibility:hidden" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+</form>

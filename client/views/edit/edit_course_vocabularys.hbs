@@ -1,0 +1,338 @@
+<style>
+
+  .cm-edit-list-header-row {
+    padding: 10px 0px 5px 0px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+
+  .cm-edit-list-header-row .cm-edit-list-field-text {
+    font-weight: bolder;
+    font-size: larger;
+    margin-right: 3px;
+  }
+
+  .cm-edit-list-data-row {
+    padding: 5px 0px;
+  }
+
+  .cm-edit-list-field { 
+    margin-top: 5px; 
+    margin-bottom: 0px;
+  }
+
+  .cm-edit-list-footer-row {
+    margin-top: 5px;
+    border-top: 1px solid #ccc;
+    padding: 10px 0px;
+  }
+
+  .cm-sort-icon.cm-sort-desc {
+    margin-left: -5px;
+  }
+
+  .icon {
+    display:inline;
+    width: 25px;
+    margin-bottom: 2px;
+  }
+
+  .cm-sort-remove .icon {
+    width: 20px;
+  }
+
+  .cm-search-icon {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  .cm-search {
+    display: inline;
+    margin-right: 15px;
+  }
+
+  .cm-search input {
+    display: inline;
+    width: 250px;
+  }
+
+</style>
+
+<div class="row cm-edit-list-title-row">
+  <div class="col-auto">
+    <h1 class="title-heading" style="display:inline;">{{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</h1>
+    <div class="spinner-border cm-hidden" id="spinner" role="status" style="margin-left:10px;margin-bottom:2px;">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+  <div class="col text-right" style="margin-top:12px;margin-right:15px;">
+    <button type="button" class="btn btn-outline-secondary cm-toggle-enabled" id="btnView" onclick="location.href='{{user.userPath}}/course/{{course.id}}/vocabularys'">Live View</button>
+  </div>
+</div>
+<div class="container cm-edit-list-body">
+  <div class="row cm-edit-list-header-row">
+    <div class="col-2 cm-edit-list-field" style="width:150px">
+      <span class="cm-edit-list-field-text">Word</span>
+      <span class="cm-edit-list-sort-icons">
+        <a class="cm-sort-icon cm-sort-asc" id="lnkSortWordAsc" href="vocabularys?sort=word{{getParamsA filter 'page,search'}}">{{icon "arrow-down"}}</a>
+        <a class="cm-sort-icon cm-sort-remove cm-hidden" id="lnkSortWordRemove" href="vocabularys{{getParamsQ filter 'page,search'}}">{{icon "no"}}</a>
+        <a class="cm-sort-icon cm-sort-desc" id="lnkSortWordDesc" href="vocabularys?sort=word&dir=desc{{getParamsA filter 'page,search'}}">{{icon "arrow-up"}}</a>
+      </span>
+    </div>
+    <div class="col-2 cm-edit-list-field">
+      <span class="cm-edit-list-field-text">Definition</span>
+      <span class="cm-edit-list-sort-icons">
+        <a class="cm-sort-icon cm-sort-asc" id="lnkSortDefinitionAsc" href="vocabularys?sort=definition{{getParamsA filter 'page,search'}}">{{icon "arrow-down"}}</a>
+        <a class="cm-sort-icon cm-sort-remove cm-hidden" id="lnkSortDefinitionRemove" href="vocabularys{{getParamsQ filter 'page,search'}}">{{icon "no"}}</a>
+        <a class="cm-sort-icon cm-sort-desc" id="lnkSortDefinitionDesc" href="vocabularys?sort=definition&dir=desc{{getParamsA filter 'page,search'}}">{{icon "arrow-up"}}</a>
+      </span>
+    </div>
+    <div class="col-8 text-right">
+      <div class="cm-search">
+        <input type="text" id="txtSearch" class="form-control" name="search" placeholder="Enter search text here" onkeypress="cmSearch(event)" value="{{filter.search}}">
+        <a class="cm-search-icon" title="Click me to search" onclick="cmSearch()" href="javascript:void(0)">{{icon "search"}}</a>
+      </div>
+      <span class="cm-edit-list-field" id="lblSelect">
+        Select
+      </span>
+      <div class="btn-group btn-group-sm" id="selectAllNone" role="group" aria-label="Select All or None">
+        <button type="button" class="btn btn-outline-secondary cm-toggle-enabled" onclick="selectAll()">All</button>
+        <button type="button" class="btn btn-outline-secondary cm-toggle-enabled" onclick="selectNone()">None</button>
+      </div>
+    </div>
+  </div>
+  {{#unless records}} 
+    <div class="row cm-edit-list-data-row" id="rowEmpty">
+      <div class="col-2">
+      </div>
+      <div class="col-7">
+        <div class="cm-toggle-visible cm-edit-list-field cm-edit-list-no-data-msg">There are no vocabularys to display. Click <strong>Add New</strong> to create some.</div>
+      </div>
+      <div class="col-3 text-right">
+      </div>
+    </div>
+  {{/unless}}
+  {{#each records}}
+    <form id="form{{this.id}}" class="needs-validation" novalidate action="vocabulary/{{this.id}}?redirect=vocabularys{{getParamsA ../filter "page,sort,dir,search"}}" method="post">
+      <div class="row cm-edit-list-data-row" id="row{{this.id}}">
+          <div class="col-2">
+            <div class="cm-toggle-visible cm-edit-list-field">{{this.word}}</div>
+            <input id="word{{this.id}}" size="4" class="form-control cm-toggle-visible cm-hidden" type="text" name="word" placeholder="Enter a word" value="{{this.word}}">
+          </div>
+          <div class="col-7">
+            <div class="cm-toggle-visible cm-edit-list-field">{{this.definition}}</div>
+            <input id="definition{{this.id}}" class="form-control cm-toggle-visible cm-hidden" type="text" name="definition" placeholder="Enter the vocabulary definition" value="{{this.definition}}" required>
+            <div class="invalid-feedback">Please provide the text definition for this vocabulary.</div>
+          </div>
+          <div class="col-3 text-right">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Edit and Delete">
+              <button type="submit" value="form{{this.id}}" class="btn btn-primary cm-toggle-visible cm-hidden">Save</button>
+              <button type="button" class="btn btn-secondary cm-toggle-visible cm-hidden" onclick="cancelEdit('{{this.id}}')">Cancel</button>
+              <button type="button" class="btn btn-outline-secondary rounded-left cm-toggle-visible cm-toggle-enabled" id="btnEdit{{this.id}}" onclick="showEdit('{{this.id}}')">Edit</button>
+              <button type="button" class="btn btn-outline-secondary cm-toggle-enabled" id="btnDel{{this.id}}" onclick="confirmDelete('{{this.id}}')" data-cm-href="vocabulary/{{this.id}}/delete">Delete</button>
+              <button type="button" class="btn btn-secondary cm-hidden" id="btnCancelDel{{this.id}}" onclick="cancelDelete('{{this.id}}')">Cancel</button>
+              <button type="button" class="btn btn-outline-secondary btn-select cm-toggle-enabled" data-toggle="button" aria-pressed="false" autocomplete="off" id="{{this.id}}">Select</button></td>
+            </div>
+          </div>
+      </div>
+    </form>
+  {{/each}}
+  <form id="formNew" class="needs-validation" novalidate action="vocabulary?redirect=vocabularys{{getParamsA filter "page,sort,dir,search"}}" method="post">
+    <div class="row cm-edit-list-footer-row" id="rowNew">
+      <div class="col-2">
+        <input id="wordNew" size="4" class="form-control cm-toggle-visible cm-hidden" type="text" name="word" placeholder="Enter a word">
+      </div>
+      <div class="col-7">
+        <input id="definitionNew" class="form-control cm-toggle-visible cm-hidden" type="text" name="definition" placeholder="Enter the vocabulary definition" required>
+        <div class="invalid-feedback">Please provide the text definition for this vocabulary.</div>
+      </div>
+      <div class="col-3 text-right">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Add New and Delete Selected">
+          <button type="submit" value="formNew" class="btn btn-primary cm-toggle-visible cm-hidden">Save</button>
+          <button type="button" class="btn btn-secondary cm-toggle-visible cm-hidden" onclick="cancelEdit('New')">Cancel</button>
+          <button type="button" class="btn btn-primary rounded-left cm-toggle-visible cm-toggle-enabled" id="btnAddNew" onclick="showEdit('New')">Add New</button>
+          <button type="button" class="btn btn-primary rounded-right cm-toggle-enabled disabled" id="btnDeleteSelected" disabled="true" onclick="confirmDeleteSelected()">Delete Selected</button>
+          <button type="button" class="btn btn-secondary cm-hidden" id="btnCancelDelSel" onclick="cancelDeleteSelected()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col text-right">
+      {{#if filter.pages}}
+        <div class="btn-group btn-group-sm cm-edit-list-pagination cm-toggle-visible" role="group" aria-label="...">
+          {{#gt filter.page 1}} 
+            <button type="button" class="btn btn-secondary cm-toggle-enabled" id="btnPrevPage" onclick="location.href='vocabularys?page={{subtract filter.page 1}}{{getParamsA filter "sort,dir,search"}}'">Prev</button>
+          {{else}}
+            <button type="button" class="btn btn-secondary disabled" disabled="true" id="btnPrevPage">Prev</button>
+          {{/gt}}
+          {{#each filter.pages}}
+            <button type="button" class="btn btn-secondary cm-toggle-enabled {{#is this ../filter.page}}active{{/is}}" id="btnPage{{this}}" onclick="location.href='vocabularys?page={{this}}{{getParamsA ../filter "sort,dir,search"}}'">{{this}}</button>
+          {{/each}}
+          {{#lt filter.page (last filter.pages)}}
+            <button type="button" class="btn btn-secondary cm-toggle-enabled" id="btnNextPage" onclick="location.href='vocabularys?page={{add filter.page 1}}{{getParamsA filter "sort,dir,search"}}'">Next</button>
+          {{else}}
+            <button type="button" class="btn btn-secondary disabled" disabled="true" id="btnNextPage">Next</button>
+          {{/lt}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+// Utility methods
+//======================================================
+
+$.prototype.cmDisable = function () { return this.addClass('disabled').prop('disabled', true); };
+$.prototype.cmEnable = function () { return this.removeClass('disabled').prop('disabled', false); };
+$.prototype.cmHide = function () { return this.addClass('cm-hidden'); };
+$.prototype.cmShow = function () { return this.removeClass('cm-hidden'); }
+
+const disableButtons = function (withIds) {
+  if (withIds) {
+    for (let i in withIds) {
+      $(withIds[i]).cmDisable();
+    }
+  } else {
+    {{!-- $('form').find('button').cmDisable(); --}}
+    $('button.cm-toggle-enabled').cmDisable();
+  }
+};
+
+const enableButtons = function (withIds) {
+  if (withIds) {
+    for (let i in withIds) {
+      $(withIds[i]).cmEnable();
+    }
+  } else {
+    {{!-- $('form').find('button').cmEnable(); --}}
+    $('button.cm-toggle-enabled').cmEnable();
+   }
+}
+
+
+// Button control/handler routines
+//======================================================
+
+if (window.location.href.includes('search=')) { 
+  $('#txtSearch').select();
+} else { $('#btnAddNew').focus(); }
+
+if (window.location.href.includes('sort=')) {
+  let href = window.location.href;
+  if (href.includes('sort=word')) {
+    if (href.includes('dir=desc')) { $('#lnkSortWordDesc').cmHide(); }
+    else { $('#lnkSortWordAsc').cmHide(); }
+    $('#lnkSortWordRemove').cmShow();
+  } else if (href.includes('sort=definition')) {
+    if (href.includes('dir=desc')) { $('#lnkSortDefinitionDesc').cmHide(); }
+    else { $('#lnkSortDefinitionAsc').cmHide(); }
+    $('#lnkSortDefinitionRemove').cmShow();
+  }
+}
+
+const selectAll = function () {
+  $('.btn-select:not(.active)').toggleClass('active');
+  $('#btnDeleteSelected').cmEnable();
+};
+
+const selectNone = function () {
+  $('.btn-select.active').toggleClass('active');
+  $('#btnDeleteSelected').cmDisable();
+};
+
+$('.btn-select').click(function (event) {
+  if (!$(event.target).hasClass('active') || $('.btn-select.active').length > 1) {
+     $('#btnDeleteSelected').cmEnable();
+  } else {
+     $('#btnDeleteSelected').cmDisable();
+  }
+});
+
+const confirmDelete = function (forId) {
+  if ($('#btnDel' + forId).hasClass('btn-primary')) {
+    $('#spinner').cmShow();
+    location.href = $('#btnDel' + forId).attr('data-cm-href');
+  } else {
+    disableButtons();
+    enableButtons(['#btnDel' + forId, '#btnCancelDel' + forId]);
+    $('#btnCancelDel' + forId).cmShow().focus();
+    $('#btnDel' + forId).addClass('btn-primary').removeClass('btn-outline-secondary').html('Sure?');
+  }
+}
+
+const cancelDelete = function (forId) {
+  enableButtons();
+  $('#btnCancelDel' + forId).cmHide();
+  $('#btnDel' + forId).addClass('btn-outline-secondary').removeClass('btn-primary').html('Delete');
+  selectNone();   // Disactivate the "Delete Selected" button
+}
+
+const confirmDeleteSelected = function () {
+  let data = $('.btn-select.active').map(function () { return this.id; }).get();
+  if (data.length) {
+    if ($('#btnDeleteSelected').hasClass('cm-confirm')) {
+      $('#spinner').cmShow();
+      $.post('vocabularys/delete', { "data" : data })
+        .done(function (res) { 
+          if (res.status === 'ok') {
+            window.location.href = '?message=' + encodeURIComponent(res.message);
+          } else {
+            window.location.href = '?error=' + encodeURIComponent(res.message);
+          }
+        });
+    } else {
+      disableButtons();
+      $('#btnCancelDelSel').cmEnable().cmShow().focus();
+      $('#btnDeleteSelected').cmEnable().addClass('cm-confirm').html('Sure?');
+    }
+  }
+};
+
+const cancelDeleteSelected = function () {
+  enableButtons();
+  $('#btnCancelDelSel').cmHide();
+  $('#btnDeleteSelected').removeClass('cm-confirm').html("Delete Selected");
+}
+
+const showEdit = function (forId) {
+  disableButtons();
+  selectNone();
+  $('#row' + forId + ' .cm-toggle-visible').toggleClass('cm-hidden').cmEnable();
+  $('#row' + forId + ' .cm-toggle-visible:not(.cm-hidden)').toggleClass('cm-shown');
+  $('#row' + forId + ' #word' + forId).focus();
+};
+
+const cancelEdit = function (forId) {
+  enableButtons();
+  $('#form' + forId).removeClass('was-validated');
+  $('#row' + forId + ' .cm-toggle-visible:not(.cm-hidden)').toggleClass('cm-shown');
+  $('#row' + forId + ' .cm-toggle-visible').toggleClass('cm-hidden');
+  selectNone();
+};
+
+const cmSearch = function (event) {
+  if (!event || (event.which === 13 || event.keyCode === 13)) {
+    $('#spinner').cmShow();
+    window.location.href = addParam(window.location.href, 'search', $('#txtSearch').val().trim());
+  }
+}
+
+const addParam = function (url, key, val) {
+  let urlArr = url.split('?');
+  let params = urlArr[1];
+  let param = val ? encodeURIComponent(key) + '=' + encodeURIComponent(val) : '';
+  if (!params) return key && val ? url + '?' + param : url;
+  let paramsArr = params.split('&');
+  while (key && paramsArr.some(elem => elem.startsWith(key))) {
+    paramsArr.splice(paramsArr.findIndex(elem => elem.startsWith(key)), 1);
+  }
+  return paramsArr.length 
+    ? urlArr[0] + '?' + paramsArr.join('&') + (param ? '&' + param : '')
+    : urlArr[0] + (param ? '?' + param : '');
+}
+
+</script>

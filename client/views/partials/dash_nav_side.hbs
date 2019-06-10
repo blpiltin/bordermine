@@ -1,0 +1,225 @@
+<nav class="sidebar bg-dark rounded-right">
+  <ul id="sidebar" class="nav nav-pills flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{{home}}">
+        {{icon "admin-home"}}<span class="hide ml-2">Course Home</span>
+      </a>
+    </li>
+    {{#if sidebar.announcements}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#announcements-menu">
+          {{icon "testimonial"}}<span class="hide ml-2">Announcement</span>
+        </a>
+        <div id="#announcements-menu" class="sub-menu collapse {{getMenuShow "announcement" path}}"  data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}announcements">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}announcement">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.agendas}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#agendas-menu">
+          {{icon "editor-ul"}}<span class="hide">Agendas</span>
+        </a>
+        <div id="#agendas-menu" class="sub-menu collapse {{getMenuShow "agenda" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}agendas">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}agenda">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.newss}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#newss-menu">
+          {{icon "admin-site"}}<span class="hide">News</span>
+        </a>
+        <div id="newss-menu" class="sub-menu collapse {{getMenuShow "news" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}newss">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}news">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.events}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#events-menu">
+          {{icon "calendar"}}<span class="hide">Events</span>
+        </a>
+        <div id="events-menu" class="sub-menu collapse {{getMenuShow "event" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}events">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}event">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.objectives}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#objectives-menu">
+          {{icon "yes-alt"}}<span class="hide">Objectives</span>
+        </a>
+        <div id="objectives-menu" class="sub-menu collapse {{getMenuShow "objective" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}objectives"><span class="hide">View All</span>{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}objective"><span class="hide">Add New</span>{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.vocabularys}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#vocabularys-menu">
+          {{icon "editor-spellcheck"}}<span class="hide">Vocabulary</span>
+        </a>
+        <div id="vocabularys-menu" class="sub-menu collapse {{getMenuShow "vocabulary" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}vocabularys"><span class="hide">View All</span>{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}vocabulary"><span class="hide">Add New</span>{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.lessons}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#lessons-menu">
+          {{icon "lightbulb"}}<span class="hide">Lessons</span>
+        </a>
+        <div id="lessons-menu" class="sub-menu collapse {{getMenuShow "lesson" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}lessons">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}lesson">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.assignments}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#assignments-menu">
+          {{icon "edit"}}<span class="hide">Assignments</span>
+        </a>
+        <div id="assignments-menu" class="sub-menu collapse {{getMenuShow "assignment" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}assignments">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}assignment">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.assessments}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#assessments-menu">
+          {{icon "performance"}}<span class="hide">Assessments</span>
+        </a>
+        <div id="assessments-menu" class="sub-menu collapse {{getMenuShow "assessment" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}assessments">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}assessment">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.resources}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#resources-menu">
+          {{icon "hammer"}}<span class="hide">Resources</span>
+        </a>
+        <div id="resources-menu" class="sub-menu collapse {{getMenuShow "resource" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}resources">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}resource">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+        {{#if sidebar.files}}
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#files-menu">
+          {{icon "admin-media"}}<span class="hide">Files</span>
+        </a>
+        <div id="files-menu" class="sub-menu collapse {{getMenuShow "file" path}}" data-parent="#sidebar" aria-expanded="false">
+          <ul class="nav flex-column ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}files">View All{{icon "list-view"}}</a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="nav-item">
+              <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}file">Add New{{icon "plus"}}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    {{/if}}
+    {{#if sidebar.info}}
+      <li class="nav-item">
+        <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}info">
+          {{icon "info"}}<span class="hide">Info</span>
+        </a>
+      </li>
+    {{/if}}
+    {{#if sidebar.settings}}
+      <li class="nav-item">
+        <a class="nav-link" href="{{#if sidebar_id}}{{sidebar_id}}/{{/if}}settings">
+          {{icon "admin-generic"}}<span class="hide">Settings</span>
+        </a>
+      </li>
+    {{/if}}
+    <li class="nav-item">
+      <a id="btnCollapse" class="nav-link btn-expand-collapse hide">{{icon "arrow-left-alt"}}</a>
+      <a id="btnExpand" class="nav-link btn-expand-collapse hide hidden">{{icon "arrow-right-alt"}}</a>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,113 @@
+@import "node_modules/bootstrap/scss/_functions.scss";
+@import "node_modules/bootstrap/scss/_variables.scss";
+@import "node_modules/bootstrap/scss/mixins/_breakpoints.scss";
+
+
+// Fonts
+//======================================================
+
+// Logo
+@import url(https://fonts.googleapis.com/css?family=Pacifico:400);     
+
+// Title Heading
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+KR:500,700);  
+
+// Navbar
+// @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,900);
+// @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800);
+
+
+// Variable overrides
+//======================================================
+
+$theme-colors: (
+  "primary": #002ba0
+);
+
+$body-bg: #ededed;
+
+
+// TODO: Refactor below
+//======================================================
+
+/*
+* Navbar
+*/
+
+a.navbar-brand {
+  font-family: 'Pacifico', cursive;
+  font-size: 30pt;
+}
+
+li.nav-item {
+  font-size: 16pt;
+  font-weight: 400;
+}
+
+.jumbotron {
+    background-color: #ffffff !important;
+    border-top: 3px solid rgb(219, 219, 219);
+}
+
+/*
+* Content
+*/
+.title-heading {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 700;
+}
+
+/*
+* Footer related
+*/
+.footer {
+  padding-top: 10px;
+  font-size: 10pt;
+}
+
+
+#dashbar-top li {
+  font-size: 14pt;
+}
+
+#dashbar-top .dropdown-item {
+  font-size: 12pt;
+}
+
+a#lbl-dashbar-logo.navbar-brand {
+  padding: 0px;
+  font-size: 20pt;
+}
+
+//======================================================
+// Dashboard
+//======================================================
+.dashboard-instructions {
+  font-size: 18pt;
+}
+
+//======================================================
+// user_profile
+//======================================================
+.profile-photo {
+  width: 200px;
+  border-radius: 5px;
+}
+
+//======================================================
+// course
+//======================================================
+.course-icon {
+  height: 100px;
+  border-radius: 5px;
+}
+
+// Bootstrap SASS imports (TODO: Change to more specific imports)
+@import "node_modules/bootstrap/scss/bootstrap";
+
+
+// Global classes
+//======================================================
+
+.cm-hidden { display: none; }
+.cm-shown { display: inline; }

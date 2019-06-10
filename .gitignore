@@ -1,0 +1,16 @@
+*private*
+untracked
+node_modules
+test_test.js
+server.log
+playground
+notes.md
+!server/mongo_data/
+server/mongo_data/*
+server/config/config.json
+trash
+temp/*
+client/uploads/*
+debug.log
+server/db/classmine_dev.db
+server/db/classmine_tst.db

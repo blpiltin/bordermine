@@ -1,0 +1,49 @@
+<form class="needs-validation" novalidate enctype="multipart/form-data" action="{{user.editPath}}/course/{{fields.course_id}}/{{fields.type}}{{#if fields._id}}/{{fields._id}}{{/if}}" method="post">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="title">Title</label>
+      <input id="title" class="form-control" type="text" name="title" placeholder="Enter a {{fields.type}} title" pattern="[^\d_-]\w+(\w|\d|-|\s)*[a-zA-Z0-9]+$" value="{{fields.title}}" required>
+      <div class="invalid-feedback">Please enter a valid {{fields.type}} title. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="slug">Slug</label>
+      <input id="slug" class="form-control" type="text" name="slug" placeholder="Enter a slug, or autogenerate" pattern="[^\d_-]\w+(\w|\d|-)*[a-zA-Z0-9]+$" value="{{fields.slug}}" required>
+      <div class="invalid-feedback">Please enter a valid slug. Valid slugs begin with letters and can only include letters, numbers, underscores, and dashes.</div>
+      <small id="slugHelpBlock" class="form-text text-muted">
+        A slug is used to determine the url that people will use to access your {{fields.type}}. Your {{fields.type}} url will be: <span id="activityUrl">?</span>.
+      </small>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="description">Description</label>
+      <textarea id="description" class="form-control" name="description" placeholder="Enter a {{fields.type}} description" rows="5">{{fields.description}}</textarea>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="summary">Home Page Summary</label>
+      <textarea id="summary" class="form-control" name="summary" placeholder="Enter a summary for this {{fields.type}}'s listing on the home page" rows="3">{{fields.summary}}</textarea>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="notes">Notes</label>
+      <textarea id="notes" class="form-control" name="notes" placeholder="Enter any notes to help with the lesson here. These can be private or displayed after a reveal time (see below)." rows="5">{{fields.notes}}</textarea>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="notesRevealTime">Notes Reveal Time</label>
+      <input id="notesRevealTime" class="form-control" type="datetime-local" name="notesRevealTime" placeholder="Enter a time to reveal notes, or leave blank to keep private." value="{{fields.notesRevealTime}}">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{back}}'">Cancel</button>
+</form>

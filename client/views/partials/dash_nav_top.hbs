@@ -1,0 +1,46 @@
+<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark" id="dashbar-top">
+  <a class="navbar-brand" id="lbl-dashbar-logo" href="/">{{#if host}}{{host}}{{else}}C{{/if}}</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+          Courses
+        </a>
+        <div id="courseMenu" class="dropdown-menu">
+          {{#each courses}}
+            <a class="dropdown-item" id="lnkEditCourse{{id}}" href="{{../user.editPath}}/course/{{id}}">{{name}}</a>
+          {{/each}}
+          {{#if courses}}
+            <div class="dropdown-divider"></div>
+          {{/if}}
+          <a class="dropdown-item" id="lnkNewCourse" href="{{user.editPath}}/course">New Course</a>
+        </div>
+      </li>
+      {{#if course}}
+        <li class="nav-item">
+          <a class="nav-link" href="{{user.editPath}}/course/{{course.id}}">{{course.name}}</a>
+        </li>
+      {{/if}}
+    </ul>
+  </div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+          Welcome {{#if user.profile.firstName}}{{user.profile.firstName}}{{else}}{{user.email}}{{/if}}
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" id="lnkProfile" href="{{user.editPath}}/profile">Profile</a>
+          <a class="dropdown-item" id="lnkAccount" href="{{user.editPath}}">Account</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" id="lnkLogout" href="/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

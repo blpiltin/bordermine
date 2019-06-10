@@ -1,0 +1,56 @@
+<div class="container view-user-profile">
+  
+	{{> user_nav}}
+
+	{{> messages}}
+	{{> errors}}
+	
+  <div class="px-4 pt-2 view-user-profile-content">
+    <div class="row">
+      <div class="col-auto">
+        <h1 class="title-heading">About</h1>
+      </div>
+      <div class="col mt-2 text-right">
+        {{#if viewerIsOwner}}
+          <button type="button" class="btn btn-outline-secondary" onclick="location.href='{{user.editPath}}/profile'">Edit View</button>
+        {{/if}}
+      </div>
+    </div>
+    <div class="row">
+      {{#if view.owner.profile.photo}}
+        <div class="col-sm-3">
+          <img class="profile-photo view-user-profile-photo" src="{{view.uploadsPath}}/{{view.owner.profile.photo}}">
+        </div>
+      {{/if}}
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <h3>Room:</h3>
+          </div>
+          <div class="col-sm-9">
+            <h3>{{question view.owner.profile.room}}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h3>Phone:</h3>
+          </div>
+          <div class="col-sm-9">
+            <h3>{{question view.owner.profile.phone}}</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h3>Bio:</h3>
+          </div>
+          <div class="col-sm-9">
+            <h3>{{question view.owner.profile.bio}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+	{{> footer}}
+	
+</div>

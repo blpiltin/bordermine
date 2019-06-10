@@ -1,0 +1,14 @@
+<div class="container">
+
+	{{> user_nav}}
+
+	{{> messages}}
+	{{> errors}}
+	
+	<div class="jumbotron text-center">
+		<h1 class="display-4">Ooops!</h1>
+		<p>It appears you've reached this page by mistake. 
+			Please try <a href="{{#if back}}{{back}}{{else}}/{{/if}}">another</a>.</p>
+	{{> footer}}
+	
+</div>

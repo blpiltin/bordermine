@@ -1,0 +1,75 @@
+{
+  "test": {
+    "action": "/test",
+    "method": "post",
+    "fields": {
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "placeholder": "Enter email",
+        "required": true,
+        "requiredError": "Please provide a valid email address.",
+        "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+"
+      },
+      "password": {
+        "type": "password",
+        "label": "Password",
+        "placeholder": "Password",
+        "required": true,
+        "requiredError": "Please provide a password that contains at least one letter, one number, and is at least 6 characters long. !,^,+,?,_,&,@ characters are allowed.",
+        "pattern": "^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\\^\\+\\?_&@]{6,}$"
+      },
+      "passwordConfirm": {
+        "type": "password",
+        "label": "Password Confirm",
+        "placeholder": "Confirm Password",
+        "required": true,
+        "requiredError": "Please provide a password confirmation.",
+        "matches": "password",
+        "matchesError": "Passwords do not match. Please provide a matching password confirmation."
+      },
+      "role": {
+        "type": "select",
+        "label": "Role",
+        "placeholder": "Please select one of the following...",
+        "required": true,
+        "requiredError": "Please select a role.",
+        "options": {
+          "student": "I am a student.",
+          "teacher": "I am a teacher.",
+          "parent": "I am a parent."
+        }
+      },
+      "modelEmail": {
+        "modelOnly": true,
+        "type": "email",
+        "label": "Email address",
+        "autocomplete": "username",
+        "placeholder": "Enter email.",
+        "required": true,
+        "requiredError": "Please provide a valid email address.",
+        "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+"
+      }
+    }
+  },
+  "login": {
+    "action": "/login",
+    "method": "post",
+    "fields": {
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "placeholder": "Enter email",
+        "required": true,
+        "requiredError": "Please provide a valid email address."
+      },
+      "password": {
+        "type": "password",
+        "label": "Password",
+        "placeholder": "Password",
+        "required": true,
+        "requiredError": "Please provide a valid password."
+      }
+    }
+  }
+}

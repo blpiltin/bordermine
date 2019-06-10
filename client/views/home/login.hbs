@@ -1,0 +1,45 @@
+<div class="container">
+
+  {{> home_nav }}
+
+  {{#if error }}
+    <div class="alert alert-danger" role="alert">
+      <strong>{{error}}</strong>
+    </div>
+  {{/if}}
+
+  {{> messages}}
+
+  <h1 class="pl-4 py-2 title-heading">Login to {{hostName host}}</h1>
+
+  <div class="px-4">
+    <form class="needs-validation" novalidate action="/login" method="post">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input id="email" class="form-control" type="email" name="email" placeholder="Enter email"  autocomplete="username email" value="{{fields.email}}" required>
+        <div class="invalid-feedback">Please provide a valid email address.</div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" class="form-control" type="password" name="password" placeholder="Password"  autocomplete="current-password" value="{{fields.password}}" required>
+        <div class="invalid-feedback">Please provide a valid password.</div>
+      </div>
+      <div class="form-row">
+        <div class="col-auto mr-auto" style="margin-bottom:15px">
+          <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button> 
+          <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Submitting...
+          </button>
+        </div>
+        <div class="col-auto">
+          <button id="btnJoin" type="button" class="btn btn-outline-secondary" onclick="location.href='/join'">Join {{hostName host}}</button>
+          <button id="btnResetPassword" type="button" class="btn btn-outline-secondary" onclick="location.href='/email/password'">Forgot Password</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  {{> footer}}
+
+</div>

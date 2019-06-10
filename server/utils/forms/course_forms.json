@@ -1,0 +1,91 @@
+{
+  "edit_course_objective": {
+    "action": "{{user.editPath}}/course/{{course.id}}/objective{{#if fields.id}}/{{fields.id}}{{/if}}",
+    "method": "post",
+    "submit": "Save",
+    "fields": {
+      "code": {
+        "type": "text",
+        "label": "Code",
+        "placeholder": "Enter an optional code"
+      },
+      "text": {
+        "type": "text",
+        "label": "Text",
+        "placeholder": "Enter objective text",
+        "required": true,
+        "requiredError": "Please provide the text description for this objective."
+      }
+    }
+  }, 
+  "edit_course_vocabulary": {
+    "action": "{{user.editPath}}/course/{{course.id}}/vocabulary{{#if fields.id}}/{{fields.id}}{{/if}}",
+    "method": "post",
+    "submit": "Save",
+    "fields": {
+      "word": {
+        "type": "text",
+        "label": "Word",
+        "placeholder": "Enter the vocabulary word",
+        "required": true,
+        "requiredError": "Please provide the word for this vocabulary."
+      },
+      "definition": {
+        "type": "text",
+        "label": "Definition",
+        "placeholder": "Enter definition"
+      },
+      "image": {
+        "type": "file",
+        "accept": "image/*",
+        "label": "Image",
+        "placeholder": "Select an image",
+        "pattern": "[0-9a-zA-Z\\._-]+\\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)",
+        "patternError": "Only image (.bpm, .png, .gif, and .jpg) file types allowed."
+      }
+    }
+  }, 
+  "edit_course_info": {
+    "action": "{{user.editPath}}/course{{#if fields.id}}/{{fields.id}}/info{{/if}}",
+    "method": "post",
+    "submit": "Save",
+    "enctype": "multipart/form-data",
+    "fields": {
+      "name": {
+        "type": "text",
+        "label": "Name",
+        "placeholder": "Enter the course name",
+        "required": true,
+        "requiredError": "Please enter a valid course name. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.",
+        "pattern": "^[A-Za-z]+((\\w|\\d|-|\\s)*[a-zA-Z0-9]+)*$"
+      },
+      "slug": {
+        "type": "text",
+        "label": "Slug",
+        "placeholder": "Enter a slug, or autogenerate",
+        "required": true,
+        "requiredError": "Please enter a valid slug. Valid slugs begin with letters and can only include letters, numbers, underscores, and dashes.",
+        "pattern": "^[a-z]+(\\w|\\d|-)*[a-zA-Z0-9]+$"
+      },
+      "code": {
+        "type": "text",
+        "label": "Code",
+        "placeholder": "Enter an optional course code"
+      },
+      "description": {
+        "type": "textarea",
+        "rows": 5,
+        "label": "Description",
+        "placeholder": "Enter a course description"
+      },
+      "icon": {
+        "type": "file",
+        "accept": "image/*",
+        "label": "Icon",
+        "placeholder": "Select an icon",
+        "pattern": "[0-9a-zA-Z\\._-]+\\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)",
+        "patternError": "Only image (.bpm, .png, .gif, and .jpg) file types allowed."
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "join": {
+    "action": "/join",
+    "method": "post",
+    "fields": {
+      "profile.firstName": {
+        "type": "text",
+        "label": "First Name",
+        "autocomplete": "given-name",
+        "placeholder": "Enter your first name",
+        "required": true,
+        "requiredError": "Please enter your first name."
+      },
+      "profile.lastName": {
+        "type": "text",
+        "label": "Last Name",
+        "autocomplete": "family-name",
+        "placeholder": "Enter your last name",
+        "required": true,
+        "requiredError": "Please enter your last name."
+      },
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "autocomplete": "username",
+        "placeholder": "Enter your email",
+        "required": true,
+        "requiredError": "Please provide a valid email address.",
+        "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+"
+      },
+      "password": {
+        "type": "password",
+        "label": "Password",
+        "autocomplete": "new-password",
+        "placeholder": "Enter a password",
+        "required": true,
+        "requiredError": "Please provide a password that contains at least one letter, one number, and is at least 6 characters long. !,^,+,?,_,&,@ characters are allowed.",
+        "pattern": "^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\\^\\+\\?_&@]{6,}$"
+      },
+      "passwordConfirm": {
+        "type": "password",
+        "label": "Password Confirm",
+        "placeholder": "Enter password confirmation",
+        "required": true,
+        "requiredError": "Please provide a password confirmation.",
+        "matches": "password",
+        "matchesError": "Passwords do not match. Please provide a matching password confirmation."
+      },
+      "role": {
+        "type": "select",
+        "label": "Role",
+        "placeholder": "Select one of the following...",
+        "required": true,
+        "requiredError": "Please select a role.",
+        "options": {
+          "student": "I am a student.",
+          "teacher": "I am a teacher.",
+          "parent": "I am a parent."
+        }
+      }
+    }
+  },
+  "login": {
+    "action": "/login",
+    "method": "post",
+    "fields": {
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "autocomplete": "username",
+        "placeholder": "Enter your email",
+        "required": true,
+        "requiredError": "Please provide a valid email address."
+      },
+      "password": {
+        "type": "password",
+        "label": "Password",
+        "autocomplete": "current-password",
+        "placeholder": "Enter your password",
+        "required": true,
+        "requiredError": "Please provide a valid password."
+      }
+    }
+  },
+  "email": {
+    "action": "/email",
+    "method": "post",
+    "fields": {
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "autocomplete": "username",
+        "placeholder": "Enter your email",
+        "required": true,
+        "requiredError": "Please provide a valid email address."
+      }
+    }
+  },
+  "password": {
+    "action": "/password",
+    "method": "post",
+    "fields": {
+      "email": {
+        "type": "email",
+        "label": "Email address",
+        "autocomplete": "username",
+        "placeholder": "Enter your email",
+        "required": true,
+        "requiredError": "Please provide a valid email address.",
+        "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+"
+      },
+      "password": {
+        "type": "password",
+        "label": "Password",
+        "autocomplete": "new-password",
+        "placeholder": "Enter a password",
+        "required": true,
+        "requiredError": "Please provide a password that contains at least one letter, one number, and is at least 6 characters long. !,^,+,?,_,&,@ characters are allowed.",
+        "pattern": "^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\\^\\+\\?_&@]{6,}$"
+      },
+      "passwordConfirm": {
+        "type": "password",
+        "label": "Password Confirm",
+        "placeholder": "Enter password confirmation",
+        "required": true,
+        "requiredError": "Please provide a password confirmation.",
+        "matches": "password",
+        "matchesError": "Passwords do not match. Please provide a matching password confirmation."
+      }
+    }
+  }
+}

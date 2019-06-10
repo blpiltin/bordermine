@@ -1,0 +1,34 @@
+<form class="needs-validation" novalidate enctype="multipart/form-data" action="{{user.editPath}}/course{{#if fields._id}}/{{fields._id}}{{/if}}" method="post">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="name">Name</label>
+      <input id="name" class="form-control" type="text" name="name" placeholder="Enter a course name" pattern="[^\d_-]\w+(\w|\d|-|\s)*[a-zA-Z0-9]+$" value="{{fields.name}}" required>
+      <div class="invalid-feedback">Please enter a valid course name. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="slug">Slug</label>
+      <input id="slug" class="form-control" type="text" name="slug" placeholder="Enter a slug, or autogenerate." pattern="[^\d_-]\w+(\w|\d|-)*[a-zA-Z0-9]+$" value="{{fields.slug}}" required>
+      <div class="invalid-feedback">Please enter a valid slug. Valid slugs begin with letters and can only include letters, numbers, underscores, and dashes.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="description">Description</label>
+      <textarea id="description" class="form-control" name="description" placeholder="Enter a course description." rows="5">{{fields.description}}</textarea>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="icon">Icon</label>
+      <input id="icon" class=" form-control-file btn btn-outline-secondary" type="file" name="icon" pattern="[0-9a-zA-Z\._-]+\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)" accept="image/*">
+      <div class="invalid-feedback">Only image (.bpm, .png, .gif, and .jpg) file types allowed.</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary" id="btnSpin" type="button" style="visibility:hidden" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+</form>

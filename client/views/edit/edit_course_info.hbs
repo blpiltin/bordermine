@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-auto">
+    <h1 class="title-heading">{{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</h1>
+  </div>
+  {{#if fields.id}}
+    <div class="col mt-2 text-right">
+      <button type="button" class="btn btn-outline-secondary" id="btnView" onclick="location.href='{{user.userPath}}/course/{{course.id}}'" enctype="multipart/form-data">Live View</button>
+    </div>
+  {{/if}}
+</div>
+<form class="needs-validation" novalidate action="{{user.editPath}}/course{{#if fields.id}}/{{fields.id}}/info{{/if}}" method="post" enctype="multipart/form-data">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="name">Name</label>
+      <input id="name" class="form-control" type="text" name="name" placeholder="Enter a course name" pattern="[^\d_-]\w+(\w|\d|-|\s)*[a-zA-Z0-9]+$" value="{{fields.name}}" required>
+      <div class="invalid-feedback">Please enter a valid course name. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.</div>
+    </div>
+    <div class="col-md-auto col-xs-1">
+      {{#if fields.icon}}
+        <img id="icon" class="course-icon" src="{{user.uploadsPath}}/{{fields.icon}}"/>
+        <input type="hidden" name="icon" value="{{fields.icon}}"/>
+        <input type="submit" class="btn btn-outline-secondary" name="delete" value="Delete"/>
+      {{else}}
+        <label for="icon">Icon</label>
+        <input id="icon" class=" form-control-file btn btn-outline-secondary" type="file" name="icon" pattern="[0-9a-zA-Z\._-]+\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)" accept="image/*">
+        <div class="invalid-feedback">Only image (.bpm, .png, .gif, and .jpg) file types allowed.</div>
+      {{/if}}
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="slug">Slug</label>
+      <input id="slug" class="form-control" type="text" name="slug" placeholder="Enter a slug, or autogenerate." pattern="[^\d_-]\w+(\w|\d|-)*[a-zA-Z0-9]+$" value="{{fields.slug}}" required>
+      <div class="invalid-feedback">Please enter a valid slug. Valid slugs begin with letters and can only include letters, numbers, underscores, and dashes.</div>
+      <small id="slugHelpBlock" class="form-text text-muted">
+        A slug is used to determine the url that people will use to access your course page. Your course url will be: <span id="courseUrl">?</span>
+      </small>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="description">Description</label>
+      <textarea id="description" class="form-control" name="description" placeholder="Enter a course description." rows="5">{{fields.description}}</textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+</form>
+
+<script>
+
+(function() { 
+
+  let protocol = window.location.protocol
+  let hostname = window.location.hostname
+  let path = window.location.pathname
+  let domain = path.match(/[^\/]+\.[^\/]+/)[0]
+  let user = path.match(/[^\/]+\.[^\/]+(?:\/edit)?\/([^\/]+)/)[1]
+
+  // Generate a valid slug based on the course name
+  //------------------------------------------------------
+  const generateSlug = function() { 
+    let name = $('#name').val()
+    let slug = name.toLowerCase().replace(/\s/g, '-')
+    $('#slug').val(slug)
+    generateUrl()
+  }
+  
+  // Generate the url based on the slug
+  //------------------------------------------------------
+  const generateUrl = function() {
+    let slug = $('#slug').val()
+    let url =  protocol + '//' + hostname + '/' + domain + '/' + user + '/' + slug
+    $('#courseUrl').text(url)
+  }
+
+  $('#name').keyup(generateSlug)
+  $('#slug').keyup(generateUrl)
+
+  if (window.addEventListener) {
+    window.addEventListener('load', generateUrl, false)
+  } 
+  else if (window.attachEvent) {
+    window.attachEvent('onload', generateUrl)
+  }
+
+})()
+
+</script>

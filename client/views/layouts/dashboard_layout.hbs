@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>{{#if host}}{{user.fullName}}{{else}}Classmine{{/if}} | {{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</title>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="/js/jquery.min.js"></script>
+  <link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/css/sprite.css">
+  <link rel="stylesheet" href="/css/classmine.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+
+<body>
+
+  <div class="no-gutters">
+    {{> dash_nav_top }}
+    <div class="main row">
+      {{#if sidebar}}{{> dash_nav_side }}{{/if}}
+      <div class="col">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              {{> messages}}
+              {{> errors}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{{body}}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{> footer}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/ckeditor5-build-classic/build/ckeditor.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/classmine.js"></script>
+</body>
+
+</html>
