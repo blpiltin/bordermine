@@ -21,6 +21,12 @@ let config, envConfig
 
 
 for (file in files) {
+
+  if (env === 'production' && files[file] === './private_config.json') { 
+    // The private file shouldn't exist on the production server
+    continue 
+  }
+
   config = require(files[file])
 
   envConfig = config['all']
@@ -35,4 +41,4 @@ for (file in files) {
 }
 
 
-module.exports = { env };
+module.exports = { env }
