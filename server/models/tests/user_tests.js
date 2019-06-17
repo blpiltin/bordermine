@@ -64,35 +64,35 @@ describe('User',function() {
     it('should not create a user with a missing password', async function() {
       let data = getRandomUserData()
       data.password = ""
-      try { data = await User.create(data)} 
+      try { await User.create(data)} 
       catch(error) {}
     })
 
     it('should not create a user with an invalid password', async function() {
       let data = getRandomUserData()
       data.password = "whatever"
-      try { data = await User.create(data) } 
+      try { await User.create(data) } 
       catch(error) {}
     })
 
     it('should not create a user with an invalid role', async function() {
       let data = getRandomUserData()
       data.role = "whatever"
-      try { data = await User.create(data) } 
+      try { await User.create(data) } 
       catch(error) {}
     })
 
     it('should not create a user with an invalid phone', async function() {
       let data = getRandomUserData()
       data.profile.phone = "whatever"
-      try { data = await User.create(data) } 
+      try { await User.create(data) } 
       catch(error) {} 
     })
 
     it('should not create a user with an invalid photo', async function() {
       let data = getRandomUserData()
       data.profile.photo = "whatever"
-      try { data = await User.create(data) }
+      try { await User.create(data) }
       catch(error) {}
     })
 
@@ -100,8 +100,16 @@ describe('User',function() {
       let users = await User.query(),
           data = getRandomUserData()
       data.email = users[0].email
-      try { data = await User.create(data) }
+      try { await User.create(data) }
       catch(error) {}
+    })
+
+    it('should not create a user with invalid profile field', async function() {
+      let data = getRandomUserData()
+      data.profile.extra = 'whatever'
+      let user = await User.create(data)
+      expect(user.profile.firstName).to.equal(data.profile.firstName)
+      expect(user.profile.extra).to.equal(undefined)
     })
 
   })
@@ -383,8 +391,7 @@ const getRandomUserData = function() {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       phone: faker.phone.phoneNumber(),
-      room: faker.random.alphaNumeric(4),
-      bio: faker.lorem.paragraphs(),
+      title: faker.random.words(),
       photo: faker.random.boolean() ? 'test_photo_1.jpg' : null
     }
   }

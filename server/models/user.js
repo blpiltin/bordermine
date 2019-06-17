@@ -67,8 +67,11 @@ class User extends BaseModel {
 
     return new Promise((resolve, reject) => {
 
-      let data = _.pick(json, ['email', 'password', 'role', 'profile'])
+      let profile = 
+            _.pick(json.profile, ['firstName', 'lastName', 'phone', 'title', 'photo']),
+          data = _.pick(json, ['email', 'password', 'role'])
 
+      data.profile = profile
       data.activationCode = uuid()
       data.activated = false
       data.created = Date.now()
@@ -142,10 +145,13 @@ class User extends BaseModel {
   //------------------------------------------------------
   update(json) {
     return new Promise(async (resolve, reject) => {
-      let data = _.pick(json, ['password', 'profile', 'passwordResetCode'])
+      let profile = 
+            _.pick(json.profile, ['firstName', 'lastName', 'phone', 'title', 'photo']),
+          data = _.pick(json, ['password', 'passwordResetCode'])
 
       if (!data.passwordResetCode) { data.passwordResetCode = null }
 
+      data.profile = profile
       data.modified = Date.now()
 
       if (data.password) {
