@@ -65,7 +65,6 @@ class BaseModel extends Model {
       } catch (err) { reject(err) }
     })
   }
-
 }
 
 

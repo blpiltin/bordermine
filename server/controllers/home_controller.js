@@ -59,7 +59,6 @@ const userJoin = async (req, res) => {
 			res.flash('message', message)
 			res.redirect('/')
 		} catch (error) {
-			debug.log(error.message)
 			if (user) { user.delete() }
 			if (error.code === 'SQLITE_CONSTRAINT') {
 				error = 'That email is already in use.'
@@ -88,6 +87,10 @@ const sendActivationCode = async (req, res) => {
 			user = await User.findByEmail(fields.email)
 			await mailer.sendActivation(user, getHost(req))
 		} catch (error) {
+			if (error.code === 'SERVER_ERROR') {
+				res.flash('error', error.message)
+				res.redirect('/')
+			}
 		} finally {
 			// Flash the same message for both valid and invalid email addresses
 			// 	for security purposes.
@@ -166,6 +169,10 @@ const sendPasswordResetCode = async (req, res) => {
 			user = await user.generatePasswordResetCode()
 			await mailer.sendPasswordReset(user, getHost(req))
 		} catch (error) {
+			if (error.code === 'SERVER_ERROR') {
+				res.flash('error', error.message)
+				res.redirect('/')
+			}
 		} finally {
 			// Flash the same message for both valid and invalid email addresses
 			// 	for security purposes.

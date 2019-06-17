@@ -1,21 +1,31 @@
-const bcrypt = require('bcryptjs')
-const faker = require('faker')
-faker.seed(777)  // Gives same results each execution
+//======================================================
+// users_seed.js
+//
+// Description: Seed the users database table for testing
+//  and development purposes.
+//
+// Version: 0.0.1
+//
+// Author: Brian Piltin
+// Copyright: (C) 2019 Brian Piltin. All rights reserved.
+//======================================================
 
-const { USER_ROLES } = require('../../models/user')
+const bcrypt = require('bcryptjs')
+
+const faker = require('faker')
+faker.seed(777)   // Gives same data for each execution
+
+const { User } = require('../../models/user')
 
 
 const NUM_STATIC_USERS = 5
 const NUM_RANDOM_USERS = 5
 
-const USER_NOT_ACTIVATED = 1
-const USER_NO_PROFILE = 2
-const USER_PARTIAL_PROFILE = 3
-const USER_0_COURSES = 2
-const USER_1_COURSES = 3
-const USER_3_COURSES = 4
-const USER_6_COURSES = 5
 
+//------------------------------------------------------
+// Create and array with user credentials including:
+//  email, password (unhashed), hash password, activationCode
+//------------------------------------------------------
 const USER_CREDENTIALS = 
   Array(NUM_STATIC_USERS + NUM_RANDOM_USERS).fill(true).map(elem => {
     let password = faker.random.alphaNumeric(7) + 'a1?'
@@ -55,7 +65,7 @@ const getStaticUserData = () => {
       password: USER_CREDENTIALS[0].hash,
       activationCode: USER_CREDENTIALS[0].activationCode,
       activated: false,
-      role: 'teacher',
+      role: 'owner',
       created: Date.now(),
       modified: Date.now()
     },
@@ -63,7 +73,7 @@ const getStaticUserData = () => {
       id: 2, 
       email: USER_CREDENTIALS[1].email,
       password: USER_CREDENTIALS[1].hash,
-      role: 'teacher',
+      role: 'owner',
       activationCode: USER_CREDENTIALS[1].activationCode,
       activated: false,
       created: Date.now(),
@@ -73,31 +83,30 @@ const getStaticUserData = () => {
       id: 3, 
       email: USER_CREDENTIALS[2].email,
       password: USER_CREDENTIALS[2].hash,
-      role: 'teacher',
+      role: 'owner',
       activationCode: USER_CREDENTIALS[2].activationCode,
       activated: true,
       created: Date.now(),
       modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
-        lastName: 'Teacher3'
+        lastName: 'Owner3'
       })
     },
     {
       id: 4,
       email: USER_CREDENTIALS[3].email,
       password: USER_CREDENTIALS[3].hash,
-      role: 'teacher',
+      role: 'owner',
       activationCode: USER_CREDENTIALS[3].activationCode,
       activated: true,
       created: Date.now(),
       modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
-        lastName: 'Teacher4',
-        room: 'A-444',
+        lastName: 'Owner4',
         phone: '999-999-9999 x999',
-        bio: 'This is a test bio. Isn\'t it beautiful?',
+        title: 'CEO',
         photo: 'test_photo_1.jpg'
       })
     },
@@ -105,17 +114,16 @@ const getStaticUserData = () => {
       id: 5,
       email: USER_CREDENTIALS[4].email,
       password: USER_CREDENTIALS[4].hash,
-      role: 'teacher',
+      role: 'owner',
       activationCode: USER_CREDENTIALS[4].activationCode,
       activated: true,
       created: Date.now(),
       modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
-        lastName: 'Teacher5',
-        room: 'A-555',
+        lastName: 'Owner5',
         phone: '999-999-9999 x999',
-        bio: 'This is a test bio. Isn\'t it beautiful?',
+        title: 'Learning Man',
         photo: 'test_photo_1.jpg'
       })
     }
@@ -131,15 +139,14 @@ const getRandomUserData = () => {
       password: USER_CREDENTIALS[NUM_STATIC_USERS + i].hash,
       activationCode: USER_CREDENTIALS[NUM_STATIC_USERS + i].activationCode,
       activated: true,
-      role: faker.random.arrayElement(USER_ROLES),
+      role: faker.random.arrayElement(User.roles),
       created: Date.now(),
       modified: Date.now(),
       profile: JSON.stringify({
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         phone: faker.phone.phoneNumber(),
-        room: faker.random.alphaNumeric(4),
-        bio: faker.lorem.paragraphs(),
+        title: faker.random.words(),
         photo: faker.random.boolean() ? 'test_photo_1.jpg' : null
       })
     })
@@ -151,9 +158,5 @@ const getRandomUserData = () => {
 
 module.exports = { 
   seed,
-  USER_CREDENTIALS,
-  USER_0_COURSES,
-  USER_1_COURSES, 
-  USER_3_COURSES, 
-  USER_6_COURSES
+  USER_CREDENTIALS
 }

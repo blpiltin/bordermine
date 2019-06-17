@@ -14,5 +14,5 @@
 module.exports.gen = function(message, code) {
   let error = new Error(message)
   if (code) { error.code = code }
-  return error
+  throw error
 }

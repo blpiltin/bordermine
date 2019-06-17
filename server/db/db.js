@@ -29,9 +29,7 @@ Model.knex(Knex)
 //------------------------------------------------------
 // Check to make sure we're using the correct database
 //------------------------------------------------------
-if (env !== 'production') {
-  debug.log('Using database', config.connection.filename)
-}
+debug.log('Using database', config.connection.filename)
 
 
 module.exports = { Knex }

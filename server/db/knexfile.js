@@ -6,7 +6,7 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: path.join(__dirname, './classmine_dev.db')
+      filename: path.join(__dirname, './bordermine_dev.db')
     },
     useNullAsDefault: true
   },
@@ -14,7 +14,7 @@ module.exports = {
   test: {
     client: 'sqlite3',
     connection: {
-      filename: path.join(__dirname, './classmine_tst.db')
+      filename: path.join(__dirname, './bordermine_test.db')
     },
     seeds: {
       directory: path.join(__dirname, './seeds')
@@ -28,7 +28,7 @@ module.exports = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: path.join(__dirname, './classmine_prd.db')
+      filename: path.join(__dirname, './bordermine_prod.db')
     },
     useNullAsDefault: true
   }

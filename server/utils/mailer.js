@@ -8,12 +8,20 @@
 //======================================================
 
 const debug = require('../../utils/debug').create('mailer.js')
-const config = require('../config/config')
+
+const env = require('../config/config').env
+const err = require('../../utils/error')
 
 const nodemailer = require('nodemailer')
 const {encodeURL} = require('./server_utils')
 
-if (config.env === 'production') debug.toLog()
+if (env === 'production') { debug.toLog() }
+
+const homeHost = process.env.HOME_HOST || 'localhost'
+const port = process.env.PORT || 3000
+const siteTitle = process.env.SITE_TITLE
+
+let mailerUp = false
 
 
 //------------------------------------------------------
@@ -22,7 +30,7 @@ if (config.env === 'production') debug.toLog()
 let options = {
   host: process.env.SMTP_SERVER || "debugmail.io",
   port: process.env.SMTP_PORT || 25,
-  tls: process.env.SMTP_PORT === 25 ? false : true,
+  tls: process.env.SMTP_TLS || (process.env.SMTP_PORT == 25 ? false : true),
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD
@@ -35,9 +43,16 @@ let mailer = nodemailer.createTransport(options)
 //------------------------------------------------------
 mailer.test = () => {
   debug.log('Testing SMTP mailer connection.')
+  setTimeout(() => {
+    if (!mailerUp) { 
+      debug.log('SERVER ERROR: SMTP mailer not available.')
+      debug.log(' mailer.options: ', mailer.options)
+    }
+  }, 3000)
   mailer.verify()
   .then(() => { 
-    debug.log('SMTP mailer up and running.'); 
+    mailerUp = true
+    debug.log('SMTP mailer up and running.')
   })
   .catch(err => { debug.log('SMTP mailer ERROR: ' + err.message )})
 }
@@ -46,15 +61,17 @@ mailer.test = () => {
 // Send the activation email for the given user.
 //------------------------------------------------------
 mailer.sendActivation = async (user, host, sender) => {
-  let path = host ? host + '/activate': 'http://classmine.com/activate'
+  if (!mailerUp) { 
+    err.gen('Unable to send activation code. Please try again later.', 'SERVER_ERROR') 
+  }
+  let path = host ? host + '/activate': `http://${homeHost}:${port}/activate`
   let url = encodeURL(path, { code: user.activationCode })
   let msg = {
     from: sender || process.env.SMTP_SENDER,
-    to: user.email || process.env.SMTP_RECIPIENT,
-    subject: 'Activate Your Classmine Account',
-    html: 'Please activate your classmine account by clicking '
-      + '<a href="' + url + '">here.</a>',
-    text: 'Please activate your classmine account by going to this link ' + url
+    to: env === 'production' ? user.email : process.env.SMTP_RECIPIENT,
+    subject: `Activate Your ${siteTitle} Account`,
+    html: `Please activate your ${siteTitle.toLowerCase()} account by clicking <a href="${url}">here.</a>`,
+    text: `Please activate your ${siteTitle.toLowerCase()} account by going to this link ${url}`
   }
   return mailer.sendMail(msg)
 }
@@ -63,15 +80,17 @@ mailer.sendActivation = async (user, host, sender) => {
 // Send the password reset email for the given user.
 //------------------------------------------------------
 mailer.sendPasswordReset = async (user, host, sender) => {
-  let path = host ? host + '/password': 'http://classmine.com/password'
+  if (!mailerUp) { 
+    err.gen('Unable to send password reset code. Please try again later.', 'SERVER_ERROR') 
+  }
+  let path = host ? host + '/password':  `http://${homeHost}:${port}/activate`
   let url = encodeURL(path, { code: user.passwordResetCode })
   let msg = {
     from: sender || process.env.SMTP_SENDER,
-    to: user.email || process.env.SMTP_RECIPIENT,
-    subject: 'Reset Your Classmine Password',
-    html: 'Please reset your classmine password by clicking '
-      + '<a href="' + url + '">here.</a>',
-    text: 'Please reset your classmine password by going to this link ' + url
+    to: env === 'production' ? user.email : process.env.SMTP_RECIPIENT,
+    subject: `Reset Your ${siteTitle} Password`,
+    html: `Please reset your ${siteTitle.toLowerCase()} password by clicking <a href="${url}">here.</a>`,
+    text: `Please reset your ${siteTitle.toLowerCase()} password by going to this link ${url}`
   }
   return mailer.sendMail(msg)
 }

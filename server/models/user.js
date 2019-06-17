@@ -1,17 +1,15 @@
 //======================================================
 // user.js 
 // 
-// Description: Defines basic user account used for authentication.
+// Description: Defines basic user account databse model.
+//  Includes CRUD, search, and authentication routines.
 // 
 // Author: Brian Piltin
 // Copyright: (C) 2019 Brian Piltin. All rights reserved.
 //
-// Version 0.0.4
+// Version 0.0.1
 // History:
 //  - 0.0.1: Initial version.
-//  - 0.0.2: Modified for use with cookies instead of web tokens.
-//  - 0.0.3: Add user profile information to Schema.
-//  - 0.0.4: Converted to Objection/Knex from Mongoose
 //======================================================
 
 const debug = require('../../utils/debug').create('user.js')
@@ -27,38 +25,29 @@ const moment = require('moment')
 const fs = require('fs-extra')
 const path = require('path')
 
-const { Model } = require('objection')
-const { Course } = require('./course')
+const { BaseModel } = require('./base_model')
+const { Company } = require('./company')
 
 const { ModelValidator }  = require('../utils/model_validator')
 const forms = require('../utils/forms/user_forms.json')
 
 
-const UPLOADS_DIR = path.join(__dirname, '../../client/uploads')
-
-const USER_ROLES = [
-  'root',
-  'webmaster',
-  'schoolmaster',
-  'administrator',
-  'teacher',
-  'student',
-  'parent'
-]
-
-
-class User extends Model {
+class User extends BaseModel {
 
   static get tableName() { return 'users' }
 
+  static get roles() { return ['root', 'admin', 'owner', 'super', 'user'] }
+
+  static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
+  
   static get relationMappings() {
     return {
       courses: {
-        relation: Model.HasManyRelation,
-        modelClass: Course,
+        relation: BaseModel.HasOneRelation,
+        modelClass: Company,
         join: {
-          from: 'users.id',
-          to: 'courses.userId'
+          from: 'users.companyId',
+          to: 'companies.id'
         }
       }
     }
@@ -92,31 +81,31 @@ class User extends Model {
         reject(Error('Incorrect username or password provided.'))
       }
 
-      bcrypt.hash(data.password, 10, (err, hash) => {
+      bcrypt.hash(data.password, 10, async (err, hash) => {
         if (err) reject(err)
         data.password = hash
-        User.query().insert(data)
-        .then(user => resolve(user))
-        .catch(err => reject(err))
+        try {
+          let user = await User.query().insert(data)
+          resolve(user)
+        } catch(error) { reject(error) }
       })
     })
   }
 
   static read(id) {
-    return new Promise((resolve, reject) => {
-      User.query().eager('courses').where({ id })
-      .then(users => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let users = await User.query().eager('courses').where({ id })
         if (users[0]) { resolve(users[0]) }
         else { reject(Error(`Unable to find user with id ${id}`)) }
-      })
-      .catch(err => reject(err))
+      } catch(error) { reject(error) }
     })
   }
 
   static findByCredentials(email, password) {
-    return new Promise((resolve, reject) => {
-      User.query().where({ email })
-      .then(users => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let users = await User.query().where({ email })
         if (users[0]) {
           let user = users[0]
           bcrypt.compare(password, user.password, (err, result) => {
@@ -129,24 +118,21 @@ class User extends Model {
         } else {
           reject(Error('Incorrect username or password provided.'))
         }
-      })
-      .catch(err => reject(err))
+      } catch(error) { reject(error) }
     })
   }
 
   static findByEmail(email) {
-    return new Promise((resolve, reject) => {
-      User.query()
-      .where({ email })
-      .then(users => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let users = await User.query().where({ email })
         if (users[0]) { resolve(users[0]) }
         else { 
           reject(error.gen(
             `Could not find user with email ${email}.`, 'USER_NOT_FOUND'
           ))
         }
-      })
-      .catch(err => reject(err))
+      } catch(error) { reject(error) }
     })
   }
 
@@ -155,7 +141,7 @@ class User extends Model {
   //  if necessary. Filter unwanted data from json.
   //------------------------------------------------------
   update(json) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let data = _.pick(json, ['password', 'profile', 'passwordResetCode'])
 
       if (!data.passwordResetCode) { data.passwordResetCode = null }
@@ -163,29 +149,29 @@ class User extends Model {
       data.modified = Date.now()
 
       if (data.password) {
-        bcrypt.hash(data.password, 10, (err, hash) => {
+        bcrypt.hash(data.password, 10, async (err, hash) => {
           if (err) reject(err)
           data.password = hash
-          User.query().patchAndFetchById(this.id, data)
-          .then(user => resolve(user))
-          .catch(err => reject(err))
+          try {
+            let user = await User.query().patchAndFetchById(this.id, data)
+            resolve(user)
+          } catch(error) { reject(error) }
         })
       } else {
-        User.query().patchAndFetchById(this.id, data)
-        .then(user => resolve(user))
-        .catch(err => reject(err))
+        try {
+          let user = await User.query().patchAndFetchById(this.id, data)
+          resolve(user)
+        } catch(error) { reject(error) }
       }
     })
   }
 
   delete() {
-    return new Promise((resolve, reject) => {
-      User.query().delete().where({ id: this.id })
-      .then(num => {
-        Course.query().delete().where({ userId: this.id })
-        .then(() => resolve(num))
-      })
-      .catch(err => reject(err))
+    return new Promise(async (resolve, reject) => {
+      try {
+        let num = await User.query().delete().where({ id: this.id })
+        resolve(num)
+      } catch(error) { reject(error) }
     }) 
   }
 
@@ -202,17 +188,20 @@ class User extends Model {
   }
 
   static activate(activationCode) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-      User.query()
-      .patch({ activated: true })
-      .where({ activationCode })
-      .where({ activated: 0 })
-      .then(numUpdated => {
+      try {
+        let numUpdated = 
+          await User.query()
+            .patch({ activated: true })
+            .where({ activationCode })
+            .where({ activated: 0 })
+
         if (numUpdated === 1) { resolve(true) }
-        else { reject(Error('Cannot activate user. Incorrect activation code.')) }
-      })
-      .catch(err => reject(err))
+        else { 
+          reject(Error('Cannot activate user. Incorrect activation code.')) 
+        }
+      } catch(error) { reject(err) }
     })
   }
 
@@ -231,66 +220,7 @@ class User extends Model {
     })
   }
 
-  createCourse(json) {
-    return new Promise((resolve, reject) => {
-
-      let data = _.pick(json, ['name', 'slug', 'code', 'description', 'icon'])
-
-      data.created = Date.now()
-      data.modified = Date.now()
-
-      this.$relatedQuery('courses').insert(data)
-      .then(course => resolve(course))
-      .catch(err => reject(err))
-    })
-  }
-
-  allCourses() {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('courses')
-      .where({ userId: this.id })
-      .then(courses => resolve(courses))
-      .catch(err => reject(err))
-    })
-  }
-
-  courseById(id) {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('courses')
-      .eager('[objectives, vocabularys]')
-      .where({ id })
-      .then(courses => {
-        if (courses[0]) { resolve(courses[0]) }
-        else { reject(Error(`Could not find course with id ${id}`)) }
-      })
-      .catch(err => reject(err))
-    })
-  }
-
-  courseBySlug(slug) {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('courses')
-      .where({ slug })
-      .then(courses => {
-        if (courses[0]) { resolve(courses[0]) }
-        else { reject(Error(`Could not find course with slug ${slug}`)) }
-      })
-      .catch(err => reject(err))
-    })
-  }
-
-  courseByCode(code) {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('courses')
-      .where({ code })
-      .then(courses => {
-        if (courses[0]) { resolve(courses[0]) }
-        else { reject(Error(`Could not find course with code ${code}`)) }
-      })
-      .catch(err => reject(err))
-    })
-  }
 }
 
 
-module.exports = { User, USER_ROLES, UPLOADS_DIR }
+module.exports = { User }

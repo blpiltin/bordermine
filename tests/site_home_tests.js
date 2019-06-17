@@ -16,6 +16,9 @@ var { Knex } = require('../server/db/db')
 
 const { USER_CREDENTIALS } = require('../server/db/seeds/users_seed')
 
+require('../server/config/config')
+const SITE_TITLE = process.env.SITE_TITLE
+
 
 before(function(done) {
   Knex.migrate.rollback()
@@ -24,16 +27,16 @@ before(function(done) {
   .then(() => done())
 })
 
-describe.only('Home Page Test', () => {
+describe('Home Page Test', () => {
 
   before(async function() {
     await driver.logout()
   })
 
-  it('should go to homepage and check title is Bordermine Homepage', async function () {
+  it('should go to homepage and check title is Bordermine Homepage', async function() {
     await driver.get(driver.HOST)
     let title = await driver.getTitle()
-    expect(title).to.equal("Bordermine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
   })
 })
 
@@ -43,21 +46,21 @@ describe('Navbar Test', () => {
     await driver.get(driver.HOST + '/join')
   })
 
-  it('should return to homepage when logo label clicked', async function () {
+  it('should return to homepage when logo label clicked', async function() {
     await driver.findElement(By.id('lbl-logo')).click()
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
   })
 
-  it('should return to homepage when Home menu clicked', async function () {
+  it('should return to homepage when Home menu clicked', async function() {
     await driver.findElement(By.linkText('Home')).click()
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
   })
 
 })
 
-describe('Teacher Join Test', () => {
+describe('User Join Test', () => {
 
   let fake
 
@@ -76,7 +79,7 @@ describe('Teacher Join Test', () => {
     await driver.get(driver.HOST)
     await driver.findElement(By.id('btnJoin')).click()
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Join")
+    expect(title).to.equal(`${SITE_TITLE} | Join`)
   })
 
   it('submitting valid form should redirect to homepage with activation message', async function() {
@@ -91,7 +94,7 @@ describe('Teacher Join Test', () => {
     await driver.findElement(By.id('btnSubmit')).click()
     //await driver.actions().pause(2000).perform();   // #example #pause
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('account was succesfully created')
     expect(fake.callCount).to.equal(1)
@@ -102,11 +105,11 @@ describe.skip('Account Activation Test', () => {
   // #Todo: Figure out how to test for this
   // #Hint: Use fakes to intercept activation code and then get the url
 
-  it('clicking activation link should activate account', async function () {
+  it('clicking activation link should activate account', async function() {
     
   })
 
-  it('providing wrong activation code should present error', async function () {
+  it('providing wrong activation code should present error', async function() {
 
   })
 })
@@ -118,11 +121,11 @@ describe('Send Activation Link Test', function() {
 
   before(function(done) { Knex.seed.run().then(() => done()) })
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     driver.logout()
   })
 
-  it('clicking activation reset button should show email page', async function () {
+  it('clicking activation reset button should show email page', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.get(driver.HOST + '/join')
     await driver.findElement(By.id('btnSendActivation')).click()
@@ -136,7 +139,7 @@ describe('Send Activation Link Test', function() {
     sinon.replace(mailer, 'sendActivation', fake)
     await sendActivationLinkRequest(USER_CREDENTIALS[0].email)
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('activation link has been sent')
     expect(fake.callCount).to.equal(1)
@@ -151,7 +154,7 @@ describe('Send Activation Link Test', function() {
     sinon.replace(mailer, 'sendActivation', fake)
     await sendActivationLinkRequest('whatever@whatever.com')
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('activation link has been sent')
     expect(fake.callCount).to.equal(0)
@@ -164,33 +167,33 @@ describe('Login Test', () => {
   
   before(function(done) { Knex.seed.run().then(() => done()) })
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     driver.logout()
   })
 
-  it('clicking login button should show login page', async function () {
+  it('clicking login button should show login page', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.get(driver.HOST)
     await driver.findElement(By.id('lnkLogin')).click()
     await driver.expectLocationToBe('/login')
   })
 
-  it('logging in active user should redirect to user dashboard', async function () {
+  it('logging in active user should redirect to user dashboard', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.login(USER_CREDENTIALS[2].email, USER_CREDENTIALS[2].password)
     await driver.expectLocationToBe('/dashboard')
   })
 
-  it('logging in inactive user should redirect to home page', async function () {
+  it('logging in inactive user should redirect to home page', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.login(USER_CREDENTIALS[0].email, USER_CREDENTIALS[0].password)
-    await driver.expectTitleToBe('Classmine | Home')
+    await driver.expectTitleToBe(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('problem')
     expect(html).to.contain('activation link')
   })
 
-  it('logging in with wrong credentials should show error', async function () {
+  it('logging in with wrong credentials should show error', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.login(USER_CREDENTIALS[1].email, USER_CREDENTIALS[2].password)
     await driver.expectLocationToBe('/login')
@@ -204,11 +207,11 @@ describe('Password Reset Test', function() {
 
   before(function(done) { Knex.seed.run().then(() => done()) })
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     driver.logout()
   })
 
-  it('clicking password reset button should show email page', async function () {
+  it('clicking password reset button should show email page', async function() {
     this.timeout(driver.TIMEOUT)
     await driver.get(driver.HOST + '/login')
     await driver.findElement(By.id('btnResetPassword')).click()
@@ -222,7 +225,7 @@ describe('Password Reset Test', function() {
     sinon.replace(mailer, 'sendPasswordReset', fake)
     await sendPasswordResetRequest(USER_CREDENTIALS[1].email)
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('reset code has been sent')
     expect(fake.callCount).to.equal(1)
@@ -237,7 +240,7 @@ describe('Password Reset Test', function() {
     sinon.replace(mailer, 'sendPasswordReset', fake)
     await sendPasswordResetRequest('whatever@whatever.com')
     let title = await driver.getTitle()
-    expect(title).to.equal("Classmine | Home")
+    expect(title).to.equal(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('reset code has been sent')
     expect(fake.callCount).to.equal(0)

@@ -1,7 +1,7 @@
 //======================================================
-// course_tests.js
+// company_tests.js
 //
-// Description: Unit tests for Course mongoose schema.
+// Description: Unit tests for Company database model.
 //
 // Version: 0.0.1
 //
@@ -9,7 +9,7 @@
 // Copyright: (C) 2019 Brian Piltin. All rights reserved.
 //======================================================
 
-const debug = require('../../../utils/debug').create('course_tests.js');
+const debug = require('../../../utils/debug').create('company_tests.js');
 
 process.env.NODE_ENV = 'test'
 
@@ -18,7 +18,7 @@ const { expect } = require('chai')
 var { Knex } = require('../../db/db')
 
 const { User } = require('../user')
-const { Course } = require('../course')
+const { Company } = require('../course')
 
 const { getRandomCourseData } = require('../../db/seeds/courses_seed')
 const { getRandomObjectiveData } = require('../../db/seeds/objectives_seed')
