@@ -26,19 +26,21 @@ const { nullifyEmpty } = require('./model_utils')
 const { ModelValidator }  = require('../utils/model_validator')
 const forms = require('../utils/forms/company_forms.json')
 
-const COMPANY_TYPES = ['broker', 'carrier']
-
-const UPLOADS_DIR = path.join(__dirname, '../../client/uploads')
-
 
 class Company extends BaseModel {
 
   static get tableName() { return 'companies' }
 
+  static get jsonAttributes() { return ['address'] }
+
+  static get types() { return ['broker', 'carrier'] }
+
+  static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
+
   static get relationMappings() {
     return {
       users: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: User,
         join: {
           from: 'companies.id',
@@ -46,7 +48,7 @@ class Company extends BaseModel {
         }
       },
       owner: {
-        relation: Model.HasOneRelation,
+        relation: BaseModel.HasOneRelation,
         modelClass: User,
         join: {
           from: 'companies.ownerId',
@@ -54,7 +56,7 @@ class Company extends BaseModel {
         }
       },
       contact: {
-        relation: Model.HasOneRelation,
+        relation: BaseModel.HasOneRelation,
         modelClass: User,
         join: {
           from: 'companies.contactId',
@@ -66,119 +68,40 @@ class Company extends BaseModel {
 
   static createValidator() { return new ModelValidator(forms['edit_company_info']) }
 
-  //------------------------------------------------------
-  // TODO: include file saving/deleting here at the model level
-  //  instead of at the controller level.
-  //------------------------------------------------------
-  update(json) {
-    return new Promise((resolve, reject) => {
-      let data = _.pick(json, ['name', 'slug', 'code', 'description', 'icon'])
 
+  static create(ownerId, contactId, json) {
+
+    return new Promise(async (resolve, reject) => {
+      let address = 
+            _.pick(json.address, [
+              'line1', 'line2', 'city', 'state', 'postalCode', 'country'
+            ]),
+          data = _.pick(json, ['type', 'name', 'logo'])
+
+      data.ownerId = ownerId
+      data.contactId = contactId
+      data.address = address
+      data.created = Date.now()
       data.modified = Date.now()
+      
+      try {
+        let company = await Company.query().insert(data)
+        resolve(company)
+      } catch(error) { reject(error) }
 
-      Company.query().patchAndFetchById(this.id, data)
-      .then(company => resolve(company))
-      .catch(err => reject(err))
     })
   }
 
-  //------------------------------------------------------
-  // Find a company given a json query
-  //------------------------------------------------------
-  static findOne(json) {
-    return new Promise((resolve, reject) => {
-      Company.query()
-      .eager('[objectives, vocabularys]')
-      .where(json)
-      .then(companies => {
-        if (companies[0]) { resolve(companies[0]) }
-        else { reject(Error('Could not find requested company.')) }
-      })
-      .catch(err => reject(err))
+  static read(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let companys = await Company.query().where({ id })
+        if (companys[0]) { resolve(companys[0]) }
+        else { reject(Error(`Unable to find company with id ${id}`)) }
+      } catch(error) { reject(error) }
     })
-  }
-
-  createObjective(json) {
-    return new Promise((resolve, reject) => {
-
-      let data = _.pick(json, ['code', 'text'])
-      nullifyEmpty(data)
-
-      this.$relatedQuery('objectives').insert(data)
-      .then(objective => resolve(objective))
-      .catch(err => reject(err))
-    })
-  }
-
-  deleteObjective(id) {
-    return new Promise((resolve, reject) => {
-      Objective.query().delete().where({ id })
-      .then(num => resolve(num))
-      .catch(err => reject(err))
-    }) 
-  }
-
-  allObjectives() {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('objectives')
-      .where({ companyId: this.id })
-      .then(objectives => resolve(objectives))
-      .catch(err => reject(err))
-    })
-  }
-
-  objectiveById(id) {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('objectives')
-      .where({ id })
-      .then(objectives => {
-        if (objectives[0]) { resolve(objectives[0]) }
-        else { reject(Error(`Could not find objective with id ${id}`)) }
-      })
-      .catch(err => reject(err))
-    })
-  }
-
-  createVocabulary(json) {
-    return new Promise((resolve, reject) => {
-
-      let data = _.pick(json, ['word', 'definition', 'image'])
-
-      this.$relatedQuery('vocabularys').insert(data)
-      .then(vocabulary => resolve(vocabulary))
-      .catch(err => reject(err))
-    })
-  }
-
-  allVocabularys() {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('vocabularys')
-      .where({ companyId: this.id })
-      .then(vocabularys => resolve(vocabularys))
-      .catch(err => reject(err))
-    })
-  }
-
-  vocabularyById(id) {
-    return new Promise((resolve, reject) => {
-      this.$relatedQuery('vocabularys')
-      .where({ id })
-      .then(vocabulary => {
-        if (vocabulary[0]) { resolve(vocabulary[0]) }
-        else { reject(Error(`Could not find vocabulary with id ${id}`)) }
-      })
-      .catch(err => reject(err))
-    })
-  }
-
-  deleteVocabulary(id) {
-    return new Promise((resolve, reject) => {
-      Vocabulary.query().delete().where({ id })
-      .then(num => resolve(num))
-      .catch(err => reject(err))
-    }) 
   }
 }
 
 
-module.exports = { Company, COMPANY_TYPES }
+module.exports = { Company }

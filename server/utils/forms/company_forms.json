@@ -5,13 +5,68 @@
     "submit": "Save",
     "enctype": "multipart/form-data",
     "fields": {
+      "type": {
+        "type": "select",
+        "label": "Type",
+        "placeholder": "Select one of the following...",
+        "required": true,
+        "requiredError": "Please select a company type.",
+        "options": {
+          "broker": "I represent a broker or agent",
+          "carrier": "I represent a carrier or shipper"
+        }
+      },
       "name": {
         "type": "text",
         "label": "Name",
         "placeholder": "Enter the company name",
         "required": true,
-        "requiredError": "Please enter a valid company name. Valid names begin with letters and can only include letters, numbers, underscores, dashes and spaces.",
-        "pattern": "^[A-Za-z]+((\\w|\\d|-|\\s)*[a-zA-Z0-9]+)*$"
+        "requiredError": "Please enter a company name."
+      },
+      "address": {
+        "type": "json",
+        "fields": {
+          "line1": {
+            "type": "text",
+            "label": "Address Line 1",
+            "placeholder": "Enter the address line 1",
+            "required": true,
+            "requiredError": "Please enter the address line 1."
+          },
+          "line2": {
+            "type": "text",
+            "label": "Address Line 2",
+            "placeholder": "Enter the address line 2"
+          },
+          "city": {
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter the city",
+            "required": true,
+            "requiredError": "Please enter the city."
+          },
+          "state": {
+            "type": "text",
+            "label": "State or Province",
+            "placeholder": "Enter the state or province",
+            "required": true,
+            "requiredError": "Please enter the state or province."
+          },
+          "postalCode": {
+            "type": "text",
+            "label": "Postal Code",
+            "placeholder": "Enter the postal or zip code",
+            "required": true,
+            "requiredError": "Please enter the postal or zip code."
+          },
+          "country": {
+            "type": "text",
+            "label": "Country",
+            "placeholder": "Enter the country",
+            "required": true,
+            "requiredError": "Please enter the country."
+          }
+        }
       },
       "logo": {
         "type": "file",

@@ -42,13 +42,13 @@ const USER_CREDENTIALS =
 //------------------------------------------------------
 // Seed the users table with both static and random data
 //------------------------------------------------------
-const seed = function(knex, Promise) {
+const seed = function (knex, Promise) {
   return knex('users').del()
   .then(function () {
-    return knex('users').insert(getStaticUserData())
+    return knex('users').insert(getStaticUserDataArray())
   })
   .then(function () {
-    return knex('users').insert(getRandomUserData())
+    return knex('users').insert(getRandomUserDataArray())
   })
 }
 
@@ -57,7 +57,7 @@ const seed = function(knex, Promise) {
 // Utils
 //======================================================
 
-const getStaticUserData = () => {
+const getStaticUserDataArray = () => {
   return [
     {
       id: 1, 
@@ -65,9 +65,7 @@ const getStaticUserData = () => {
       password: USER_CREDENTIALS[0].hash,
       activationCode: USER_CREDENTIALS[0].activationCode,
       activated: false,
-      role: 'owner',
-      created: Date.now(),
-      modified: Date.now()
+      role: 'owner'
     },
     {
       id: 2, 
@@ -75,9 +73,7 @@ const getStaticUserData = () => {
       password: USER_CREDENTIALS[1].hash,
       role: 'owner',
       activationCode: USER_CREDENTIALS[1].activationCode,
-      activated: false,
-      created: Date.now(),
-      modified: Date.now()
+      activated: false
     },
     {
       id: 3, 
@@ -86,8 +82,6 @@ const getStaticUserData = () => {
       role: 'owner',
       activationCode: USER_CREDENTIALS[2].activationCode,
       activated: true,
-      created: Date.now(),
-      modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
         lastName: 'Owner3'
@@ -100,8 +94,6 @@ const getStaticUserData = () => {
       role: 'owner',
       activationCode: USER_CREDENTIALS[3].activationCode,
       activated: true,
-      created: Date.now(),
-      modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
         lastName: 'Owner4',
@@ -117,8 +109,6 @@ const getStaticUserData = () => {
       role: 'owner',
       activationCode: USER_CREDENTIALS[4].activationCode,
       activated: true,
-      created: Date.now(),
-      modified: Date.now(),
       profile: JSON.stringify({
         firstName: 'Test',
         lastName: 'Owner5',
@@ -130,33 +120,48 @@ const getStaticUserData = () => {
   ]
 }
 
-const getRandomUserData = () => {
-  let data = []
+const getRandomUserDataArray = () => {
+  let arr = []
 
   for (var i = 0; i < NUM_RANDOM_USERS; i++) {
-    data.push({
-      email: USER_CREDENTIALS[NUM_STATIC_USERS + i].email,
-      password: USER_CREDENTIALS[NUM_STATIC_USERS + i].hash,
-      activationCode: USER_CREDENTIALS[NUM_STATIC_USERS + i].activationCode,
-      activated: true,
-      role: faker.random.arrayElement(User.roles),
-      created: Date.now(),
-      modified: Date.now(),
-      profile: JSON.stringify({
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        phone: faker.phone.phoneNumber(),
-        title: faker.random.words(),
-        photo: faker.random.boolean() ? 'test_photo_1.jpg' : null
-      })
-    })
+    let data = getRandomUserData()
+
+    data.email = USER_CREDENTIALS[NUM_STATIC_USERS + i].email
+    data.password = USER_CREDENTIALS[NUM_STATIC_USERS + i].hash
+    data.activationCode = USER_CREDENTIALS[NUM_STATIC_USERS + i].activationCode
+    data.profile = JSON.stringify(data.profile)
+
+    arr.push(data)
   }
   
-  return data
+  return arr
+}
+
+
+const getRandomUserData = () => {
+  return {
+    email: faker.internet.email(),
+    password: faker.random.alphaNumeric(7) + 'a1?',
+    activationCode: faker.random.uuid(),
+    activated: true,
+    role: faker.random.arrayElement(User.roles),
+    profile: {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      phone: faker.phone.phoneNumber(),
+      title: faker.random.words(),
+      photo: faker.random.boolean() ? 'test_photo_1.jpg' : null
+    },
+    created: Date.now(),
+    modified: Date.now()
+  }
 }
 
 
 module.exports = { 
   seed,
-  USER_CREDENTIALS
+  getRandomUserData,
+  USER_CREDENTIALS,
+  NUM_STATIC_USERS,
+  NUM_RANDOM_USERS
 }

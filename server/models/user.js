@@ -36,6 +36,8 @@ class User extends BaseModel {
 
   static get tableName() { return 'users' }
 
+  static get jsonAttributes() { return ['profile'] }
+  
   static get roles() { return ['root', 'admin', 'owner', 'super', 'user'] }
 
   static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
@@ -52,8 +54,6 @@ class User extends BaseModel {
       }
     }
   }
-
-  static get jsonAttributes() { return ['profile'] }
 
   get fullName() { 
     return this.profile 
