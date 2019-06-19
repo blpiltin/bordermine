@@ -69,7 +69,7 @@ class Company extends BaseModel {
   static createValidator() { return new ModelValidator(forms['edit_company_info']) }
 
 
-  static create(ownerId, json) {
+  static create(json) {
 
     return new Promise(async (resolve, reject) => {
       let address = 
@@ -78,8 +78,6 @@ class Company extends BaseModel {
             ]),
           data = _.pick(json, ['type', 'name', 'logo'])
 
-      data.ownerId = ownerId
-      data.contactId = ownerId
       data.address = address
       data.created = Date.now()
       data.modified = Date.now()
@@ -108,11 +106,33 @@ class Company extends BaseModel {
             _.pick(json.address, [
                 'line1', 'line2', 'city', 'state', 'postalCode', 'country'
               ]),
-          data = _.pick(json, ['contactId', 'name', 'logo'])
+          data = _.pick(json, ['name', 'logo'])
       
       data.address = address
       data.modified = Date.now()
 
+      try {
+        let company = await Company.query().patchAndFetchById(this.id, data)
+        resolve(company)
+      } catch(error) { reject(error) }
+    })
+  }
+
+  updateOwner(ownerId) {
+    return new Promise(async (resolve, reject) => {
+      let data = { ownerId, contactId: ownerId, modified: Date.now() }
+      
+      try {
+        let company = await Company.query().patchAndFetchById(this.id, data)
+        resolve(company)
+      } catch(error) { reject(error) }
+    })
+  }
+
+  updateContact(contactId) {
+    return new Promise(async (resolve, reject) => {
+      let data = { contactId, modified: Date.now() }
+      
       try {
         let company = await Company.query().patchAndFetchById(this.id, data)
         resolve(company)

@@ -20,8 +20,8 @@ exports.up = function (knex, Promise) {
   return knex.schema.createTable('companies', function (table) {
 
     table.increments('id')
-    table.integer('ownerId').notNullable().references('users.id')
-    table.integer('contactId').notNullable().references('users.id')
+    table.integer('ownerId').references('users.id')
+    table.integer('contactId').references('users.id')
 
     table.enu('type', Company.types).notNullable()
     table.string('name').notNullable().unique()

@@ -19,7 +19,6 @@ const { expect } = require('chai')
 
 var { Knex } = require('../../db/db')
 
-const { User } = require('../user')
 const { Company } = require('../company')
 
 const { getRandomUserData } = require('../../db/seeds/users_seed')
@@ -36,48 +35,36 @@ before(async function () {
 describe('Company', function () {
 
   describe('create', async function () {
-    let user
     
-    before(async function () {
-      user = await User.read(1)
-    })
-
     it('should create a company with valid data', async function () {
       let data = getRandomCompanyData()
-      let company = await Company.create(user.id, data)
+      let company = await Company.create(data)
       company = await Company.read(company.id)
       expect(company).to.be.ok
-      expect(company.ownerId).to.equal(user.id)
-      expect(company.contactId).to.equal(user.id)
+      expect(company.name).to.equal(data.name)
       expect(company.address).to.contain(data.address)
       expect(company.created).to.be.ok
       expect(company.modified).to.be.ok
     })
 
-    it('should not create a company with a missing ownerId', async function () {
-      let data = getRandomCompanyData(), company
-      try { company = await Company.create(undefined, data) } 
-      catch(error) { expect(company).to.not.be.ok }
-    })
-
     it('should not create a company with a missing name', async function () {
       let data = getRandomCompanyData(), company
       delete data.name
-      try { company = await Company.create(user.id, data) } 
+      try { company = await Company.create(data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
     it('should not create a company with an invalid type', async function () {
       let data = getRandomCompanyData(), company
       data.type = 'whatever'
-      try { company = await Company.create(user.id, data) } 
+      try { company = await Company.create(data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
     it('should not create a company with a missing address', async function () {
       let data = getRandomCompanyData(), company
       delete data.address
-      try { company = await Company.create(user.id, data)} 
+      try { company = await Company.create(data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -86,7 +73,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.line1
-      try { company = await Company.create(user.id, data)} 
+      try { company = await Company.create(data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -95,7 +82,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.line2
-      company = await Company.create(user.id, data)
+      company = await Company.create(data)
       expect(company).to.be.ok
     })
 
@@ -104,7 +91,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.city
-      try { company = await Company.create(user.id, data) } 
+      try { company = await Company.create(data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -113,7 +100,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.state
-      try { company = await Company.create(user.id, data)} 
+      try { company = await Company.create(data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -122,7 +109,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.postalCode
-      try { company = await Company.create(user.id, data)} 
+      try { company = await Company.create(data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -131,7 +118,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.country
-      try { company = await Company.create(user.id, data)} 
+      try { company = await Company.create(data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -148,7 +135,7 @@ describe('Company', function () {
 
     it('should not get a company with an invalid id', async function ()  {
       let company
-      try { company = await User.read(-1) }
+      try { company = await Company.read(-1) }
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -165,16 +152,24 @@ describe('Company', function () {
 
     it('should not allow updates to the company owner', async function () {
       let data = getRandomCompanyData()
-          company = await Company.create(1, data)
+          company = await Company.create(data)
 
       company = await company.update({ ownerId: 2})
-      expect(company.ownerId).to.equal(1)
+      expect(company.ownerId).to.not.equal(2)
+    })
+
+    it('should not allow updates to the company contact', async function () {
+      let data = getRandomCompanyData()
+          company = await Company.create(data)
+
+      company = await company.update({ contactId: 2})
+      expect(company.contactId).to.not.equal(2)
     })
 
     it('should not allow updates to the company type', async function () {
       let data = getRandomCompanyData()
       data.type = 'carrier'
-      let company = await Company.create(1, data)
+      let company = await Company.create(data)
 
       company = await company.update({ type: 'broker' })
       expect(company.type).to.equal('carrier')
@@ -189,13 +184,45 @@ describe('Company', function () {
 
   })
 
+  describe('updateOwner', function () {
+
+    it('should update the company ownerId and contactId', async function () {
+      let data = getRandomCompanyData()
+          company = await Company.create(data)
+      
+      expect(company.ownerId).to.not.be.ok
+      expect(company.contactId).to.not.be.ok
+
+      company = await company.updateOwner(1)
+      expect(company.ownerId).to.equal(1)
+      expect(company.contactId).to.equal(1)
+    })
+
+  })
+
+  describe('updateContact', function () {
+
+    it('should update the company contactId', async function () {
+      let data = getRandomCompanyData()
+          company = await Company.create(data)
+      
+      expect(company.ownerId).to.not.be.ok
+      expect(company.contactId).to.not.be.ok
+
+      company = await company.updateContact(1)
+      expect(company.ownerId).to.not.be.ok
+      expect(company.contactId).to.equal(1)
+    })
+
+  })
+
   describe('delete', function () {
 
     it('should delete a company and related users', async function () {
-      let data = getRandomUserData(), deleted
-      let owner = await User.create(data)
-      data = getRandomCompanyData()
-      let company = await Company.create(owner.id, data)
+      const { User } = require('../user')
+
+      let data = getRandomCompanyData(), deleted,
+          company = await Company.create(data)
       data = getRandomUserData()
       data.companyId = company.id
       let user1 = await User.create(data)
@@ -203,7 +230,6 @@ describe('Company', function () {
       data.companyId = company.id
       let user2 = await User.create(data)
 
-      expect(owner).to.be.ok
       expect(company).to.be.ok
       expect(user1).to.be.ok
       expect(user2).to.be.ok
@@ -212,9 +238,6 @@ describe('Company', function () {
       expect(num).to.equal(1)
 
       try { deleted = await Company.read(1) }
-      catch(error) { expect(deleted).to.not.be.ok }
-
-      try { deleted = await User.read(owner.id) }
       catch(error) { expect(deleted).to.not.be.ok }
 
       try { deleted = await User.read(user1.id) }
