@@ -20,7 +20,7 @@ exports.up = function (knex, Promise) {
   return knex.schema.createTable('users', function (table) {
 
     table.increments('id')
-    table.integer('companyId').references('companies.id')
+    table.integer('companyId').references('companies.id').onDelete('CASCADE')
     
     table.string('email').notNullable().unique()
     table.string('password').notNullable()

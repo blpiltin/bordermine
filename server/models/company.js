@@ -15,11 +15,9 @@ const debug = require('../../utils/debug').create('company.js')
 
 const _ = require('lodash')
 
-const fs = require('fs-extra')
 const path = require('path')
 
 const { BaseModel } = require('./base_model')
-const { User } = require('./user')
 
 const { nullifyEmpty } = require('./model_utils')
 
@@ -38,9 +36,11 @@ class Company extends BaseModel {
   static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
 
   static get relationMappings() {
+    const { User } = require('./user')
+
     return {
       users: {
-        relation: BaseModel.HasManyRelation,
+        relation: this.HasManyRelation,
         modelClass: User,
         join: {
           from: 'companies.id',
@@ -48,7 +48,7 @@ class Company extends BaseModel {
         }
       },
       owner: {
-        relation: BaseModel.HasOneRelation,
+        relation: this.HasOneRelation,
         modelClass: User,
         join: {
           from: 'companies.ownerId',
@@ -56,7 +56,7 @@ class Company extends BaseModel {
         }
       },
       contact: {
-        relation: BaseModel.HasOneRelation,
+        relation: this.HasOneRelation,
         modelClass: User,
         join: {
           from: 'companies.contactId',
@@ -69,7 +69,7 @@ class Company extends BaseModel {
   static createValidator() { return new ModelValidator(forms['edit_company_info']) }
 
 
-  static create(ownerId, contactId, json) {
+  static create(ownerId, json) {
 
     return new Promise(async (resolve, reject) => {
       let address = 
@@ -79,7 +79,7 @@ class Company extends BaseModel {
           data = _.pick(json, ['type', 'name', 'logo'])
 
       data.ownerId = ownerId
-      data.contactId = contactId
+      data.contactId = ownerId
       data.address = address
       data.created = Date.now()
       data.modified = Date.now()
@@ -101,6 +101,41 @@ class Company extends BaseModel {
       } catch(error) { reject(error) }
     })
   }
+
+  update(json) {
+    return new Promise(async (resolve, reject) => {
+      let address = 
+            _.pick(json.address, [
+                'line1', 'line2', 'city', 'state', 'postalCode', 'country'
+              ]),
+          data = _.pick(json, ['contactId', 'name', 'logo'])
+      
+      data.address = address
+      data.modified = Date.now()
+
+      try {
+        let company = await Company.query().patchAndFetchById(this.id, data)
+        resolve(company)
+      } catch(error) { reject(error) }
+    })
+  }
+
+  //------------------------------------------------------
+  // Delete a company and all related users.
+  //  Should only be used for administration/testing purposes!
+  //------------------------------------------------------
+  delete() {
+    return new Promise(async (resolve, reject) => {
+      const { User } = require('./user')
+
+      try {
+        let num = await User.query().delete().where({ companyId: this.id })
+        num = await Company.query().delete().where({ id: this.id })
+        resolve(num)
+      } catch(error) { reject(error) }
+    }) 
+  }
+
 }
 
 

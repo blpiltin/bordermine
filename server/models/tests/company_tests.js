@@ -16,16 +16,13 @@ const debug = require('../../../utils/debug').create('companies_tests.js')
 process.env.NODE_ENV = 'test'
 
 const { expect } = require('chai')
-const faker = require('faker')
-const sinon = require('sinon')
-
-const moment = require('moment')
 
 var { Knex } = require('../../db/db')
 
 const { User } = require('../user')
 const { Company } = require('../company')
 
+const { getRandomUserData } = require('../../db/seeds/users_seed')
 const { getRandomCompanyData } = require('../../db/seeds/companies_seed')
 
 
@@ -38,7 +35,7 @@ before(async function () {
 
 describe('Company', function () {
 
-  describe.only('create', async function () {
+  describe('create', async function () {
     let user
     
     before(async function () {
@@ -47,7 +44,7 @@ describe('Company', function () {
 
     it('should create a company with valid data', async function () {
       let data = getRandomCompanyData()
-      let company = await Company.create(user.id, user.id, data)
+      let company = await Company.create(user.id, data)
       company = await Company.read(company.id)
       expect(company).to.be.ok
       expect(company.ownerId).to.equal(user.id)
@@ -59,27 +56,28 @@ describe('Company', function () {
 
     it('should not create a company with a missing ownerId', async function () {
       let data = getRandomCompanyData(), company
-      try { company = await Company.create(undefined, user.id, data) } 
-      catch(error) { expect(company).to.not.be.ok }
-    })
-
-    it('should not create a company with a missing contactId', async function () {
-      let data = getRandomCompanyData(), company
-      try { company = await Company.create(user.id, undefined, data) } 
+      try { company = await Company.create(undefined, data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
     it('should not create a company with a missing name', async function () {
       let data = getRandomCompanyData(), company
       delete data.name
-      try { company = await Company.create(user.id, user.id, data) } 
+      try { company = await Company.create(user.id, data) } 
+      catch(error) { expect(company).to.not.be.ok }
+    })
+
+    it('should not create a company with an invalid type', async function () {
+      let data = getRandomCompanyData(), company
+      data.type = 'whatever'
+      try { company = await Company.create(user.id, data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
     it('should not create a company with a missing address', async function () {
       let data = getRandomCompanyData(), company
       delete data.address
-      try { company = await Company.create(user.id, user.id, data)} 
+      try { company = await Company.create(user.id, data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -88,7 +86,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.line1
-      try { company = await Company.create(user.id, user.id, data)} 
+      try { company = await Company.create(user.id, data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -97,7 +95,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.line2
-      company = await Company.create(user.id, user.id, data)
+      company = await Company.create(user.id, data)
       expect(company).to.be.ok
     })
 
@@ -106,7 +104,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.city
-      try { company = await Company.create(user.id, user.id, data) } 
+      try { company = await Company.create(user.id, data) } 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -115,7 +113,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.state
-      try { company = await Company.create(user.id, user.id, data)} 
+      try { company = await Company.create(user.id, data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -124,7 +122,7 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.postalCode
-      try { company = await Company.create(user.id, user.id, data)} 
+      try { company = await Company.create(user.id, data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
@@ -133,269 +131,99 @@ describe('Company', function () {
 
       let data = getRandomCompanyData(), company
       delete data.address.country
-      try { company = await Company.create(user.id, user.id, data)} 
+      try { company = await Company.create(user.id, data)} 
       catch(error) { expect(company).to.not.be.ok }
     })
 
   })
 
 
-  describe('read',function () {
+  describe('read', function () {
 
-    it('should get a user with a valid id', async function ()  {
-      let user = await User.read(1)
-      expect(user).to.be.ok
-      expect(user.id).to.equal(1)
+    it('should get a company with a valid id', async function ()  {
+      let company = await Company.read(1)
+      expect(company).to.be.ok
+      expect(company.id).to.equal(1)
     })
 
-    it('should not get a user with an invalid id', async function ()  {
-      try { await User.read(-1) }
-      catch(error) {}
-    })
-
-  })
-
-  describe('findByCredentials',function () {
-
-    it('should find a user with valid credentials', async function () {
-      let data = getRandomUserData(),
-          password = data.password
-
-      await User.create(data)
-      let user = await User.findByCredentials(data.email, password)
-      expect(user).to.be.ok
-      expect(user.email).to.equal(data.email)
-    })
-
-    it('should not find a user with invalid email', async function ()  {
-      let data = getRandomUserData(),
-          password = data.password,
-          email = "whatever@wontwork.com"
-
-      await User.create(data)
-      try { await User.findByCredentials(email, password) }
-      catch(error) {}
-    })
-
-    it('should reject a user with invalid password', async function ()  {
-      let data = getRandomUserData(),
-          password = "whatever"
-          
-      await User.create(data)
-      try { await User.findByCredentials(data.email, password) }
-      catch(error) {}
-    })
-
-  })
-
-  describe('findByEmail',function () {
-
-    it('should find a user with valid email', async function () {
-      let user = await User.findByEmail(USER_CREDENTIALS[2].email)
-      expect(user.email).to.equal(USER_CREDENTIALS[2].email)
-    })
-
-    it('should reject finding a user with an invalid email', async function () {
-      try { await User.findByEmail('invalidemail@whoever.com') }
-      catch(error) {}
+    it('should not get a company with an invalid id', async function ()  {
+      let company
+      try { company = await User.read(-1) }
+      catch(error) { expect(company).to.not.be.ok }
     })
 
   })
 
   describe('update', function () {
-     
-    this.timeout(10000)
 
-    it('should read a user and return model', async function () {
-      let user = await User.read(2)
-      expect(user).to.be.ok
+    it('should update a company with valid data', async function () {
+      let data = getRandomCompanyData(),
+          company = await Company.read(1)
+      company = await company.update(data)
+      expect(company.address.line1).to.equal(data.address.line1)
     })
 
-    it('should update a user with valid data', async function () {
-      let data = getRandomUserData(),
-          firstName = data.profile.firstName
+    it('should not allow updates to the company owner', async function () {
+      let data = getRandomCompanyData()
+          company = await Company.create(1, data)
 
-      delete data.email
-      delete data.activationCode
-      delete data.activated
-      delete data.role
-
-      let user = await User.read(1)
-      user = await user.update(data)
-      expect(user.profile.firstName).to.equal(firstName)
+      company = await company.update({ ownerId: 2})
+      expect(company.ownerId).to.equal(1)
     })
 
-    it('should provide the user\'s full name', async function () {
-      let user = await User.read(1),
-          fullName = `${user.profile.firstName} ${user.profile.lastName}`
-      expect(user.fullName).to.equal(fullName)
+    it('should not allow updates to the company type', async function () {
+      let data = getRandomCompanyData()
+      data.type = 'carrier'
+      let company = await Company.create(1, data)
+
+      company = await company.update({ type: 'broker' })
+      expect(company.type).to.equal('carrier')
     })
 
-    it('should not update email', async function () {
-      let user = await User.read(1)
-
-      user = await user.update({ email: 'whatever@whoever.com' })
-      expect(user.email).to.not.equal('whatever@whoever.com')
-    })
-
-    it('should not allow updates with invalid data', async function () {
-      let user = await User.read(1)
+    it('should not allow updates with an invalid type', async function () {
+      let company = await Company.read(1), updated
       
-      try { await user.update({ profile: { phone: '333' } }) }
-      catch(error) {}
-    })
-
-    it('should not allow updates to activation field', async function () {
-      let user = await User.read(1)
-      
-      user = await user.update({ activated: true })
-      expect(user.activated).to.not.equal(true)
-    })
-
-    it('should not update non-updateable fields', async function () {
-      let data = getRandomUserData()
-      data.role = 'root'
-
-      let user = await User.read(1)
-      user = await user.update(data)
-      
-      expect(user.profile).to.contain(data.profile)
-      expect(user.email).to.not.equal(data.email)
-      expect(user.role).to.not.equal(data.role)
-      expect(user.activationCode).to.not.equal(data.activationCode)
-      expect(user.activated).to.not.equal(data.activated)
-      expect(user.created).to.not.equal(data.created)
-      expect(user.modified).to.not.equal(data.modified)
-    })
-
-    it('should delete a previously generated passwordResetCode', async function () {
-      let user = await User.create(getRandomUserData())
-
-      expect(user.passwordResetCode).to.not.be.ok
-      user = await user.generatePasswordResetCode()
-      expect(user.passwordResetCode).to.be.ok
-      user = await user.update({ password: 'abc123!++'})
-      expect(user.passwordResetCode).to.not.be.ok
+      try { updated = await company.update({ type: 'whatever' }) }
+      catch(error) { expect(updated).to.not.be.ok }
     })
 
   })
 
-  describe('delete',function () {
+  describe('delete', function () {
 
-    it('should delete a user', async function () {
-      let data = getRandomUserData(),
-          user = await User.create(data)
-      
-      expect(user).to.be.ok
+    it('should delete a company and related users', async function () {
+      let data = getRandomUserData(), deleted
+      let owner = await User.create(data)
+      data = getRandomCompanyData()
+      let company = await Company.create(owner.id, data)
+      data = getRandomUserData()
+      data.companyId = company.id
+      let user1 = await User.create(data)
+      data = getRandomUserData()
+      data.companyId = company.id
+      let user2 = await User.create(data)
 
-      let num = await user.delete()
+      expect(owner).to.be.ok
+      expect(company).to.be.ok
+      expect(user1).to.be.ok
+      expect(user2).to.be.ok
+
+      let num = await company.delete()
       expect(num).to.equal(1)
+
+      try { deleted = await Company.read(1) }
+      catch(error) { expect(deleted).to.not.be.ok }
+
+      try { deleted = await User.read(owner.id) }
+      catch(error) { expect(deleted).to.not.be.ok }
+
+      try { deleted = await User.read(user1.id) }
+      catch(error) { expect(deleted).to.not.be.ok }
+
+      try { deleted = await User.read(user2.id) }
+      catch(error) { expect(deleted).to.not.be.ok }
     })
 
   })
 
-  describe('matchPassword', function () {
-    
-    it('should return the user if the supplied password matches user password', 
-      async function () {
-
-      let user = await User.read(2)
-      user = await user.matchPassword(USER_CREDENTIALS[1].password)
-      expect(user).to.be.ok
-    })
-
-    it('should return an error if the password does not match user password', 
-      async function () {
-
-      let user = await User.read(2)
-      try { await user.matchPassword(USER_CREDENTIALS[0].password) }
-      catch(error) {}
-    })
-
-  })
-
-  describe('activate',function () {
-
-    it('should activate a user with correct activation code', async function () {
-      let data = getRandomUserData()
-      data.activated = false
-      
-      let user = await User.create(data)
-      let activated = await User.activate(user.activationCode)
-      expect(activated).to.equal(true)
-    })
-
-    it('should not activate a user with incorrect activation code', 
-      async function () {
-
-      let data = getRandomUserData()
-      data.activated = false
-      
-      let user = await User.create(data)
-
-      try { user.activate('whatever') }
-      catch(error) {}
-    })
-
-  })
-
-  describe('generatePasswordResetCode', function () {
-    
-    it('should generate a unique password reset code', async function () {
-      let user = await User.create(getRandomUserData())
-      expect(user.passwordResetCode).to.not.be.ok
-      user = await user.generatePasswordResetCode()
-      expect(user.passwordResetCode).to.be.ok
-    })
-
-  })
-
-  describe('confirmPasswordResetCode', function () {
-
-    it('should confirm a valid password reset code', async function () {
-      let user = await User.create(getRandomUserData())
-      expect(user.passwordResetCode).to.not.be.ok
-      user = await user.generatePasswordResetCode()
-      expect(user.passwordResetCode).to.be.ok
-      user = await user.confirmPasswordResetCode(user.passwordResetCode)
-      expect(user).to.be.ok
-    })
-
-    it('should reject an invalid password reset code', async function () {
-      let user = await User.create(getRandomUserData())
-      expect(user.passwordResetCode).to.not.be.ok
-      user = await user.generatePasswordResetCode()
-      expect(user.passwordResetCode).to.be.ok
-      try {
-        await user.confirmPasswordResetCode('anything-goes')
-      } catch (error) {
-        
-      }
-    })
-
-    it('should reject an expired password reset code', async function () {
-      let user = await User.create(getRandomUserData())
-      user = await user.generatePasswordResetCode()
-      let ahead =  new Date(moment().add(1, 'hour'))
-      let clock = sinon.useFakeTimers(ahead)
-      try {
-        await user.confirmPasswordResetCode(user.passwordResetCode)
-      } catch (error) {
-        clock.restore()
-      }
-    })
-
-  })
-
-  describe('fullName',function () {
-
-    it('should get user\'s full name', function (done) {
-      let data = getRandomUserData()
-      User.create(data)
-      .then(user => {
-        expect(user.fullName).to.equal(`${user.profile.firstName} ${user.profile.lastName}`)
-        done()
-      })
-    })
-  })
 })

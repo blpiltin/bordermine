@@ -26,7 +26,6 @@ const fs = require('fs-extra')
 const path = require('path')
 
 const { BaseModel } = require('./base_model')
-const { Company } = require('./company')
 
 const { ModelValidator }  = require('../utils/model_validator')
 const forms = require('../utils/forms/user_forms.json')
@@ -37,15 +36,17 @@ class User extends BaseModel {
   static get tableName() { return 'users' }
 
   static get jsonAttributes() { return ['profile'] }
-  
+
   static get roles() { return ['root', 'admin', 'owner', 'super', 'user'] }
 
   static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
   
   static get relationMappings() {
+    const { Company } = require('./company')
+
     return {
-      courses: {
-        relation: BaseModel.HasOneRelation,
+      company: {
+        relation: this.HasOneRelation,
         modelClass: Company,
         join: {
           from: 'users.companyId',
@@ -98,7 +99,7 @@ class User extends BaseModel {
   static read(id) {
     return new Promise(async (resolve, reject) => {
       try {
-        let users = await User.query().eager('courses').where({ id })
+        let users = await User.query().eager('company').where({ id })
         if (users[0]) { resolve(users[0]) }
         else { reject(Error(`Unable to find user with id ${id}`)) }
       } catch(error) { reject(error) }

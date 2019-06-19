@@ -16,7 +16,7 @@ const debug = require('../../../utils/debug').create('user_tests.js')
 process.env.NODE_ENV = 'test'
 
 const { expect } = require('chai')
-const faker = require('faker')
+
 const sinon = require('sinon')
 
 const moment = require('moment')
@@ -262,13 +262,16 @@ describe('User',function () {
   describe('delete',function () {
 
     it('should delete a user', async function () {
-      let data = getRandomUserData(),
+      let data = getRandomUserData(), deleted
           user = await User.create(data)
       
       expect(user).to.be.ok
 
+      let id = user.id
       let num = await user.delete()
       expect(num).to.equal(1)
+      try { deleted = await User.read(id) }
+      catch(error) { expect(deleted).to.not.be.ok }
     })
 
   })
@@ -376,6 +379,6 @@ describe('User',function () {
 
       expect(user.fullName).to.equal(`${user.profile.firstName} ${user.profile.lastName}`)
     })
-    
+
   })
 })
