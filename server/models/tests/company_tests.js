@@ -221,14 +221,10 @@ describe('Company', function () {
     it('should delete a company and related users', async function () {
       const { User } = require('../user')
 
-      let data = getRandomCompanyData(), deleted,
-          company = await Company.create(data)
-      data = getRandomUserData()
-      data.companyId = company.id
-      let user1 = await User.create(data)
-      data = getRandomUserData()
-      data.companyId = company.id
-      let user2 = await User.create(data)
+      let deleted, 
+          company = await Company.create(getRandomCompanyData()),
+          user1 = await User.create(company.id, getRandomUserData()),
+          user2 = await User.create(company.id, getRandomUserData())
 
       expect(company).to.be.ok
       expect(user1).to.be.ok
@@ -237,7 +233,7 @@ describe('Company', function () {
       let num = await company.delete()
       expect(num).to.equal(1)
 
-      try { deleted = await Company.read(1) }
+      try { deleted = await Company.read(company.id) }
       catch(error) { expect(deleted).to.not.be.ok }
 
       try { deleted = await User.read(user1.id) }

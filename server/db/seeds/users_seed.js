@@ -61,6 +61,7 @@ const getStaticUserDataArray = () => {
   return [
     {
       id: 1, 
+      companyId: 1,
       email: USER_CREDENTIALS[0].email,
       password: USER_CREDENTIALS[0].hash,
       activationCode: USER_CREDENTIALS[0].activationCode,
@@ -69,17 +70,19 @@ const getStaticUserDataArray = () => {
     },
     {
       id: 2, 
+      companyId: 1,
       email: USER_CREDENTIALS[1].email,
       password: USER_CREDENTIALS[1].hash,
-      role: 'owner',
+      role: 'user',
       activationCode: USER_CREDENTIALS[1].activationCode,
       activated: false
     },
     {
       id: 3, 
+      companyId: 1,
       email: USER_CREDENTIALS[2].email,
       password: USER_CREDENTIALS[2].hash,
-      role: 'owner',
+      role: 'user',
       activationCode: USER_CREDENTIALS[2].activationCode,
       activated: true,
       profile: JSON.stringify({
@@ -89,9 +92,10 @@ const getStaticUserDataArray = () => {
     },
     {
       id: 4,
+      companyId: 1, 
       email: USER_CREDENTIALS[3].email,
       password: USER_CREDENTIALS[3].hash,
-      role: 'owner',
+      role: 'user',
       activationCode: USER_CREDENTIALS[3].activationCode,
       activated: true,
       profile: JSON.stringify({
@@ -104,9 +108,10 @@ const getStaticUserDataArray = () => {
     },
     {
       id: 5,
+      companyId: 1,
       email: USER_CREDENTIALS[4].email,
       password: USER_CREDENTIALS[4].hash,
-      role: 'owner',
+      role: 'user',
       activationCode: USER_CREDENTIALS[4].activationCode,
       activated: true,
       profile: JSON.stringify({
@@ -140,6 +145,7 @@ const getRandomUserDataArray = () => {
 
 const getRandomUserData = () => {
   return {
+    companyId: 2,
     email: faker.internet.email(),
     password: faker.random.alphaNumeric(7) + 'a1?',
     activationCode: faker.random.uuid(),

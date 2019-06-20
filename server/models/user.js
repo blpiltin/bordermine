@@ -64,7 +64,7 @@ class User extends BaseModel {
 
   static createValidator() { return new ModelValidator(forms['edit_user']) }
 
-  static create(json) {
+  static create(companyId, json) {
 
     return new Promise((resolve, reject) => {
 
@@ -78,6 +78,8 @@ class User extends BaseModel {
       data.created = Date.now()
       data.modified = Date.now()
       
+      data.companyId = companyId
+
       // Do password validation here because validator prevented against 
       //  checking hashed password
       let passwordPattern = forms['edit_user'].fields.password.pattern

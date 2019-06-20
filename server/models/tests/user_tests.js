@@ -26,9 +26,10 @@ var { Knex } = require('../../db/db')
 const { User } = require('../user')
 
 const { 
-  USER_CREDENTIALS,
-  getRandomUserData
+  USER_CREDENTIALS, 
+  getRandomUserData 
 } = require('../../db/seeds/users_seed')
+const { getRandomCompanyData } = require('../../db/seeds/companies_seed')
 
 
 before(async function () {
@@ -37,15 +38,20 @@ before(async function () {
   await Knex.seed.run()
 })
 
-
 describe('User',function () {
+  let company
+
+  before(async function() {
+    const { Company } = require('../company')
+    company = await Company.create(getRandomCompanyData())
+  })
 
   describe('create', function () {
 
     it('should create a user with valid data', async function () {
       let data = getRandomUserData()
       delete data.activationCode
-      let user = await User.create(data)
+      let user = await User.create(company.id, data)
       user = await User.read(user.id)
       expect(user).to.be.ok
       expect(user.profile).to.contain(data.profile)
@@ -58,42 +64,42 @@ describe('User',function () {
     it('should not create a user with invalid email', async function () {
       let data = getRandomUserData(), user
       data.email = "whatever"
-      try { user = await User.create(data) } 
+      try { user = await User.create(company.id, data) } 
       catch(error) { expect(user).to.not.be.ok }
     })
 
     it('should not create a user with a missing password', async function () {
       let data = getRandomUserData(), user
       data.password = ""
-      try { user = await User.create(data)} 
+      try { user = await User.create(company.id, data)} 
       catch(error) { expect(user).to.not.be.ok }
     })
 
     it('should not create a user with an invalid password', async function () {
       let data = getRandomUserData(), user
       data.password = "whatever"
-      try { user = await User.create(data) } 
+      try { user = await User.create(company.id, data) } 
       catch(error) { expect(user).to.not.be.ok }
     })
 
     it('should not create a user with an invalid role', async function () {
       let data = getRandomUserData(), user
       data.role = "whatever"
-      try { user = await User.create(data) } 
+      try { user = await User.create(company.id, data) } 
       catch(error) { expect(user).to.not.be.ok }
     })
 
     it('should not create a user with an invalid phone', async function () {
       let data = getRandomUserData(), user
       data.profile.phone = "whatever"
-      try { user = await User.create(data) } 
+      try { user = await User.create(company.id, data) } 
       catch(error) { expect(user).to.not.be.ok } 
     })
 
     it('should not create a user with an invalid photo', async function () {
       let data = getRandomUserData(), user
       data.profile.photo = "whatever"
-      try { user = await User.create(data) }
+      try { user = await User.create(company.id, data) }
       catch(error) { expect(user).to.not.be.ok }
     })
 
@@ -101,14 +107,14 @@ describe('User',function () {
       let users = await User.query(), user
           data = getRandomUserData()
       data.email = users[0].email
-      try { user = await User.create(data) }
+      try { user = await User.create(company.id, data) }
       catch(error) { expect(user).to.not.be.ok }
     })
 
     it('should not create a user with invalid profile field', async function () {
       let data = getRandomUserData()
       data.profile.extra = 'whatever'
-      let user = await User.create(data)
+      let user = await User.create(company.id, data)
       expect(user.profile.firstName).to.equal(data.profile.firstName)
       expect(user.profile.extra).to.equal(undefined)
     })
@@ -138,7 +144,7 @@ describe('User',function () {
       let data = getRandomUserData(),
           password = data.password
 
-      await User.create(data)
+      await User.create(company.id, data)
       let user = await User.findByCredentials(data.email, password)
       expect(user).to.be.ok
       expect(user.email).to.equal(data.email)
@@ -149,7 +155,7 @@ describe('User',function () {
           password = data.password,
           email = "whatever@wontwork.com"
 
-      await User.create(data)
+      await User.create(company.id, data)
       try { user = await User.findByCredentials(email, password) }
       catch(error) { expect(user).to.not.be.ok }
     })
@@ -158,7 +164,7 @@ describe('User',function () {
       let data = getRandomUserData(), user
           password = "whatever"
           
-      await User.create(data)
+      await User.create(company.id, data)
       try { user = await User.findByCredentials(data.email, password) }
       catch(error) { expect(user).to.not.be.ok }
     })
@@ -248,7 +254,7 @@ describe('User',function () {
     })
 
     it('should delete a previously generated passwordResetCode', async function () {
-      let user = await User.create(getRandomUserData())
+      let user = await User.create(company.id, getRandomUserData())
 
       expect(user.passwordResetCode).to.not.be.ok
       user = await user.generatePasswordResetCode()
@@ -263,7 +269,7 @@ describe('User',function () {
 
     it('should delete a user', async function () {
       let data = getRandomUserData(), deleted
-          user = await User.create(data)
+          user = await User.create(company.id, data)
       
       expect(user).to.be.ok
 
@@ -305,7 +311,7 @@ describe('User',function () {
 
       data.activated = false
       
-      let user = await User.create(data)
+      let user = await User.create(company.id, data)
       let activated = await User.activate(user.activationCode)
       expect(activated).to.equal(true)
     })
@@ -316,7 +322,7 @@ describe('User',function () {
       let data = getRandomUserData()
       data.activated = false
       
-      let user = await User.create(data), activated
+      let user = await User.create(company.id, data), activated
 
       try { activated = user.activate('whatever') }
       catch(error) { expect(activated).to.not.be.ok }
@@ -327,7 +333,7 @@ describe('User',function () {
   describe('generatePasswordResetCode', function () {
     
     it('should generate a unique password reset code', async function () {
-      let user = await User.create(getRandomUserData())
+      let user = await User.create(company.id, getRandomUserData())
       expect(user.passwordResetCode).to.not.be.ok
       user = await user.generatePasswordResetCode()
       expect(user.passwordResetCode).to.be.ok
@@ -338,7 +344,7 @@ describe('User',function () {
   describe('confirmPasswordResetCode', function () {
 
     it('should confirm a valid password reset code', async function () {
-      let user = await User.create(getRandomUserData())
+      let user = await User.create(company.id, getRandomUserData())
       expect(user.passwordResetCode).to.not.be.ok
       user = await user.generatePasswordResetCode()
       expect(user.passwordResetCode).to.be.ok
@@ -347,7 +353,7 @@ describe('User',function () {
     })
 
     it('should reject an invalid password reset code', async function () {
-      let user = await User.create(getRandomUserData()), reset
+      let user = await User.create(company.id, getRandomUserData()), reset
 
       expect(user.passwordResetCode).to.not.be.ok
       user = await user.generatePasswordResetCode()
@@ -357,7 +363,7 @@ describe('User',function () {
     })
 
     it('should reject an expired password reset code', async function () {
-      let user = await User.create(getRandomUserData()), reset
+      let user = await User.create(company.id, getRandomUserData()), reset
       user = await user.generatePasswordResetCode()
       let ahead =  new Date(moment().add(1, 'hour'))
       let clock = sinon.useFakeTimers(ahead)
@@ -375,7 +381,7 @@ describe('User',function () {
 
     it('should get user\'s full name', async function () {
       let data = getRandomUserData()
-          user = await User.create(data)
+          user = await User.create(company.id, data)
 
       expect(user.fullName).to.equal(`${user.profile.firstName} ${user.profile.lastName}`)
     })
