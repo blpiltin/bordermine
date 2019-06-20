@@ -48,7 +48,7 @@ mailer.test = () => {
       debug.log('SERVER ERROR: SMTP mailer not available.')
       debug.log(' mailer.options: ', mailer.options)
     }
-  }, 3000)
+  }, 5000)
   mailer.verify()
   .then(() => { 
     mailerUp = true

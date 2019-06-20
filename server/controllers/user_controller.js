@@ -51,11 +51,16 @@ const viewUserProfile = (req, res) => {
 }
 
 const editUserProfile = async (req, res) => {
+  let user
   try {
-    let user = await User.read(req.session.userId)
-    res.render('edit/edit_user_profile', { fields: user.profile, layout: edit_layout })
+    user = await User.read(req.session.userId)
+    res.render('edit/edit_user_profile', { 
+      fields: user.profile, layout: edit_layout 
+    })
   } catch(error) {
-    res.status(400).render('edit/edit_user_profile', { fields: req.fields, error, layout: edit_layout })
+    res.status(400).render('edit/edit_user_profile', { 
+      fields: req.fields, error, layout: edit_layout
+    })
   }
 }
 

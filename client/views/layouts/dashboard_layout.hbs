@@ -3,15 +3,17 @@
 
 <head>
   <meta charset="utf-8">
-  <title>{{#if host}}{{user.fullName}}{{else}}Classmine{{/if}} | {{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</title>
+  <title>{{#if host}}{{user.fullName}}{{else}}Bordermine{{/if}} | {{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="/js/jquery.min.js"></script>
   <link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/css/bootstrap.css">
   <link rel="stylesheet" href="/assets/css/sprite.css">
-  <link rel="stylesheet" href="/css/classmine.css">
+  <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+
+  {{> favicons }}
 </head>
 
 <body>
@@ -45,9 +47,8 @@
 
   <script src="/js/popper.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/ckeditor5-build-classic/build/ckeditor.js"></script>
   <script src="/js/sidebar.js"></script>
-  <script src="/js/classmine.js"></script>
+  <script src="/js/site.js"></script>
 </body>
 
 </html>

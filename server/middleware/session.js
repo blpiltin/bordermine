@@ -16,7 +16,8 @@ const debug = require('../../utils/debug').create('session.js')
 
 const createError = require('http-errors')
 
-const { User, UPLOADS_DIR } = require('../models/user')
+const { User } = require('../models/user')
+
 const { 
 	getDomainFromEmail,
 	getEditPathFromEmail, 
@@ -52,7 +53,7 @@ const populate = async (req, res, next) => {
 		res.locals.user.dashboardPath = getDashboardPathFromEmail(user.email)
 		res.locals.user.editPath = getEditPathFromEmail(user.email)
 		res.locals.user.uploadsPath = '/uploads/' + user.id
-		res.locals.user.uploadsDir = UPLOADS_DIR + '/' + user.id + '/'
+		res.locals.user.uploadsDir = User.uploadsDir + '/' + user.id + '/'
 
 		// Make additional nav data available in templates
 		if (user.role === 'teacher') {

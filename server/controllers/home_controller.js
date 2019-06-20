@@ -23,6 +23,7 @@ const {
 const { mailer } = require('../utils/mailer')
 
 const { User } = require('../models/user')
+const { Company } = require('../models/company')
 
 const { FormValidator }  = require('../utils/forms/form_validator')
 const forms = require('../utils/forms/home_forms.json')
@@ -42,24 +43,27 @@ const viewHome = (req, res) => {
 // Redirect to home on success, show errors on failure.
 //------------------------------------------------------
 const userJoin = async (req, res) => {
-
 	let errors = new FormValidator(forms['join']).validate(req.fields),
 			fields = coalesce(req.fields),
-			user
+			user, company
 
 	// #Todo: Check for match between host and email domain for non-parents.
 	if (errors) {
 		res.status(400).render('home/join', { fields, errors })
 	} else {
 		try {
-			user = await User.create(fields)
+			company = await Company.create(fields.company)
+			fields.user.role = 'owner'
+			user = await User.create(company.id, fields.user)
+			company.updateOwner(user.id)
 			await mailer.sendActivation(user, getHost(req))
 			let message = 'Your account was succesfully created. ' +
 				'Please check your email for instructions on activating your account.'
 			res.flash('message', message)
 			res.redirect('/')
 		} catch (error) {
-			if (user) { user.delete() }
+			debug.log(error.message, error.code)
+			if (company) { company.delete() }
 			if (error.code === 'SQLITE_CONSTRAINT') {
 				error = 'That email is already in use.'
 			}

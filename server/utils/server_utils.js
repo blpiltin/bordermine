@@ -77,6 +77,7 @@ const coalesce = (obj) => {
       if (!newObj[seg]) newObj[seg] = {};
       newObj[seg][segs[0]] = obj[key];
     } else {
+      if (!newObj[seg]) newObj[seg] = {};
       newObj[seg][segs.join('.')] = obj[key];
     }
   }

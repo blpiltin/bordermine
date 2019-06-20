@@ -89,14 +89,14 @@
       "phone": {
         "type": "text",
         "label": "Phone",
-        "placeholder": "Enter phone or extension",
+        "placeholder": "Enter your phone or extension",
         "pattern": "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{4})(?:[-.x ]*(\\d+))?)\\s*$",
         "patternError": "Please enter your phone number beginning with the area code. Use the letter \"x\" for the extension."
       },
       "title": {
         "type": "text",
         "label": "Title",
-        "placeholder": "Enter your title"
+        "placeholder": "Enter your position or title"
       },
       "photo": {
         "type": "file",

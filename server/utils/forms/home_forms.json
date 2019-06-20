@@ -3,72 +3,90 @@
     "action": "/join",
     "method": "post",
     "fields": {
-      "profile.firstName": {
+      "user.profile.firstName": {
         "type": "text",
-        "label": "Primary First Name",
+        "label": "First Name",
         "autocomplete": "given-name",
-        "placeholder": "Enter first name",
+        "placeholder": "Enter your first name",
         "required": true,
         "requiredError": "Please enter a primary contact first name."
       },
-      "profile.lastName": {
+      "user.profile.lastName": {
         "type": "text",
-        "label": "Primary Last Name",
+        "label": "Last Name",
         "autocomplete": "family-name",
-        "placeholder": "Enter last name",
+        "placeholder": "Enter your last name",
         "required": true,
         "requiredError": "Please enter a primary contact last name."
       },
-      "email": {
+      "user.email": {
         "type": "email",
-        "label": "Primary Email",
+        "label": "Email",
         "autocomplete": "username",
-        "placeholder": "Enter email address",
+        "placeholder": "Enter your email address",
         "required": true,
         "requiredError": "Please enter a valid email address.",
         "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+"
       },
+      "company.type": {
+        "type": "select",
+        "label": "Company Type",
+        "placeholder": "Select one of the following...",
+        "required": true,
+        "requiredError": "Please select the type of company you represent.",
+        "options": {
+          "broker": "I represent a broker or agent",
+          "carrier": "I represent a carrier or shipper"
+        }
+      },
       "company.name": {
         "type": "text",
-        "label": "Company name",
-        "placeholder": "Enter a company name",
+        "label": "Company Name",
+        "placeholder": "Enter your company name",
         "required": true,
-        "requiredError": "Please enter a company name."
+        "requiredError": "Please enter your company name."
       },
-      "company.address1": {
+      "company.address.line1": {
         "type": "text",
         "label": "Company Address 1",
-        "placeholder": "Enter company address line 1",
+        "placeholder": "Enter your company address line 1",
         "required": true,
-        "requiredError": "Please enter company address line 1."
+        "requiredError": "Please enter your company address line 1."
       },
-      "company.address2": {
+      "company.address.line2": {
         "type": "text",
         "label": "Company Address 2",
-        "placeholder": "Enter company address line 2"
+        "placeholder": "Enter your company address line 2"
       },
-      "company.city": {
+      "company.address.city": {
         "type": "text",
         "label": "Company City",
-        "placeholder": "Enter company city",
+        "placeholder": "Enter your company city",
         "required": true,
-        "requiredError": "Please enter company city."
+        "requiredError": "Please enter your company city."
       },
-      "company.state": {
+      "company.address.state": {
         "type": "text",
         "label": "Company State or Province",
-        "placeholder": "Enter company state",
+        "placeholder": "Enter your company state",
         "required": true,
-        "requiredError": "Please enter company state."
+        "requiredError": "Please enter your company state."
       },
-      "company.country": {
+      "company.address.postalCode": {
+        "type": "text",
+        "label": "Company Postal Code",
+        "placeholder": "Enter your company postal or zip code",
+        "required": true,
+        "requiredError": "Please enter your company postal or zip code."
+      },
+      "company.address.country": {
         "type": "text",
         "label": "Company Country",
-        "placeholder": "Enter company country",
+        "placeholder": "Enter your company country",
         "required": true,
-        "requiredError": "Please enter company country."
+        "requiredError": "Please enter your company country."
       },
-      "password": {
+      "user.password": {
         "type": "password",
         "label": "Password",
         "autocomplete": "new-password",
@@ -77,27 +95,14 @@
         "requiredError": "Please provide a password that contains at least one letter, one number, and is at least 6 characters long. !,^,+,?,_,&,@ characters are allowed.",
         "pattern": "^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\\^\\+\\?_&@]{6,}$"
       },
-      "passwordConfirm": {
+      "user.passwordConfirm": {
         "type": "password",
         "label": "Password Confirm",
         "placeholder": "Enter password confirmation",
         "required": true,
         "requiredError": "Please provide a password confirmation.",
-        "matches": "password",
+        "matches": "user.password",
         "matchesError": "Passwords do not match. Please provide a matching password confirmation."
-      },
-      "role": {
-        "modelOnly": true,
-        "type": "select",
-        "label": "Role",
-        "placeholder": "Select one of the following...",
-        "required": true,
-        "requiredError": "Please select a role.",
-        "options": {
-          "root": "root",
-          "admin": "admin",
-          "user": "user"
-        }
       }
     }
   },

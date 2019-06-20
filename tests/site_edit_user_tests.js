@@ -19,6 +19,8 @@ var { User } = require('../server/models/user')
 
 const { USER_CREDENTIALS } = require('../server/db/seeds/users_seed')
 
+const fixturesDir = require('path').join(__dirname, './fixtures')
+
 
 before(async function() {
   await Knex.migrate.rollback()
@@ -36,9 +38,8 @@ describe('Edit User Profile Test', function() {
   let formData = {
     firstName: 'Hungry', 
     lastName: 'Howie',
-    room: 'B1234',
-    phone: '111-222-3456 x123',
-    bio: 'I am a great guy!'
+    title: 'President',
+    phone: '+22 111-222-3456 x123'
   }
   
   before(async function() { 
@@ -65,48 +66,67 @@ describe('Edit User Profile Test', function() {
     await driver.get(driver.HOST + profilePath)
     await driver.findElement(By.name('firstName')).sendKeys(formData.firstName)
     await driver.findElement(By.name('lastName')).sendKeys(formData.lastName)
-    await driver.findElement(By.name('room')).sendKeys(formData.room)
-    await driver.findElement(By.name('phone')).sendKeys(formData.phone)
-    await driver.findElement(By.name('bio')).sendKeys(formData.bio);                                                                                             
+    await driver.findElement(By.name('title')).sendKeys(formData.title)
+    await driver.findElement(By.name('phone')).sendKeys(formData.phone)                                                                                          
     await driver.findElement(By.id('btnSubmit')).click()
     await driver.expectLocationToBe(profilePath)
     await driver.expectPageToContain([
       'value="' + formData.firstName + '"', 
       'value="' + formData.lastName + '"', 
-      'value="' + formData.room + '"', 
-      'value="' + formData.phone + '"', 
-      formData.bio 
+      'value="' + formData.title + '"', 
+      'value="' + formData.phone + '"'
     ])
   })
 
   it('filling out invalid form and submitting should show error', async function() {
-    formData.phone = '111'
     await driver.get(driver.HOST + profilePath)
     await driver.findElement(By.name('firstName')).sendKeys(formData.firstName)
     await driver.findElement(By.name('lastName')).sendKeys(formData.lastName)
-    await driver.findElement(By.name('room')).sendKeys(formData.room)
-    await driver.findElement(By.name('phone')).sendKeys(formData.phone)
-    await driver.findElement(By.name('bio')).sendKeys(formData.bio);                                                                                             
+    await driver.findElement(By.name('phone')).sendKeys('111')
+    await driver.findElement(By.name('title')).sendKeys(formData.title);                                                                                             
     await driver.findElement(By.id('btnSubmit')).click()
     await driver.expectLocationToBe(profilePath)
     await driver.expectPageToContain('Please enter your phone number beginning with ' +
       'the area code. Use the letter "x" for the extension.')
   })
 
-  it.skip('selecting photo and submitting should save profile', async function() {
-    // #Todo: figure out how to test for this
+  it('selecting photo and submitting should save profile', async function() {
+    await driver.get(driver.HOST + profilePath)
+    await fillProfileForm(formData, 'test_photo_1.jpg')
+    await driver.findElement(By.id('btnSubmit')).click()
+    await driver.expectLocationToBe(profilePath)
+    await driver.expectPageToContain('test_photo_1.jpg')
   })
 
-  it.skip('selecting photo and submitting twice should not delete photo', async function() {
-    // #Todo: figure out how to test for this
+  it('selecting photo and saving twice should not delete photo', async function() {
+    await driver.get(driver.HOST + profilePath)
+    await fillProfileForm(formData, 'test_photo_1.jpg')
+    await driver.findElement(By.id('btnSubmit')).click()
+    await driver.expectLocationToBe(profilePath)
+    await driver.expectPageToContain('test_photo_1.jpg')
+    await driver.get(driver.HOST + profilePath)
+    await driver.findElement(By.id('btnSubmit')).click()
+    await driver.expectLocationToBe(profilePath)
+    await driver.expectPageToContain('test_photo_1.jpg')
   })
 
-  it.skip('selecting invalid file and submitting should return error', async function() {
-    // #Todo: figure out how to test for this
+  it('selecting invalid file and submitting should return error', async function() {
+    await driver.get(driver.HOST + profilePath)
+    await fillProfileForm(formData, 'test_file_1.pdf')
+    await driver.findElement(By.id('btnSubmit')).click()
+    await driver.expectLocationToBe(profilePath)
+    await driver.expectPageToContain('alert')
   })
 
-  it.skip('clicking delete button should delete photo from profile', async function() {
-    // #Todo: figure out how to test for this
+  it('clicking delete button should delete photo from profile', async function() {
+    await driver.get(driver.HOST + profilePath)
+    await fillProfileForm(formData, 'test_photo_1.jpg')
+    await driver.findElement(By.id('btnSubmit')).click()
+    await driver.expectPageToContain('test_photo_1.jpg')
+    await driver.get(driver.HOST + profilePath)
+    await driver.findElement(By.id('btnDeletePhoto')).click()
+    await driver.expectLocationToBe(profilePath)
+    await driver.expectPageToContain('input id="photo"')
   })
 
   it('clicking on live view link should show profile view page', async function() {
@@ -114,7 +134,7 @@ describe('Edit User Profile Test', function() {
     await driver.get(driver.HOST + profilePath)
     await driver.findElement(By.id('btnView')).click()
     await driver.expectLocationToBe(viewPath)
-    await driver.expectPageToContain('Test Teacher3')
+    await driver.expectPageToContain('Test Owner3')
   })
 
 })
@@ -192,3 +212,17 @@ describe('Edit User Account Info Test', function() {
     await driver.expectPageToContain('alert-danger')
   })
 })
+
+//======================================================
+// Utils
+//======================================================
+
+const fillProfileForm = async (formData, fileName) => {
+  await driver.findElement(By.name('firstName')).sendKeys(formData.firstName)
+  await driver.findElement(By.name('lastName')).sendKeys(formData.lastName)
+  await driver.findElement(By.name('phone')).sendKeys(formData.phone)
+  await driver.findElement(By.name('title')).sendKeys(formData.title)
+  if (fileName) {
+    await driver.findElement(By.name('photo')).sendKeys(fixturesDir + '/' + fileName)
+  }
+}

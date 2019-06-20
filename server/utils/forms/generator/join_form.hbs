@@ -1,54 +1,102 @@
 <form class="needs-validation" novalidate action="/join" method="post">
   <div class="form-group form-row">
     <div class="col">
-      <label for="profile.firstName">First Name</label>
-      <input id="profile.firstName" class="form-control" type="text" name="profile.firstName" placeholder="Enter your first name" value="{{fields.profile.firstName}}" required autocomplete="given-name">
-      <div class="invalid-feedback">Please enter your first name.</div>
+      <label for="user.profile.firstName">First Name</label>
+      <input id="user.profile.firstName" class="form-control" type="text" name="user.profile.firstName" placeholder="Enter your first name" value="{{fields.user.profile.firstName}}" required autocomplete="given-name">
+      <div class="invalid-feedback">Please enter a primary contact first name.</div>
     </div>
   </div>
   <div class="form-group form-row">
     <div class="col">
-      <label for="profile.lastName">Last Name</label>
-      <input id="profile.lastName" class="form-control" type="text" name="profile.lastName" placeholder="Enter your last name" value="{{fields.profile.lastName}}" required autocomplete="family-name">
-      <div class="invalid-feedback">Please enter your last name.</div>
+      <label for="user.profile.lastName">Last Name</label>
+      <input id="user.profile.lastName" class="form-control" type="text" name="user.profile.lastName" placeholder="Enter your last name" value="{{fields.user.profile.lastName}}" required autocomplete="family-name">
+      <div class="invalid-feedback">Please enter a primary contact last name.</div>
     </div>
   </div>
   <div class="form-group form-row">
     <div class="col">
-      <label for="email">Email address</label>
-      <input id="email" class="form-control" type="email" name="email" placeholder="Enter email" pattern="[\w-]+@([\w-]+\.)+[\w-]+" value="{{fields.email}}" required autocomplete="username">
-      <div class="invalid-feedback">Please provide a valid email address.</div>
+      <label for="user.email">Email</label>
+      <input id="user.email" class="form-control" type="email" name="user.email" placeholder="Enter your email address" pattern="[\w-]+@([\w-]+\.)+[\w-]+" value="{{fields.user.email}}" required autocomplete="username">
+      <div class="invalid-feedback">Please enter a valid email address.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.type">Company Type</label>
+      <select id="company.type" class="custom-select" name="company.type" required>
+        <option value="" {{checkSelected fields.company.type ""}}>Select one of the following...</option>
+        <option value="broker" {{checkSelected fields.company.type "broker"}}>I represent a broker or agent</option>
+        <option value="carrier" {{checkSelected fields.company.type "carrier"}}>I represent a carrier or shipper</option>
+      </select>
+      <div class="invalid-feedback">Please select the type of company you represent.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.name">Company Name</label>
+      <input id="company.name" class="form-control" type="text" name="company.name" placeholder="Enter your company name" value="{{fields.company.name}}" required>
+      <div class="invalid-feedback">Please enter your company name.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.line1">Company Address 1</label>
+      <input id="company.address.line1" class="form-control" type="text" name="company.address.line1" placeholder="Enter your company address line 1" value="{{fields.company.address.line1}}" required>
+      <div class="invalid-feedback">Please enter your company address line 1.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.line2">Company Address 2</label>
+      <input id="company.address.line2" class="form-control" type="text" name="company.address.line2" placeholder="Enter your company address line 2" value="{{fields.company.address.line2}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.city">Company City</label>
+      <input id="company.address.city" class="form-control" type="text" name="company.address.city" placeholder="Enter your company city" value="{{fields.company.address.city}}" required>
+      <div class="invalid-feedback">Please enter your company city.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.state">Company State or Province</label>
+      <input id="company.address.state" class="form-control" type="text" name="company.address.state" placeholder="Enter your company state" value="{{fields.company.address.state}}" required>
+      <div class="invalid-feedback">Please enter your company state.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.postalCode">Company Postal Code</label>
+      <input id="company.address.postalCode" class="form-control" type="text" name="company.address.postalCode" placeholder="Enter your company postal or zip code" value="{{fields.company.address.postalCode}}" required>
+      <div class="invalid-feedback">Please enter your company postal or zip code.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="company.address.country">Company Country</label>
+      <input id="company.address.country" class="form-control" type="text" name="company.address.country" placeholder="Enter your company country" value="{{fields.company.address.country}}" required>
+      <div class="invalid-feedback">Please enter your company country.</div>
     </div>
   </div>
   <div class="form-group form-row">
     <div class="col">
       <label for="password">Password</label>
-      <input id="password" class="form-control" type="password" name="password" placeholder="Password" pattern="^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\^\+\?_&@]{6,}$" value="{{fields.password}}" required autocomplete="new-password">
+      <input id="password" class="form-control" type="password" name="password" placeholder="Enter a password" pattern="^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z!\^\+\?_&@]{6,}$" value="{{fields.password}}" required autocomplete="new-password">
       <div class="invalid-feedback">Please provide a password that contains at least one letter, one number, and is at least 6 characters long. !,^,+,?,_,&,@ characters are allowed.</div>
     </div>
   </div>
   <div class="form-group form-row">
     <div class="col">
       <label for="passwordConfirm">Password Confirm</label>
-      <input id="passwordConfirm" class="form-control" type="password" name="passwordConfirm" placeholder="Confirm Password" value="{{fields.passwordConfirm}}" required>
+      <input id="passwordConfirm" class="form-control" type="password" name="passwordConfirm" placeholder="Enter password confirmation" value="{{fields.passwordConfirm}}" required>
       <div class="invalid-feedback">Please provide a password confirmation.</div>
     </div>
   </div>
-  <div class="form-group form-row">
-    <div class="col">
-      <label for="role">Role</label>
-      <select id="role" class="custom-select" name="role" required>
-        <option value="" {{checkSelected fields.role ""}}>Please select one of the following...</option>
-        <option value="student" {{checkSelected fields.role "student"}}>I am a student.</option>
-        <option value="teacher" {{checkSelected fields.role "teacher"}}>I am a teacher.</option>
-        <option value="parent" {{checkSelected fields.role "parent"}}>I am a parent.</option>
-      </select>
-      <div class="invalid-feedback">Please select a role.</div>
-    </div>
-  </div>
   <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
-  <button class="btn btn-primary" id="spinner" type="button" style="visibility:hidden" disabled>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     Saving...
   </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{back}}'">Cancel</button>
 </form>

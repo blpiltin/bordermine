@@ -5,17 +5,6 @@
     "submit": "Save",
     "enctype": "multipart/form-data",
     "fields": {
-      "type": {
-        "type": "select",
-        "label": "Type",
-        "placeholder": "Select one of the following...",
-        "required": true,
-        "requiredError": "Please select a company type.",
-        "options": {
-          "broker": "I represent a broker or agent",
-          "carrier": "I represent a carrier or shipper"
-        }
-      },
       "name": {
         "type": "text",
         "label": "Name",
