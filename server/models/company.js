@@ -66,7 +66,7 @@ class Company extends BaseModel {
     }
   }
 
-  static createValidator() { return new ModelValidator(forms['edit_company_info']) }
+  static createValidator() { return new ModelValidator(forms['edit_company']) }
 
 
   static create(json) {

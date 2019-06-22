@@ -11,13 +11,18 @@ const {
   saveUserProfile
 } = require('../controllers/user_controller')
 
+const { 
+  editCompany,
+  saveCompany
+} = require('../controllers/company_controller')
+
 // const {
-//   newCourse,
-//   createCourse,
-//   editCourseInfo,
-//   saveCourseInfo,
-//   editCourse
-// } = require('../controllers/course_controller')
+//   newClient,
+//   createClient,
+//   editClientInfo,
+//   saveClientInfo,
+//   editClient
+// } = require('../controllers/client_controller')
 
 // const {
 //   newObjective,
@@ -50,54 +55,62 @@ router.get('/profile', permit('owner'), (req, res) =>
 router.post('/profile', permit('owner'), (req, res) => 
   saveUserProfile(req, res))
 
+//------------------------------------------------------
+// Edit the user's company (if owner)
+//------------------------------------------------------
+router.get('/company', permit('owner', 'owner'), (req, res) => 
+  editCompany(req, res))
+router.post('/company', permit('owner', 'owner'), (req, res) => 
+  saveCompany(req, res))
+
 //======================================================
-// Course edit routes
+// Client edit routes
 //======================================================
 
 //------------------------------------------------------
-// Create new course, edit and save course info 
+// Create new client, edit and save client info 
 //------------------------------------------------------
-// router.get('/course', 
-//   permit('owner', 'teacher'), (req, res) => newCourse(req, res))
-// router.post('/course', 
-//   permit('owner', 'teacher'), (req, res) => createCourse(req, res))
-// router.get('/course/:course_id/info', 
-//   permit('owner', 'teacher'), (req, res) => editCourseInfo(req, res))
-// router.post('/course/:course_id/info', 
-//   permit('owner', 'teacher'), (req, res) => saveCourseInfo(req, res))
+// router.get('/client', 
+//   permit('owner', 'teacher'), (req, res) => newClient(req, res))
+// router.post('/client', 
+//   permit('owner', 'teacher'), (req, res) => createClient(req, res))
+// router.get('/client/:client_id/info', 
+//   permit('owner', 'teacher'), (req, res) => editClientInfo(req, res))
+// router.post('/client/:client_id/info', 
+//   permit('owner', 'teacher'), (req, res) => saveClientInfo(req, res))
 
 //------------------------------------------------------
-// Primary edit course page
+// Primary edit client page
 //------------------------------------------------------
-// router.get('/course/:course_id', 
-//   permit('owner', 'teacher'), (req, res) => editCourse(req, res))
+// router.get('/client/:client_id', 
+//   permit('owner', 'teacher'), (req, res) => editClient(req, res))
 
 //------------------------------------------------------
-// Course Objective edit routes
-// Create new objective, edit, save and list course objectives
+// Client Objective edit routes
+// Create new objective, edit, save and list client objectives
 //------------------------------------------------------
-// router.get('/course/:course_id/objective', 
+// router.get('/client/:client_id/objective', 
 //   permit('owner', 'teacher'), (req, res) => newObjective(req, res))
-// router.post('/course/:course_id/objective', 
+// router.post('/client/:client_id/objective', 
 //   permit('owner', 'teacher'), (req, res) => createObjective(req, res))
-// router.get('/course/:course_id/objective/:objective_id', 
+// router.get('/client/:client_id/objective/:objective_id', 
 //   permit('owner', 'teacher'), (req, res) => editObjective(req, res))
-// router.post('/course/:course_id/objective/:objective_id', 
+// router.post('/client/:client_id/objective/:objective_id', 
 //   permit('owner', 'teacher'), (req, res) => saveObjective(req, res))
-// router.get('/course/:course_id/objective/:objective_id/delete', 
+// router.get('/client/:client_id/objective/:objective_id/delete', 
 //   permit('owner', 'teacher'), (req, res) => deleteObjective(req, res))
-// router.get('/course/:course_id/objectives', 
+// router.get('/client/:client_id/objectives', 
 //   permit('owner', 'teacher'), (req, res) => editObjectives(req, res))
-// router.post('/course/:course_id/objectives/delete', 
+// router.post('/client/:client_id/objectives/delete', 
 //   permit('owner', 'teacher'), (req, res) => deleteObjectives(req, res))
 
 
 //======================================================
-// Add course_id to res.locals for use in forms and tempaltes
+// Add client_id to res.locals for use in forms and tempaltes
 //======================================================
-// router.param('course_id', async (req, res, next, course_id) => {
-//   res.locals.course = await res.locals.user.courseById(course_id)
-//   res.locals.home = req.originalUrl.match('(.+' + course_id + ')')[0]
+// router.param('client_id', async (req, res, next, client_id) => {
+//   res.locals.client = await res.locals.user.clientById(client_id)
+//   res.locals.home = req.originalUrl.match('(.+' + client_id + ')')[0]
 //   next()
 // })
 

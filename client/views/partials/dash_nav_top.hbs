@@ -9,21 +9,21 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
-          Courses
+          Clients
         </a>
-        <div id="courseMenu" class="dropdown-menu">
-          {{#each courses}}
-            <a class="dropdown-item" id="lnkEditCourse{{id}}" href="{{../user.editPath}}/course/{{id}}">{{name}}</a>
+        <div id="clientMenu" class="dropdown-menu">
+          {{#each clients}}
+            <a class="dropdown-item" id="lnkEditClient{{id}}" href="{{../user.editPath}}/client/{{id}}">{{name}}</a>
           {{/each}}
-          {{#if courses}}
+          {{#if clients}}
             <div class="dropdown-divider"></div>
           {{/if}}
-          <a class="dropdown-item" id="lnkNewCourse" href="{{user.editPath}}/course">New Course</a>
+          <a class="dropdown-item" id="lnkNewClient" href="{{user.editPath}}/client">New Client</a>
         </div>
       </li>
-      {{#if course}}
+      {{#if client}}
         <li class="nav-item">
-          <a class="nav-link" href="{{user.editPath}}/course/{{course.id}}">{{course.name}}</a>
+          <a class="nav-link" href="{{user.editPath}}/client/{{client.id}}">{{client.name}}</a>
         </li>
       {{/if}}
     </ul>
@@ -37,6 +37,10 @@
         <div class="dropdown-menu">
           <a class="dropdown-item" id="lnkProfile" href="{{user.editPath}}/profile">Profile</a>
           <a class="dropdown-item" id="lnkAccount" href="{{user.editPath}}">Account</a>
+          {{#is user.role "owner"}}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" id="lnkCompany" href="{{user.editPath}}/company">Company</a>
+          {{/is}}
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="lnkLogout" href="/logout">Logout</a>
         </div>

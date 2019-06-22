@@ -2,9 +2,6 @@
   <div class="col-auto">
     <h1 class="title-heading">{{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}</h1>
   </div>
-  <div class="col mt-2 text-right">
-    <button type="button" class="btn btn-outline-secondary" id="btnView" onclick="location.href='{{user.userPath}}/profile'">Live View</button>
-  </div>
 </div>
 <form class="needs-validation" novalidate action="{{user.editPath}}/profile" method="post" id="uploadForm" ref="uploadForm" enctype="multipart/form-data">
   <div class="form-group form-row">

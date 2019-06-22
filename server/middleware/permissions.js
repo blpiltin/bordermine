@@ -30,7 +30,8 @@ const permit = (users, roles) => {
     if (req.session && req.session.userId) {
       // So far we have authentication, 'owner' permission only
 
-      if (users === 'owner' || users === 'all') {
+      if (users === 'owner' && res.locals.user.id === res.locals.view.ownerId
+        || users === 'all') {
         // Use for authentication purposes only. User should be logged in.
         reject = false
       } else if (users) {

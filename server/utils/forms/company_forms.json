@@ -1,6 +1,6 @@
 {
-  "edit_company_info": {
-    "action": "{{user.editPath}}/company{{#if fields.id}}/{{fields.id}}/info{{/if}}",
+  "edit_company": {
+    "action": "{{user.editPath}}/company",
     "method": "post",
     "submit": "Save",
     "enctype": "multipart/form-data",
@@ -10,50 +10,97 @@
         "label": "Name",
         "placeholder": "Enter the company name",
         "required": true,
-        "requiredError": "Please enter a company name."
+        "requiredError": "Please enter the company name."
+      },
+      "address.line1": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Address Line 1",
+        "placeholder": "Enter the company address line 1",
+        "required": true,
+        "requiredError": "Please enter the company address line 1."
+      },
+      "address.line2": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Address Line 2",
+        "placeholder": "Enter the company address line 2"
+      },
+      "address.city": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "City",
+        "placeholder": "Enter the company city",
+        "required": true,
+        "requiredError": "Please enter the company city."
+      },
+      "address.state": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "State or Province",
+        "placeholder": "Enter the company state or province",
+        "required": true,
+        "requiredError": "Please enter the company state or province."
+      },
+      "address.postalCode": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Postal Code",
+        "placeholder": "Enter the company postal or zip code",
+        "required": true,
+        "requiredError": "Please enter the company postal or zip code."
+      },
+      "address.country": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Country",
+        "placeholder": "Enter the company country",
+        "required": true,
+        "requiredError": "Please enter the company country."
       },
       "address": {
         "type": "json",
+        "modelOnly": "true",
         "fields": {
           "line1": {
             "type": "text",
             "label": "Address Line 1",
-            "placeholder": "Enter the address line 1",
+            "placeholder": "Enter the company address line 1",
             "required": true,
-            "requiredError": "Please enter the address line 1."
+            "requiredError": "Please enter the company address line 1."
           },
           "line2": {
             "type": "text",
             "label": "Address Line 2",
-            "placeholder": "Enter the address line 2"
+            "placeholder": "Enter the company address line 2"
           },
           "city": {
             "type": "text",
             "label": "City",
-            "placeholder": "Enter the city",
+            "placeholder": "Enter the company city",
             "required": true,
-            "requiredError": "Please enter the city."
+            "requiredError": "Please enter the company city."
           },
           "state": {
             "type": "text",
             "label": "State or Province",
-            "placeholder": "Enter the state or province",
+            "placeholder": "Enter the company state or province",
             "required": true,
-            "requiredError": "Please enter the state or province."
+            "requiredError": "Please enter the company state or province."
           },
           "postalCode": {
             "type": "text",
             "label": "Postal Code",
-            "placeholder": "Enter the postal or zip code",
+            "placeholder": "Enter the company postal or zip code",
             "required": true,
-            "requiredError": "Please enter the postal or zip code."
+            "requiredError": "Please enter the company postal or zip code."
           },
           "country": {
             "type": "text",
             "label": "Country",
-            "placeholder": "Enter the country",
+            "placeholder": "Enter the company country",
             "required": true,
-            "requiredError": "Please enter the country."
+            "requiredError": "Please enter the company country."
           }
         }
       },
@@ -61,7 +108,7 @@
         "type": "file",
         "accept": "image/*",
         "label": "Logo",
-        "placeholder": "Select a logo",
+        "placeholder": "Select the company logo",
         "pattern": "[0-9a-zA-Z\\._-]+\\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)",
         "patternError": "Only image (.bpm, .png, .gif, and .jpg) file types allowed."
       }

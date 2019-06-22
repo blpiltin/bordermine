@@ -24,13 +24,14 @@ exports.up = function (knex, Promise) {
     table.integer('contactId').references('users.id')
 
     table.enu('type', Company.types).notNullable()
-    table.string('name').notNullable().unique()
+    table.string('name').notNullable()
     table.jsonb('address').notNullable()
     table.string('logo')
 
     table.timestamp('created').defaultTo(knex.fn.now())
     table.timestamp('modified').defaultTo(knex.fn.now())
 
+    table.unique(['ownerId', 'name'])
   })
 }
 

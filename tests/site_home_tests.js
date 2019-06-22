@@ -1,3 +1,17 @@
+//======================================================
+// site_home_tests.js 
+// 
+// Description: Defines functional tests for the site
+//  home pages.
+//
+// Author: Brian Piltin
+// Copyright: (C) 2019 Brian Piltin. All rights reserved.
+//
+// Version 0.0.1
+// History:
+//  - 0.0.1: Initial tests
+//======================================================
+
 const debug = require('../utils/debug').create('site_home_tests.js')
 
 process.env.NODE_ENV = 'test'
@@ -193,7 +207,7 @@ describe('Login Test', () => {
 
   it('logging in inactive user should redirect to home page', async function() {
     this.timeout(driver.TIMEOUT)
-    await driver.login(USER_CREDENTIALS[0].email, USER_CREDENTIALS[0].password)
+    await driver.login(USER_CREDENTIALS[1].email, USER_CREDENTIALS[1].password)
     await driver.expectTitleToBe(`${SITE_TITLE} | Home`)
     let html = await driver.getPageSource()
     expect(html).to.contain('problem')

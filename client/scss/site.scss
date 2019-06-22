@@ -87,7 +87,7 @@ a#lbl-dashbar-logo.navbar-brand {
 }
 
 //======================================================
-// user_profile
+// Edit User Profile
 //======================================================
 .profile-photo {
   width: 200px;
@@ -95,7 +95,15 @@ a#lbl-dashbar-logo.navbar-brand {
 }
 
 //======================================================
-// course
+// Edit Company
+//======================================================
+.company-logo {
+  width: 200px;
+  border-radius: 5px;
+}
+
+//======================================================
+// Edit Course
 //======================================================
 .course-icon {
   height: 100px;
@@ -106,6 +114,7 @@ a#lbl-dashbar-logo.navbar-brand {
 @import "node_modules/bootstrap/scss/bootstrap";
 
 
+//======================================================
 // Global classes
 //======================================================
 

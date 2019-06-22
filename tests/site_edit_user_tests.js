@@ -1,3 +1,17 @@
+//======================================================
+// site_edit_user_tests.js 
+// 
+// Description: Defines functional tests for the site
+//  edit user pages including password and profile changes.
+//
+// Author: Brian Piltin
+// Copyright: (C) 2019 Brian Piltin. All rights reserved.
+//
+// Version 0.0.1
+// History:
+//  - 0.0.1: Initial tests
+//======================================================
+
 const debug = require('../utils/debug').create('site_edit_user_tests.js')
 
 process.env.NODE_ENV = 'test'
@@ -105,6 +119,8 @@ describe('Edit User Profile Test', function() {
     await driver.expectLocationToBe(profilePath)
     await driver.expectPageToContain('test_photo_1.jpg')
     await driver.get(driver.HOST + profilePath)
+    formData.title = 'Vice President'
+    await fillProfileForm(formData)
     await driver.findElement(By.id('btnSubmit')).click()
     await driver.expectLocationToBe(profilePath)
     await driver.expectPageToContain('test_photo_1.jpg')
@@ -127,14 +143,6 @@ describe('Edit User Profile Test', function() {
     await driver.findElement(By.id('btnDeletePhoto')).click()
     await driver.expectLocationToBe(profilePath)
     await driver.expectPageToContain('input id="photo"')
-  })
-
-  it('clicking on live view link should show profile view page', async function() {
-    let viewPath = `${driver.HOST}${getUserPathFromEmail(email)}`;
-    await driver.get(driver.HOST + profilePath)
-    await driver.findElement(By.id('btnView')).click()
-    await driver.expectLocationToBe(viewPath)
-    await driver.expectPageToContain('Test Owner3')
   })
 
 })

@@ -1,0 +1,63 @@
+<form class="needs-validation" novalidate enctype="multipart/form-data" action="{{user.editPath}}/company" method="post">
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="name">Name</label>
+      <input id="name" class="form-control" type="text" name="name" placeholder="Enter the company name" value="{{fields.name}}" required>
+      <div class="invalid-feedback">Please enter the company name.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.line1">Address Line 1</label>
+      <input id="address.line1" class="form-control" type="text" name="address.line1" placeholder="Enter the company address line 1" value="{{fields.address.line1}}" required>
+      <div class="invalid-feedback">Please enter the company address line 1.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.line2">Address Line 2</label>
+      <input id="address.line2" class="form-control" type="text" name="address.line2" placeholder="Enter the company address line 2" value="{{fields.address.line2}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.city">City</label>
+      <input id="address.city" class="form-control" type="text" name="address.city" placeholder="Enter the company city" value="{{fields.address.city}}" required>
+      <div class="invalid-feedback">Please enter the company city.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.state">State or Province</label>
+      <input id="address.state" class="form-control" type="text" name="address.state" placeholder="Enter the company state or province" value="{{fields.address.state}}" required>
+      <div class="invalid-feedback">Please enter the company state or province.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.postalCode">Postal Code</label>
+      <input id="address.postalCode" class="form-control" type="text" name="address.postalCode" placeholder="Enter the company postal or zip code" value="{{fields.address.postalCode}}" required>
+      <div class="invalid-feedback">Please enter the company postal or zip code.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="address.country">Country</label>
+      <input id="address.country" class="form-control" type="text" name="address.country" placeholder="Enter the company country" value="{{fields.address.country}}" required>
+      <div class="invalid-feedback">Please enter the company country.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <div class="col">
+      <label for="logo">Logo</label>
+      <input id="logo" class=" form-control-file btn btn-outline-secondary" type="file" name="logo" pattern="[0-9a-zA-Z\._-]+\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)" accept="image/*">
+      <div class="invalid-feedback">Only image (.bpm, .png, .gif, and .jpg) file types allowed.</div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary" id="btnSubmit">Save</button>
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{back}}'">Cancel</button>
+</form>

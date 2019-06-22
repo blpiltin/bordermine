@@ -52,8 +52,7 @@ const getStaticCompanyDataArray = () => {
         state: 'One State',
         postalCode: '1111',
         country: 'Country One'
-      }),
-      logo: 'test_photo_1.jpg'
+      })
     },
     {
       id: 2, 
@@ -83,8 +82,7 @@ const getStaticCompanyDataArray = () => {
         state: 'Three State',
         postalCode: '33333',
         country: 'Country Three'
-      }),
-      logo: null
+      })
     }
   ]
 }
@@ -93,7 +91,7 @@ const getRandomCompanyDataArray = () => {
   let arr = []
 
   for (var i = 0; i < NUM_RANDOM_COMPANIES; i++) {
-    let data = getRandomCompanyData()
+    let data = getRandomCompanyData(4, 4)
 
     data.address = JSON.stringify(data.address)
 

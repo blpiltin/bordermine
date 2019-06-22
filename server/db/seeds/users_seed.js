@@ -65,7 +65,7 @@ const getStaticUserDataArray = () => {
       email: USER_CREDENTIALS[0].email,
       password: USER_CREDENTIALS[0].hash,
       activationCode: USER_CREDENTIALS[0].activationCode,
-      activated: false,
+      activated: true,
       role: 'owner'
     },
     {
@@ -87,15 +87,15 @@ const getStaticUserDataArray = () => {
       activated: true,
       profile: JSON.stringify({
         firstName: 'Test',
-        lastName: 'Owner3'
+        lastName: 'User3'
       })
     },
     {
       id: 4,
-      companyId: 1, 
+      companyId: 2, 
       email: USER_CREDENTIALS[3].email,
       password: USER_CREDENTIALS[3].hash,
-      role: 'user',
+      role: 'owner',
       activationCode: USER_CREDENTIALS[3].activationCode,
       activated: true,
       profile: JSON.stringify({
@@ -108,7 +108,7 @@ const getStaticUserDataArray = () => {
     },
     {
       id: 5,
-      companyId: 1,
+      companyId: 2,
       email: USER_CREDENTIALS[4].email,
       password: USER_CREDENTIALS[4].hash,
       role: 'user',
