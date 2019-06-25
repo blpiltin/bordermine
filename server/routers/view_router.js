@@ -24,7 +24,7 @@ const {
 //------------------------------------------------------
 // View Dashboard
 //------------------------------------------------------
-router.get('/dashboard', permit('all'), (req, res) => viewDashboard(req, res))
+router.get('/dashboard', permit('owner'), (req, res) => viewDashboard(req, res))
 
 //------------------------------------------------------
 // Use for AJAX course menu. 

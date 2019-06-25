@@ -60,6 +60,7 @@ const permit = (users, roles) => {
   }
 }
 
+//------------------------------------------------------
 // Redirect an authenticated user to the dashboard.
 //------------------------------------------------------
 const redirect = (req, res, next) => {

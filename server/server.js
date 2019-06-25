@@ -193,7 +193,7 @@ app.use((req, res, next) => next(createError(404)))
 //------------------------------------------------------
 app.use((err, req, res, next) => {
   // res.locals.message = err.message
-  res.locals.error = env === 'development' ? err : {}
+  res.locals.error = env === 'development' ? err : null
   res.status(err.status || 500)
   res.render('error')
 })
@@ -203,7 +203,7 @@ app.use((err, req, res, next) => {
 // Start the server
 //======================================================
 app.listen(port, () => {
-	debug.log(`Classmine server is running on port ${port}`)
+	debug.log(`${process.env.SITE_TITLE} server is running on port ${port}`)
 })
 
 

@@ -12,7 +12,7 @@
 //  - 0.0.1: Initial tests
 //======================================================
 
-const debug = require('../utils/debug').create('site_edit_company_tests.js')
+const debug = require('../utils/debug').create('site_edit_client_tests.js')
 
 process.env.NODE_ENV = 'test'
 
@@ -29,8 +29,6 @@ const {
 
 var { Knex } = require('../server/db/db')
 
-var { Company } = require('../server/models/company')
-
 const { USER_CREDENTIALS } = require('../server/db/seeds/users_seed')
 const { getRandomCompanyData } = require('../server/db/seeds/companies_seed')
 
@@ -45,7 +43,7 @@ before(async function() {
   await Knex.seed.run()
 })
 
-describe('Edit Company Page Access', function () {
+describe.only('Edit Client Page Access', function () {
   this.timeout(driver.TIMEOUT)
 
   beforeEach(async function() { 
@@ -56,49 +54,34 @@ describe('Edit Company Page Access', function () {
   // Test with no login
   //------------------------------------------------------
   it('guests should not have access to it', async function () {
-    let companyPath = `${getEditPathFromEmail(USER_CREDENTIALS[0].email)}/company`
+    let clientPath = `${getEditPathFromEmail(USER_CREDENTIALS[0].email)}/client`
 
-    await driver.get(driver.HOST + companyPath)
-    await driver.expectLocationToBe('/login')
-    await driver.expectPageToContain('alert')
+    await driver.get(driver.HOST + clientPath)
+    await driver.expectPageToContain('Error')
   })
 
   //------------------------------------------------------
   // Test with user from company 2 but path from company 1
   //------------------------------------------------------
   it('users from other companys should not have access to it', async function () {
-    let companyPath = `${getEditPathFromEmail(USER_CREDENTIALS[0].email)}/company`
+    let clientPath = `${getEditPathFromEmail(USER_CREDENTIALS[0].email)}/client`
         email = USER_CREDENTIALS[3].email,
         password = USER_CREDENTIALS[3].password
 
     await driver.login(email, password)
-    await driver.get(driver.HOST + companyPath)
-    await driver.expectPageToContain('alert')
-  })
-
-  //------------------------------------------------------
-  // Test with user (not owner) from company 1
-  //------------------------------------------------------
-  it('unauthorized users should not have access to it', async function () {
-    let companyPath = `${getEditPathFromEmail(USER_CREDENTIALS[2].email)}/company`
-        email = USER_CREDENTIALS[2].email,
-        password = USER_CREDENTIALS[2].password
-
-    await driver.login(email, password)
-    await driver.get(driver.HOST + companyPath)
-    await driver.actions().pause(3000).perform()
-    await driver.expectPageToContain('alert')
+    await driver.get(driver.HOST + clientPath)
+    await driver.expectPageToContain('Error')
   })
 
 })
 
-describe('Edit Company Page', function () {
+describe('New Client Page', function () {
 
   this.timeout(driver.TIMEOUT)
 
   let email = USER_CREDENTIALS[0].email,
       password = USER_CREDENTIALS[0].password,
-      companyPath = `${getEditPathFromEmail(email)}/company`,
+      newClientPath = `${getEditPathFromEmail(email)}/client`,
       formData
 
   before(async function() { 

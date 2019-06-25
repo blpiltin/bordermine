@@ -19,8 +19,6 @@ const path = require('path')
 
 const { BaseModel } = require('./base_model')
 
-const { nullifyEmpty } = require('./model_utils')
-
 const { ModelValidator }  = require('../utils/model_validator')
 const forms = require('../utils/forms/company_forms.json')
 

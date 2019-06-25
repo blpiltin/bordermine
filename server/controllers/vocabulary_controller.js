@@ -156,7 +156,7 @@ const editVocabularys = async (req, res) => {
   if (req.query.pageFor) { filter.pageFor = req.query.pageFor }
 
   try {
-    let data = await Vocabulary.filter(req.params.course_id, filter)
+    let data = await Vocabulary.filter({ courseId: req.params.course_id }, filter)
     res.render('edit/edit_course_vocabularys', { 
       records: data.records, sidebar, filter: data.filter, 
       layout: EDIT_LAYOUT, title: 'Edit Course Vocabulary'

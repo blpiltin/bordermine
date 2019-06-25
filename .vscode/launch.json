@@ -8,6 +8,7 @@
 
 
 
+
     {
       "type": "node",
       "request": "launch",
@@ -86,6 +87,21 @@
         "999999",
         "--colors",
         "${workspaceFolder}/server/utils/forms/tests/form_validator_tests.js"
+      ],
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Exporter Tests",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/server/models/tests/exporter_tests.js"
       ],
       "internalConsoleOptions": "openOnSessionStart"
     }

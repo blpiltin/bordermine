@@ -1,0 +1,216 @@
+{
+  "edit_client": {
+    "action": "{{user.editPath}}/client",
+    "method": "post",
+    "submit": "Save",
+    "enctype": "multipart/form-data",
+    "fields": {
+      "type": {
+        "modelOnly": true,
+        "type": "text",
+        "label": "Type",
+        "disabled": true,
+        "pattern": "^(exporter|consignee)$"
+      },
+      "name": {
+        "type": "text",
+        "label": "Name",
+        "placeholder": "Enter the client name",
+        "required": true,
+        "requiredError": "Please enter the client name."
+      },
+      "address.line1": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Address Line 1",
+        "placeholder": "Enter the client address line 1",
+        "required": true,
+        "requiredError": "Please enter the client address line 1."
+      },
+      "address.line2": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Address Line 2",
+        "placeholder": "Enter the client address line 2"
+      },
+      "address.city": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "City",
+        "placeholder": "Enter the client city",
+        "required": true,
+        "requiredError": "Please enter the client city."
+      },
+      "address.state": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "State or Province",
+        "placeholder": "Enter the client state or province",
+        "required": true,
+        "requiredError": "Please enter the client state or province."
+      },
+      "address.postalCode": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Postal Code",
+        "placeholder": "Enter the client postal or zip code",
+        "required": true,
+        "requiredError": "Please enter the client postal or zip code."
+      },
+      "address.country": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Country",
+        "placeholder": "Enter the client country",
+        "required": true,
+        "requiredError": "Please enter the client country."
+      },
+      "contact.firstName": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Contact First Name",
+        "placeholder": "Enter the contact's first name"
+      },
+      "contact.lastName": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Contact Last Name",
+        "placeholder": "Enter the contact's last name"
+      },
+      "contact.email": {
+        "formOnly": "true",
+        "type": "email",
+        "label": "Contact Email Address",
+        "placeholder": "Enter the contact's email address",
+        "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+",
+        "patternError": "Please provide a valid contact email address."
+      },
+      "contact.phone": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Phone",
+        "placeholder": "Enter the contact's phone or extension",
+        "pattern": "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{4})(?:[-.x ]*(\\d+))?)\\s*$",
+        "patternError": "Please enter the contact's phone number beginning with the area code. Use the letter \"x\" for the extension."
+      },
+      "contact.fax": {
+        "formOnly": "true",
+        "type": "text",
+        "label": "Phone",
+        "placeholder": "Enter the contact's fax number",
+        "pattern": "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{4})(?:[-.x ]*(\\d+))?)\\s*$",
+        "patternError": "Please enter the contact's fax number beginning with the area code."
+      },
+      "contact.title": {
+        "type": "text",
+        "label": "Contact Title",
+        "placeholder": "Enter the contact's position or title"
+      },
+      "address": {
+        "type": "json",
+        "modelOnly": "true",
+        "fields": {
+          "line1": {
+            "type": "text",
+            "label": "Address Line 1",
+            "placeholder": "Enter the client address line 1",
+            "required": true,
+            "requiredError": "Please enter the client address line 1."
+          },
+          "line2": {
+            "type": "text",
+            "label": "Address Line 2",
+            "placeholder": "Enter the client address line 2"
+          },
+          "city": {
+            "type": "text",
+            "label": "City",
+            "placeholder": "Enter the client city",
+            "required": true,
+            "requiredError": "Please enter the client city."
+          },
+          "state": {
+            "type": "text",
+            "label": "State or Province",
+            "placeholder": "Enter the client state or province",
+            "required": true,
+            "requiredError": "Please enter the client state or province."
+          },
+          "postalCode": {
+            "type": "text",
+            "label": "Postal Code",
+            "placeholder": "Enter the client postal or zip code",
+            "required": true,
+            "requiredError": "Please enter the client postal or zip code."
+          },
+          "country": {
+            "type": "text",
+            "label": "Country",
+            "placeholder": "Enter the client country",
+            "required": true,
+            "requiredError": "Please enter the client country."
+          }
+        }
+      },
+      "contact": {
+        "type": "json",
+        "modelOnly": "true",
+        "fields": {
+          "firstName": {
+            "type": "text",
+            "label": "Contact First Name",
+            "placeholder": "Enter the contact's first name"
+          },
+          "lastName": {
+            "formOnly": "true",
+            "type": "text",
+            "label": "Contact Last Name",
+            "placeholder": "Enter the contact's last name"
+          },
+          "email": {
+            "formOnly": "true",
+            "type": "email",
+            "label": "Contact Email Address",
+            "placeholder": "Enter the contact's email address",
+            "pattern": "[\\w-]+@([\\w-]+\\.)+[\\w-]+",
+            "patternError": "Please provide a valid contact email address."
+          },
+          "phone": {
+            "formOnly": "true",
+            "type": "text",
+            "label": "Contact Phone",
+            "placeholder": "Enter the contact's phone or extension",
+            "pattern": "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{4})(?:[-.x ]*(\\d+))?)\\s*$",
+            "patternError": "Please enter the contact's phone number beginning with the area code. Use the letter \"x\" for the extension."
+          },
+          "fax": {
+            "formOnly": "true",
+            "type": "text",
+            "label": "Contact Fax",
+            "placeholder": "Enter the contact's fax number",
+            "pattern": "^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{4})(?:[-.x ]*(\\d+))?)\\s*$",
+            "patternError": "Please enter the contact's fax number beginning with the area code."
+          },
+          "title": {
+            "type": "text",
+            "label": "Contact Title",
+            "placeholder": "Enter the contact's position or title"
+          }
+        }
+      },
+      "notes": {
+        "type": "text",
+        "label": "Notes",
+        "placeholder": "Enter notes for this client"
+      },
+      "logo": {
+        "type": "file",
+        "accept": "image/*",
+        "label": "Logo",
+        "placeholder": "Select the client logo",
+        "pattern": "[0-9a-zA-Z\\._-]+\\.(bmp|BMP|png|PNG|gif|GIF|jp[e]?g|JP[E]?G)",
+        "patternError": "Only image (.bpm, .png, .gif, and .jpg) file types allowed."
+      }
+    }
+  }
+}

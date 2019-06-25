@@ -1,20 +1,43 @@
 
+//======================================================
+// 20190613212119_create_clients_table.js
+//
+// Description: Define the knex schema class to create the
+//  clients database table. 
+//
+// NOTE: use 'knex migrate:latest' or 'knex migrate:rollback'
+//  from within db directory.
+//
+// Version: 0.0.1
+//
+// Author: Brian Piltin
+// Copyright: (C) 2019 Brian Piltin. All rights reserved.
+//======================================================
+
+const { Client } = require('../../models/client')
+
+
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('clients', function(table) {
-    table.increments()
+
+    table.increments('id')
     table.integer('companyId').notNullable().references('companies.id')
-    table.integer('ownerId').references('users.id')
-    table.string('name').notNullable().unique()
-    table.string('address1').notNullable()
-    table.string('address2')
-    table.string('city').notNullable()
-    table.string('state').notNullable()
-    table.string('postalCode').notNullable()
-    table.string('country').notNullable()
-    table.json('contact')
+    table.integer('executiveId').notNullable().references('users.id')
+
+    table.enu('type', Client.types).notNullable()
+    table.string('name').notNullable()
+    table.jsonb('address')
+    table.jsonb('contact')
+    table.jsonb('extra')
+    table.string('logo')
     table.text('notes')
-    table.timestamp('created')
-    table.timestamp('modified')
+
+    table.boolean('archive')
+
+    table.timestamp('created').defaultTo(knex.fn.now())
+    table.timestamp('modified').defaultTo(knex.fn.now())
+
+    table.unique(['companyId', 'name'])
   })
 }
 
