@@ -20,6 +20,8 @@ const { Client } = require('./client')
 
 class Exporter extends Client {
 
+  static get pluralName() { return 'exporters' }
+  
   // static get relationMappings() {
   //   const { Manifest } = require('./manifest')
 

@@ -56,37 +56,33 @@ router.post('/company', permit('owner', 'owner'), (req, res) =>
   saveCompany(req, res))
 
 
-//======================================================
-// Client edit routes
-//======================================================
-
 //------------------------------------------------------
-// Create new client, edit, save and list clients
+// Create new exporter, edit, save and list exporters
 //------------------------------------------------------
-router.get('/client', 
-  permit('domain', 'user'), (req, res) => newClient(req, res))
-router.post('/client', 
-  permit('domain', 'user'), (req, res) => createClient(req, res))
-router.get('/client/:client_id', 
-  permit('domain', 'user'), (req, res) => editClient(req, res))
-router.post('/client/:client_id', 
-  permit('domain', 'user'), (req, res) => saveClient(req, res))
-router.get('/client/:client_id/delete', 
-  permit('domain', 'user'), (req, res) => deleteClient(req, res))
-router.get('/clients/', 
-  permit('domain', 'user'), (req, res) => editClients(req, res))
-router.post('/clients/delete', 
-  permit('domain', 'user'), (req, res) => deleteClients(req, res))
+router.get('/exporter', 
+  permit('domain', 'user'), (req, res) => newClient(req, res, 'exporter'))
+router.post('/exporter', 
+  permit('domain', 'user'), (req, res) => createClient(req, res, 'exporter'))
+router.get('/exporter/:exporter_id', 
+  permit('domain', 'user'), (req, res) => editClient(req, res, 'exporter'))
+router.post('/exporter/:exporter_id', 
+  permit('domain', 'user'), (req, res) => saveClient(req, res, 'exporter'))
+router.get('/exporter/:exporter_id/delete', 
+  permit('domain', 'user'), (req, res) => deleteClient(req, res, 'exporter'))
+router.get('/exporters/', 
+  permit('domain', 'user'), (req, res) => editClients(req, res, 'exporter'))
+router.post('/exporters/delete', 
+  permit('domain', 'user'), (req, res) => deleteClients(req, res, 'exporter'))
 
 
 //======================================================
-// Add client_id to res.locals for use in forms and tempaltes
+// Add exporter_id to res.locals for use in forms and tempaltes
 //======================================================
-router.param('client_id', async (req, res, next, client_id) => {
-  res.locals.client = await res.locals.user.clientById(client_id)
+router.param('exporter_id', async (req, res, next, exporter_id) => {
+  res.locals.exporter = await res.locals.user.exporterById(exporter_id)
 
   // TODO: Figure out what the homePath was supposed to be used for. Back button?
-  res.locals.homePath = req.originalUrl.match('(.+' + client_id + ')')[0]
+  res.locals.homePath = req.originalUrl.match('(.+' + exporter_id + ')')[0]
 
   next()
 })

@@ -26,6 +26,8 @@ const forms = require('../utils/forms/client_forms.json')
 class Client extends BaseModel {
 
   static get tableName() { return 'clients' }
+  
+  static getPluralName(type) { return type + 's' }
 
   static get jsonAttributes() { return ['address', 'contact', 'extra'] }
 
@@ -91,6 +93,18 @@ class Client extends BaseModel {
     return new Promise(async (resolve, reject) => {
       try {
         let clients = await Client.query().eager('executive').where({ id })
+        if (clients[0]) { resolve(clients[0]) }
+        else { reject(Error(`Unable to find client with id ${id}`)) }
+      } catch(error) { reject(error) }
+    })
+  }
+
+  static readByCompany(companyId, id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let clients = 
+          await Client
+            .query().eager('executive').where({ companyId, id })
         if (clients[0]) { resolve(clients[0]) }
         else { reject(Error(`Unable to find client with id ${id}`)) }
       } catch(error) { reject(error) }

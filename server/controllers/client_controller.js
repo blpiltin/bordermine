@@ -1,3 +1,16 @@
+//======================================================
+// client_controller.js 
+// 
+// Description: Defines the client controller class.
+// 
+// Author: Brian Piltin
+// Copyright: (C) 2019 Brian Piltin. All rights reserved.
+//
+// Version 0.0.1
+// History:
+//  - 0.0.1: Initial version.
+//======================================================
+
 const debug = require('../../utils/debug').create('client_controller.js')
 
 const { serialize } = require('../utils/server_utils')
@@ -20,46 +33,50 @@ const EDIT_LAYOUT = 'dashboard_layout'
 //------------------------------------------------------
 // Response for GET new client request
 //------------------------------------------------------
-const newClient = async (req, res) => {
-  let sidebar = DASHBOARD_MENU
-  res.render('edit/edit_course_client', { 
-    title: 'New Course client', sidebar, layout: EDIT_LAYOUT 
-  })
+const newClient = async (req, res, type) => {
+  let title = `New ${_.capitalize(type)}`, 
+      layout = EDIT_LAYOUT,
+      sidebar = DASHBOARD_MENU,
+      fields = { type }
+  res.render('edit/edit_client', { title, layout, sidebar, fields })
 }
 
 //------------------------------------------------------
 // Response for POST new client request
 //------------------------------------------------------
-const createClient = async (req, res) => {
-  let title = 'New Client', layout = EDIT_LAYOUT, sidebar = DASHBOARD_MENU
-  let fields = req.fields
-  let errors = new FormValidator(forms['edit_course_client']).validate(fields)
+const createClient = async (req, res, type) => {
+  let title = `New ${_.capitalize(type)}`, 
+      layout = EDIT_LAYOUT, 
+      sidebar = DASHBOARD_MENU,
+      pluralName = Client.getPluralName(type),
+      fields = _.merge(req.fields, type),
+      errors = new FormValidator(forms['edit_client']).validate(fields)
+
   if (errors) {
-    if (req.query.redirect === 'client') {
+    if (req.query.redirect === type) {
       res.flash('errors', errors)
-      res.redirect('client' + '?' + serialize(req.query))
+      res.redirect(type + '?' + serialize(req.query))
     } else {
-      res.status(400).render('edit/edit_course_client', { 
-        title, sidebar, fields, errors, layout 
+      res.status(400).render('edit/edit_client', { 
+        title, layout, sidebar, fields, errors 
       })
     }
   } else {
     try {
-      let course = await res.locals.user.courseById(req.params.course_id)
-      let client = await course.createClient(fields)
+      let client = await res.locals.user.createClient(type, fields)
       req.query.pageFor = client.id
-      res.flash('message', 'The course client was saved succesfully.')
-      res.redirect('clients' + '?' + serialize(req.query))
+      res.flash('message', `The ${type} was saved succesfully.`)
+      res.redirect(pluralName + '?' + serialize(req.query))
     } catch (error) {
       if (error.message.search('UNIQUE constraint failed')) {
-        error = 'Client with that word already exists.'
+        error = `${type === 'exporter' ? 'An exporter' : 'A consignee'} with that name already exists.`
       }
-      if (req.query.redirect === 'client') {
+      if (req.query.redirect === type) {
         res.flash('error', error)
-        res.redirect('clients' + '?' + serialize(req.query))
+        res.redirect(pluralName + '?' + serialize(req.query))
       } else {
-        res.status(400).render('edit/edit_course_client', { 
-          title, sidebar, fields, error, layout 
+        res.status(400).render('edit/edit_client', { 
+          title, layout, sidebar, fields, error 
         })
       }
     }
@@ -69,51 +86,62 @@ const createClient = async (req, res) => {
 //------------------------------------------------------
 // Response for GET existing client request
 //------------------------------------------------------
-const editClient = async (req, res) => {
-  let title = 'Edit Course Client', layout = EDIT_LAYOUT, sidebar = DASHBOARD_MENU
+const editClient = async (req, res, type) => {
+  let title = `Edit ${_.capitalize(type)}`, 
+      layout = EDIT_LAYOUT,
+      sidebar = DASHBOARD_MENU
+
   try {
-    let course = await res.locals.user.courseById(req.params.course_id)
-    let client = await course.clientById(req.params.client_id)
-    res.render('edit/edit_course_client', { title, sidebar, fields: client, layout })
+    let companyId = res.locals.user.companyId,
+        id = req.params.client_id,
+        client = Client.readByCompany(companyId, id),
+        fields = client
+    res.render('edit/edit_client', { title, sidebar, fields, layout })
   } catch (error) {
-    res.flash('error', 'The requested course client was not found.')
-    res.status(404).redirect('../clients')
+    res.flash('error', `The requested ${type} was not found.`)
+    res.status(404).redirect(`../${Client.getPluralName(type)}`)
   }
 }
 
 //------------------------------------------------------
 // Response for POST existing client request
 //------------------------------------------------------
-const saveClient = async (req, res) => {
-  let title = 'Edit Course Client', layout = EDIT_LAYOUT, sidebar = DASHBOARD_MENU
-  let fields = req.fields
-  let errors = new FormValidator(forms['edit_course_client']).validate(fields)
+const saveClient = async (req, res, type) => {
+  let title = `New ${_.capitalize(type)}`, 
+  layout = EDIT_LAYOUT, 
+  sidebar = DASHBOARD_MENU,
+  pluralName = Client.getPluralName(type),
+  fields = _.merge(req.fields, type),
+  errors = new FormValidator(forms['edit_client']).validate(fields)
+
   if (errors) {
-    if (req.query.redirect === 'clients') {
+    if (req.query.redirect === type) {
       res.flash('errors', errors)
-      res.redirect('../clients' + '?' + serialize(req.query))
+      res.redirect(`../${pluralName}` + '?' + serialize(req.query))
     } else {
-      res.status(400).render('edit/edit_course_client', { 
-        title, sidebar, fields, errors, layout
+      res.status(400).render('edit/edit_client', { 
+        title, layout, sidebar, fields, errors
       })
     }
   } else {
     try {
-      let course = await res.locals.user.courseById(req.params.course_id)
-      let client = await course.clientById(req.params.client_id)
+      let companyId = res.locals.user.companyId,
+          id = req.params.client_id,
+          client = Client.readByCompany(companyId, id)
+
       client = await client.update(fields)
-      res.flash('message', 'The course client was saved succesfully.')
-      res.redirect('../clients' + '?' + serialize(req.query))
+      res.flash('message', `The ${type} was saved succesfully.`)
+      res.redirect(`../${pluralName}` + '?' + serialize(req.query))
     } catch (error) {
       if (error.message.search('UNIQUE constraint failed')) {
-        error = 'Client with that word already exists.'
+        error = `${type === 'exporter' ? 'An exporter' : 'A consignee'} with that name already exists.`
       }
-      if (req.query.redirect === 'clients') {
+      if (req.query.redirect === type) {
         res.flash('error', error)
-        res.redirect('../clients' + '?' + serialize(req.query))
+        res.redirect(`../${pluralName}` + '?' + serialize(req.query))
       } else {
-        res.status(400).render('edit/edit_course_client', { 
-          title, sidebar, fields, error, layout 
+        res.status(400).render('edit/edit_client', { 
+          title, layout, sidebar, fields, error 
         })
       }
     }
@@ -123,7 +151,7 @@ const saveClient = async (req, res) => {
 //------------------------------------------------------
 // Response for GET delete existing client request
 //------------------------------------------------------
-const deleteClient = async (req, res) => {
+const deleteClient = async (req, res, type) => {
   try {
     let course = await res.locals.user.courseById(req.params.course_id)
     await course.deleteClient(req.params.client_id)
@@ -138,7 +166,7 @@ const deleteClient = async (req, res) => {
 //------------------------------------------------------
 // Response for GET clients request
 //------------------------------------------------------
-const editClients = async (req, res) => {
+const editClients = async (req, res, type) => {
 
   if (flashParamsRedirect(req, res, 'clients')) return
 

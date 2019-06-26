@@ -111,7 +111,7 @@ class User extends BaseModel {
   static findByCredentials(email, password) {
     return new Promise(async (resolve, reject) => {
       try {
-        let users = await User.query().where({ email })
+        let users = await User.query().eager('company').where({ email })
         if (users[0]) {
           let user = users[0]
           bcrypt.compare(password, user.password, (err, result) => {
@@ -131,7 +131,7 @@ class User extends BaseModel {
   static findByEmail(email) {
     return new Promise(async (resolve, reject) => {
       try {
-        let users = await User.query().where({ email })
+        let users = await User.query().eager('company').where({ email })
         if (users[0]) { resolve(users[0]) }
         else { 
           reject(error.gen(
@@ -227,6 +227,17 @@ class User extends BaseModel {
       }
       resolve(this)
     })
+  }
+
+  //------------------------------------------------------
+  // Convenience function for creating a new client with
+  //  current user and company attributes.
+  //------------------------------------------------------
+  createClient(type, json) {
+    if (type === 'exporter') {
+      return Exporter.create(this.companyId, this.id, json)
+    } 
+    return Consignee.create(this.companyId, this.id, json)
   }
 
 }

@@ -11,6 +11,7 @@ class BaseModel extends Model {
 
   static get DEFAULT_PAGE_LIMIT() { return 10 }
   
+  static get pluralName() { throw new Error('pluralName must be implemented!') }
   static get sortCols() { throw new Error('sortCols must be implemented!') }
   static get searchCols() { throw new Error('searchCols must be implemented!') }
   
