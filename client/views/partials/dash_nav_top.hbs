@@ -6,40 +6,17 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
-          Clients
-        </a>
-        <div id="clientMenu" class="dropdown-menu">
-          {{#each clients}}
-            <a class="dropdown-item" id="lnkEditClient{{id}}" href="{{../user.editPath}}/client/{{id}}">{{name}}</a>
-          {{/each}}
-          {{#if clients}}
-            <div class="dropdown-divider"></div>
-          {{/if}}
-          <a class="dropdown-item" id="lnkNewClient" href="{{user.editPath}}/client">New Client</a>
-        </div>
-      </li>
-      {{#if client}}
-        <li class="nav-item">
-          <a class="nav-link" href="{{user.editPath}}/client/{{client.id}}">{{client.name}}</a>
-        </li>
-      {{/if}}
-    </ul>
-  </div>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
           Welcome {{#if user.profile.firstName}}{{user.profile.firstName}}{{else}}{{user.email}}{{/if}}
         </a>
         <div class="dropdown-menu">
-          <a class="dropdown-item" id="lnkProfile" href="{{user.editPath}}/profile">Profile</a>
-          <a class="dropdown-item" id="lnkAccount" href="{{user.editPath}}">Account</a>
+          <a class="dropdown-item" id="lnkProfile" href="/{{user.editPath}}/profile">Profile</a>
+          <a class="dropdown-item" id="lnkAccount" href="/{{user.editPath}}/account">Account</a>
           {{#is user.role "owner"}}
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" id="lnkCompany" href="{{user.editPath}}/company">Company</a>
+            <a class="dropdown-item" id="lnkCompany" href="/{{user.editPath}}/company">Company</a>
           {{/is}}
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="lnkLogout" href="/logout">Logout</a>

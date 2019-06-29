@@ -18,13 +18,6 @@ const createError = require('http-errors')
 
 const { User } = require('../models/user')
 
-const { 
-	getDomainFromEmail,
-	getEditPathFromEmail, 
-	getUserPathFromEmail, 
-	getDashboardPathFromEmail
-} = require('../utils/server_utils')
-
 
 //------------------------------------------------------
 // Middleware to aid in setting up res.locals.user
@@ -36,7 +29,7 @@ const populate = async (req, res, next) => {
 
 	res.locals.path = req.path
 	res.locals.back = req.headers.referrer || req.headers.referer
-	
+
 	// Set user info based on session
 	if (req.session && req.session.userId) {
 		
@@ -48,20 +41,20 @@ const populate = async (req, res, next) => {
 		}
 		
 		res.locals.user = user
-		res.locals.user.domain = getDomainFromEmail(user.email)
-		res.locals.user.userPath = getUserPathFromEmail(user.email)
-		res.locals.user.dashboardPath = getDashboardPathFromEmail(user.email)
-		res.locals.user.editPath = getEditPathFromEmail(user.email)
+		res.locals.user.domain = user.companyId
+		res.locals.user.userPath = 
+			`company/${user.companyId}/user/${user.id}`
+		res.locals.user.dashboardPath = 
+			`company/${user.companyId}/user/${user.id}/dashboard`
+		res.locals.user.editPath = 
+			`company/${user.companyId}/user/${user.id}/edit`
 		res.locals.user.uploadsPath = '/uploads/' + user.id
 		res.locals.user.uploadsDir = User.uploadsDir + '/' + user.id + '/'
-
-		// Make additional nav data available in templates
-		if (user.role === 'teacher') {
-			res.locals.courses = await user.courses
-		}
 	}
+
 	res.locals.message = res.locals.flash.message
 	res.locals.error = res.locals.flash.error
+
 	next()
 }
 

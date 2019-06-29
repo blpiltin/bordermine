@@ -38,7 +38,7 @@ class Exporter extends Client {
   // }
 
   static createValidator() { 
-    return new ModelValidator(super.forms['edit_client'].replace(' client', ' exporter')) 
+    return new ModelValidator(super.forms['edit_client'].replace('{{fields.type}}', 'exporter')) 
   }
 
   static create(companyId, executiveId, json) {

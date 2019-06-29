@@ -26,6 +26,7 @@ const fs = require('fs-extra')
 const path = require('path')
 
 const { BaseModel } = require('./base_model')
+const { Client } = require('./client')
 
 const { ModelValidator }  = require('../utils/model_validator')
 const forms = require('../utils/forms/user_forms.json')
@@ -72,7 +73,7 @@ class User extends BaseModel {
             _.pick(json.profile, ['firstName', 'lastName', 'phone', 'title', 'photo']),
           data = _.pick(json, ['email', 'password', 'role'])
 
-      data.profile = profile
+      if (!_.isEmpty(profile)) { data.profile = profile }
       data.activationCode = uuid()
       data.activated = false
       data.created = Date.now()
@@ -154,7 +155,7 @@ class User extends BaseModel {
 
       if (!data.passwordResetCode) { data.passwordResetCode = null }
 
-      data.profile = profile
+      if (!_.isEmpty(profile)) { data.profile = profile }
       data.modified = Date.now()
 
       if (data.password) {
@@ -234,10 +235,7 @@ class User extends BaseModel {
   //  current user and company attributes.
   //------------------------------------------------------
   createClient(type, json) {
-    if (type === 'exporter') {
-      return Exporter.create(this.companyId, this.id, json)
-    } 
-    return Consignee.create(this.companyId, this.id, json)
+    return Client.create(this.companyId, this.id, type, json)
   }
 
 }

@@ -36,7 +36,7 @@ class Consignee extends Client {
   }
 
   static createValidator() { 
-    return new ModelValidator(super.forms['edit_client'].replace(' client', ' consignee')) 
+    return new ModelValidator(super.forms['edit_client'].replace('{{fields.type}}', 'consignee')) 
   }
 
   static create(companyId, executiveId, json) {

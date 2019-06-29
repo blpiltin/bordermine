@@ -51,10 +51,13 @@ const question = (field) => field ? field : '?'
 const hostName = (host) => host ? host : siteTitle()
 
 //------------------------------------------------------
-// For using svg sprites as icons
+// For using font awesome icons or svg sprites as icons
 // #Note: Run gulp sprites to generate sprites from svg
 //------------------------------------------------------
 const icon = (name) => {
+  if (name.startsWith('fa-')) {
+    return new handlebars.SafeString(`<span class="fa-icon fas ${name}"></span>`)
+  }
 	let html = `<svg viewBox="0 0 1 1" class="icon ${name}">` +
 		`<use xlink:href="/assets/svg/symbols.svg#${name}"></use></svg>`
 	return new handlebars.SafeString(html)
@@ -70,7 +73,7 @@ const isView = (name) => name === obj.data.exphbs.view
 // Determine which sidebar submenu is shown based on path
 //------------------------------------------------------
 const getMenuShow = (menu, path) => {
-	return path.match(menu) ? 'show' : ''
+	return typeof path === 'string' && path.split('/')[6].match(menu) ? 'show' : ''
 }
 
 //------------------------------------------------------

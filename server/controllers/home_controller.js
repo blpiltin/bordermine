@@ -15,7 +15,6 @@ const debug = require('../../utils/debug').create('home_controller.js')
 
 const { 
 	getHost, 
-	getDashboardPathFromEmail, 
 	encodeURL,
 	coalesce
 } = require('../utils/server_utils')
@@ -136,7 +135,7 @@ const userLogin = async (req, res) => {
 			res.redirect('/')
 		} else {
 			req.session.userId = user.id
-			res.redirect(getDashboardPathFromEmail(user.email))
+			res.redirect(`/company/${user.companyId}/user/${user.id}/dashboard`)
 		}
 	} catch (err) {
 		if (!user) err = 'Invalid username or password. Please try again or join.'

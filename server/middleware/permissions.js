@@ -30,20 +30,21 @@ const permit = (users, roles) => {
     if (req.session && req.session.userId) {
       // So far we have authentication, 'owner' permission only
 
-      if (users === 'owner' && res.locals.user.id === res.locals.view.ownerId
-        || users === 'all') {
-        // Use for authentication purposes only. User should be logged in.
+      if (users === 'all') {
+        // Any authenticated user permissions
         reject = false
-      } else if (users) {
-        // Check for user's domain matching view domain
-        if (users.domain === 'user' && res.locals.user.domain === res.locals.view.domain) {
-          reject = false
-        }
+      } else if (users === 'company' && 
+        res.locals.user.companyId == res.locals.route.companyId) {
+        // User who is also part of the company permissions
+        reject = false
+      } else if (users === 'owner' &&
+        res.locals.user.companyId == res.locals.route.companyId &&
+        res.locals.user.id == res.locals.route.userId) {
+        // Exact match of logged in user and path permissions (most stringent)
+        reject = false
       }
 
-      if (typeof roles === 'string' && roles !== res.locals.user.role) {
-        reject = true
-      }
+      if (roles) { reject = !canRole(res.locals.user.role, roles) }
 
       if (reject) {
         return next(createError(404))
@@ -72,6 +73,20 @@ const redirect = (req, res, next) => {
   } else {
     next()
   }
+}
+
+//======================================================
+// Utils
+//======================================================
+
+//------------------------------------------------------
+// Check to see if userRole has >= permissions of permittedRole
+//------------------------------------------------------
+const canRole = (userRole, permittedRole) => {
+  let { User } = require('../models/user'),
+      userLevel = User.roles.indexOf(userRole),
+      permittedLevel = User.roles.indexOf(permittedRole)
+  return userLevel <= permittedLevel
 }
 
 

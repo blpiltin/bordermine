@@ -1,6 +1,6 @@
 {
   "edit_user": {
-    "action": "{{user.editPath}}",
+    "action": "account",
     "method": "post",
     "submit": "Save",
     "fields": {
@@ -67,7 +67,7 @@
     }
   },
   "edit_user_profile": {
-    "action": "{{user.editPath}}/profile",
+    "action": "profile",
     "method": "post",
     "submit": "Save",
     "enctype": "multipart/form-data",

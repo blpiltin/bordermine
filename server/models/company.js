@@ -76,7 +76,7 @@ class Company extends BaseModel {
             ]),
           data = _.pick(json, ['type', 'name', 'logo'])
 
-      data.address = address
+      if (!_.isEmpty(address)) { data.address = address }
       data.created = Date.now()
       data.modified = Date.now()
       
@@ -106,7 +106,7 @@ class Company extends BaseModel {
               ]),
           data = _.pick(json, ['name', 'logo'])
       
-      data.address = address
+      if (!_.isEmpty(address)) { data.address = address }
       data.modified = Date.now()
 
       try {

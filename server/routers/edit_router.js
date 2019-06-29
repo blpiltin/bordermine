@@ -2,6 +2,7 @@ const debug = require('../../utils/debug').create('edit_router.js')
 
 const express = require('express')
 const router = express.Router()
+
 const { permit } = require('../middleware/permissions')
 
 const { 
@@ -11,7 +12,7 @@ const {
   saveUserProfile
 } = require('../controllers/user_controller')
 
-const { 
+const {
   editCompany,
   saveCompany
 } = require('../controllers/company_controller')
@@ -27,27 +28,22 @@ const {
 } = require('../controllers/client_controller')
 
 
-//======================================================
-// Handle the user account and profile routes here
-//======================================================
-
 //------------------------------------------------------
+// Path: /company/companyId/user/userId/edit/
 // #Todo: Technically this should edit the user's account info
 //------------------------------------------------------
-router.get('/', permit('owner'), (req, res) => 
-  editUser(req, res))
-router.post('/', permit('owner'), (req, res) => 
-  saveUser(req, res))
+router.get('/account', permit('owner'), (req, res) => editUser(req, res))
+router.post('/account', permit('owner'), (req, res) => saveUser(req, res))
 
 //------------------------------------------------------
+// Path: /company/companyId/user/userId/edit/profile
 // Edit the user's profile
 //------------------------------------------------------
-router.get('/profile', permit('owner'), (req, res) => 
-  editUserProfile(req, res))
-router.post('/profile', permit('owner'), (req, res) => 
-  saveUserProfile(req, res))
+router.get('/profile', permit('owner'), (req, res) => editUserProfile(req, res))
+router.post('/profile', permit('owner'), (req, res) => saveUserProfile(req, res))
 
 //------------------------------------------------------
+// Path: /company/companyId/user/userId/edit/company
 // Edit the user's company (if owner)
 //------------------------------------------------------
 router.get('/company', permit('owner', 'owner'), (req, res) => 
@@ -57,32 +53,33 @@ router.post('/company', permit('owner', 'owner'), (req, res) =>
 
 
 //------------------------------------------------------
+// Path: /companyId/edit/exporter
 // Create new exporter, edit, save and list exporters
 //------------------------------------------------------
 router.get('/exporter', 
-  permit('domain', 'user'), (req, res) => newClient(req, res, 'exporter'))
+  permit('company', 'user'), (req, res) => newClient(req, res, 'exporter'))
 router.post('/exporter', 
-  permit('domain', 'user'), (req, res) => createClient(req, res, 'exporter'))
-router.get('/exporter/:exporter_id', 
-  permit('domain', 'user'), (req, res) => editClient(req, res, 'exporter'))
-router.post('/exporter/:exporter_id', 
-  permit('domain', 'user'), (req, res) => saveClient(req, res, 'exporter'))
-router.get('/exporter/:exporter_id/delete', 
-  permit('domain', 'user'), (req, res) => deleteClient(req, res, 'exporter'))
+  permit('company', 'user'), (req, res) => createClient(req, res, 'exporter'))
+router.get('/exporter/:clientId', 
+  permit('company', 'user'), (req, res) => editClient(req, res, 'exporter'))
+router.post('/exporter/:clientId', 
+  permit('company', 'user'), (req, res) => saveClient(req, res, 'exporter'))
+router.get('/exporter/:clientId/delete', 
+  permit('company', 'user'), (req, res) => deleteClient(req, res, 'exporter'))
 router.get('/exporters/', 
-  permit('domain', 'user'), (req, res) => editClients(req, res, 'exporter'))
+  permit('company', 'user'), (req, res) => editClients(req, res, 'exporter'))
 router.post('/exporters/delete', 
-  permit('domain', 'user'), (req, res) => deleteClients(req, res, 'exporter'))
+  permit('company', 'user'), (req, res) => deleteClients(req, res, 'exporter'))
 
 
-//======================================================
-// Add exporter_id to res.locals for use in forms and tempaltes
-//======================================================
-router.param('exporter_id', async (req, res, next, exporter_id) => {
-  res.locals.exporter = await res.locals.user.exporterById(exporter_id)
+//------------------------------------------------------
+// Add client to res.locals for use in forms and tempaltes
+//------------------------------------------------------
+router.param('clientId', async (req, res, next, clientId) => {
+  res.locals.client = await res.locals.user.clientById(clientId)
 
   // TODO: Figure out what the homePath was supposed to be used for. Back button?
-  res.locals.homePath = req.originalUrl.match('(.+' + exporter_id + ')')[0]
+  res.locals.homePath = req.originalUrl.match('(.+' + clientId + ')')[0]
 
   next()
 })

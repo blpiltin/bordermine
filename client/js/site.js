@@ -54,3 +54,13 @@ $(document).ready(() => {
     });
   }
 });
+
+//------------------------------------------------------
+// HACK to prevent enter key from submitting delete photo form
+//------------------------------------------------------
+function submitHidden(field) {
+  $("form").append(
+    '<input type="hidden" name="'+ field + '" value="' + field + '"/>'
+  )
+  $("form").submit() 
+}

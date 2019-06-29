@@ -70,7 +70,7 @@ class Client extends BaseModel {
             _.pick(json.contact, [
               'firstName', 'lastName', 'email', 'phone', 'fax', 'title'
             ]),
-          data = _.pick(json, ['name', 'logo'])
+          data = _.pick(json, ['name', 'logo', 'notes'])
 
       data.address = address
       data.contact = contact
@@ -121,7 +121,7 @@ class Client extends BaseModel {
             _.pick(json.contact, [
               'firstName', 'lastName', 'email', 'phone', 'fax', 'title'
             ]),
-          data = _.pick(json, ['name', 'logo'])
+          data = _.pick(json, ['name', 'logo', 'notes'])
       
       data.address = address
       data.contact = contact

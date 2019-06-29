@@ -152,16 +152,25 @@ mailer.test()
 app.use('/', require('./routers/home_router'))
 
 //------------------------------------------------------
-// Domain (view and edit) routes
+// User edit routess
 //------------------------------------------------------
-app.use('/:domain', require('./routers/domain_router'))
+app.use('/company/:companyId/user/:userId', require('./routers/user_router'))
 
 //------------------------------------------------------
-// Setup up domain res.locals.view properties
+// Setup up company res.locals.route properties
 //------------------------------------------------------
-app.param('domain', (req, res, next, domain) => {
-	res.locals.view = {}
-	res.locals.view.domain = domain
+app.param('companyId', (req, res, next, companyId) => {
+	if (!res.locals.route) { res.locals.route = {} }
+	res.locals.route.companyId = companyId
+	next()
+})
+
+//------------------------------------------------------
+// Setup up user res.locals.route properties
+//------------------------------------------------------
+app.param('userId', (req, res, next, userId) => {
+	if (!res.locals.route) { res.locals.route = {} }
+	res.locals.route.userId = userId
 	next()
 })
 

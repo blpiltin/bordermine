@@ -13,7 +13,9 @@
 
 const debug = require('../../utils/debug').create('client_controller.js')
 
-const { serialize } = require('../utils/server_utils')
+const _ = require('lodash')
+
+const { serialize, coalesce } = require('../utils/server_utils')
 const { flashParamsRedirect } = require('./controller_utils')
 
 const { FormValidator }  = require('../utils/forms/form_validator')
@@ -50,7 +52,10 @@ const createClient = async (req, res, type) => {
       sidebar = DASHBOARD_MENU,
       pluralName = Client.getPluralName(type),
       fields = _.merge(req.fields, type),
-      errors = new FormValidator(forms['edit_client']).validate(fields)
+      formStr = JSON.stringify(forms['edit_client']).replace('{{fields.type}}', type),
+      errors = new FormValidator(JSON.parse(formStr)).validate(fields, req.files)
+
+  fields = coalesce(fields)
 
   if (errors) {
     if (req.query.redirect === type) {
@@ -68,6 +73,7 @@ const createClient = async (req, res, type) => {
       res.flash('message', `The ${type} was saved succesfully.`)
       res.redirect(pluralName + '?' + serialize(req.query))
     } catch (error) {
+      debug.log(error.code, error.message)
       if (error.message.search('UNIQUE constraint failed')) {
         error = `${type === 'exporter' ? 'An exporter' : 'A consignee'} with that name already exists.`
       }
@@ -112,7 +118,9 @@ const saveClient = async (req, res, type) => {
   sidebar = DASHBOARD_MENU,
   pluralName = Client.getPluralName(type),
   fields = _.merge(req.fields, type),
-  errors = new FormValidator(forms['edit_client']).validate(fields)
+  errors = 
+    new FormValidator(forms['edit_client'].replace('{{fields.type}}', type))
+      .validate(fields)
 
   if (errors) {
     if (req.query.redirect === type) {

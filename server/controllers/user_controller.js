@@ -14,14 +14,14 @@ const edit_layout = 'dashboard_layout'
 
 const editUser = async (req, res) => {
   let fields = { role: res.locals.user.role }
-  res.render('edit/edit_user', { title: 'Edit Account Info', fields, layout: edit_layout })
+  res.render('edit/edit_user_account', { title: 'Edit Account Info', fields, layout: edit_layout })
 }
 
 const saveUser = async (req, res) => {
   let fields = _.merge(req.fields, { role: res.locals.user.role })
   let errors = new FormValidator(forms['edit_user']).validate(fields)
 	if (errors) {
-    res.status(400).render('edit/edit_user', { 
+    res.status(400).render('edit/edit_user_account', { 
       title: 'Edit Account Info', fields, errors, layout: edit_layout 
     })
 	} else {
@@ -30,9 +30,9 @@ const saveUser = async (req, res) => {
       await user.matchPassword(req.fields.currentPassword)
 			await user.update({ password: req.fields.password })
 			res.flash('message', 'Your account was succesfully updated.')
-			res.redirect(res.locals.user.dashboardPath)
+			res.redirect('/' + res.locals.user.dashboardPath)
 		} catch(error) {
-      res.status(400).render('edit/edit_user', { 
+      res.status(400).render('edit/edit_user_account', { 
         title: 'Edit Account Info', fields, error, layout: edit_layout 
       }); 
 		}
@@ -43,17 +43,9 @@ const saveUser = async (req, res) => {
 // User Profile
 //======================================================
 
-// #Todo: start here with developing permit({ domain: user })
-const viewUserProfile = (req, res) => {
-  let title = `About | ${res.locals.view.owner.fullName}`
-  let viewerIsOwner = res.locals.user && (res.locals.user.email === res.locals.view.owner.email)
-  res.render('view/view_user_profile', { title, viewerIsOwner, layout: view_layout })
-}
-
 const editUserProfile = async (req, res) => {
-  let user
   try {
-    user = await User.read(req.session.userId)
+    let user = await User.read(req.session.userId)
     res.render('edit/edit_user_profile', { 
       fields: user.profile, layout: edit_layout 
     })
@@ -95,7 +87,6 @@ const saveUserProfile = async (req, res) => {
 module.exports = {
   editUser,
   saveUser,
-  viewUserProfile,
   editUserProfile,
   saveUserProfile
 }
