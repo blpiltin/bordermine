@@ -25,7 +25,8 @@ const { Client } = require('../models/client')
 
 const { DASHBOARD_MENU } = require('./dashboard_controller')
 
-const EDIT_LAYOUT = 'dashboard_layout'
+const layout = 'dashboard_layout'
+const sidebar = DASHBOARD_MENU
 
 
 //======================================================
@@ -36,23 +37,21 @@ const EDIT_LAYOUT = 'dashboard_layout'
 // Response for GET new client request
 //------------------------------------------------------
 const newClient = async (req, res, type) => {
-  let title = `New ${_.capitalize(type)}`, 
-      layout = EDIT_LAYOUT,
-      sidebar = DASHBOARD_MENU,
+  let mode = 'new', 
+      title = `${_.capitalize(type)}`, 
       fields = { type }
-  res.render('edit/edit_client', { title, layout, sidebar, fields })
+  res.render('user/client', { mode, title, layout, sidebar, fields })
 }
 
 //------------------------------------------------------
 // Response for POST new client request
 //------------------------------------------------------
 const createClient = async (req, res, type) => {
-  let title = `New ${_.capitalize(type)}`, 
-      layout = EDIT_LAYOUT, 
-      sidebar = DASHBOARD_MENU,
-      pluralName = Client.getPluralName(type),
+  let mode = 'new',
+      title = `${_.capitalize(type)}`,
+      types = Client.getPluralName(type),
       fields = _.merge(req.fields, type),
-      formStr = JSON.stringify(forms['edit_client']).replace('{{fields.type}}', type),
+      formStr = JSON.stringify(forms['edit_client']).replace(/{{fields\.type}}/g, type),
       errors = new FormValidator(JSON.parse(formStr)).validate(fields, req.files)
 
   fields = coalesce(fields)
@@ -62,8 +61,8 @@ const createClient = async (req, res, type) => {
       res.flash('errors', errors)
       res.redirect(type + '?' + serialize(req.query))
     } else {
-      res.status(400).render('edit/edit_client', { 
-        title, layout, sidebar, fields, errors 
+      res.status(400).render('user/client', { 
+        mode, title, layout, sidebar, fields, errors 
       })
     }
   } else {
@@ -71,18 +70,17 @@ const createClient = async (req, res, type) => {
       let client = await res.locals.user.createClient(type, fields)
       req.query.pageFor = client.id
       res.flash('message', `The ${type} was saved succesfully.`)
-      res.redirect(pluralName + '?' + serialize(req.query))
+      res.redirect(types + '?' + serialize(req.query))
     } catch (error) {
-      debug.log(error.code, error.message)
-      if (error.message.search('UNIQUE constraint failed')) {
+      if (error.message.includes('UNIQUE constraint failed')) {
         error = `${type === 'exporter' ? 'An exporter' : 'A consignee'} with that name already exists.`
       }
       if (req.query.redirect === type) {
-        res.flash('error', error)
-        res.redirect(pluralName + '?' + serialize(req.query))
+        res.flash('error', error.message || error)
+        res.redirect(types + '?' + serialize(req.query))
       } else {
-        res.status(400).render('edit/edit_client', { 
-          title, layout, sidebar, fields, error 
+        res.status(400).render('user/client', { 
+          mode, title, layout, sidebar, fields, error 
         })
       }
     }
@@ -93,18 +91,14 @@ const createClient = async (req, res, type) => {
 // Response for GET existing client request
 //------------------------------------------------------
 const editClient = async (req, res, type) => {
-  let title = `Edit ${_.capitalize(type)}`, 
-      layout = EDIT_LAYOUT,
-      sidebar = DASHBOARD_MENU
-
+  let title = `${_.capitalize(type)}`
   try {
     let companyId = res.locals.user.companyId,
-        id = req.params.client_id,
-        client = Client.readByCompany(companyId, id),
-        fields = client
-    res.render('edit/edit_client', { title, sidebar, fields, layout })
+        clientId = res.locals.route.clientId,
+        fields = await Client.readByCompany(companyId, clientId)
+    res.render('user/client', { title, layout, sidebar, fields })
   } catch (error) {
-    res.flash('error', `The requested ${type} was not found.`)
+    res.flash('error', error.message || error)
     res.status(404).redirect(`../${Client.getPluralName(type)}`)
   }
 }
@@ -113,43 +107,44 @@ const editClient = async (req, res, type) => {
 // Response for POST existing client request
 //------------------------------------------------------
 const saveClient = async (req, res, type) => {
-  let title = `New ${_.capitalize(type)}`, 
-  layout = EDIT_LAYOUT, 
-  sidebar = DASHBOARD_MENU,
-  pluralName = Client.getPluralName(type),
-  fields = _.merge(req.fields, type),
-  errors = 
-    new FormValidator(forms['edit_client'].replace('{{fields.type}}', type))
-      .validate(fields)
+  let title = `${_.capitalize(type)}`, 
+      types = Client.getPluralName(type),
+      fields = req.fields,
+      formStr = JSON.stringify(forms['edit_client']).replace(/{{fields\.type}}/g, type),
+      errors = new FormValidator(JSON.parse(formStr)).validate(fields, req.files)
+
+  fields = coalesce(fields)
 
   if (errors) {
     if (req.query.redirect === type) {
       res.flash('errors', errors)
-      res.redirect(`../${pluralName}` + '?' + serialize(req.query))
+      res.redirect(`../${types}` + '?' + serialize(req.query))
     } else {
-      res.status(400).render('edit/edit_client', { 
+      res.status(400).render('user/client', { 
         title, layout, sidebar, fields, errors
       })
     }
   } else {
     try {
       let companyId = res.locals.user.companyId,
-          id = req.params.client_id,
-          client = Client.readByCompany(companyId, id)
+          clientId = res.locals.route.clientId,
+          client = await Client.readByCompany(companyId, clientId)
 
-      client = await client.update(fields)
+      await client.update(fields)
+      req.query.pageFor = clientId
       res.flash('message', `The ${type} was saved succesfully.`)
-      res.redirect(`../${pluralName}` + '?' + serialize(req.query))
+      res.redirect(`../${types}` + '?' + serialize(req.query))
     } catch (error) {
-      if (error.message.search('UNIQUE constraint failed')) {
+      console.log(error)
+      if (error.message.includes('UNIQUE constraint failed')) {
         error = `${type === 'exporter' ? 'An exporter' : 'A consignee'} with that name already exists.`
       }
       if (req.query.redirect === type) {
-        res.flash('error', error)
-        res.redirect(`../${pluralName}` + '?' + serialize(req.query))
+        res.flash('error', error.message || error)
+        res.redirect(`../${types}` + '?' + serialize(req.query))
       } else {
-        res.status(400).render('edit/edit_client', { 
-          title, layout, sidebar, fields, error 
+        res.status(400).render('user/client', { 
+          title, layout, sidebar, fields, error: error.message || error 
         })
       }
     }
@@ -166,7 +161,7 @@ const deleteClient = async (req, res, type) => {
     res.flash('message', 'The client was deleted succesfully.')
     res.redirect('../../clients')
   } catch (error) {
-    res.flash('error', error)
+    res.flash('error', error.message || error)
     res.status(400).redirect('../../clients')
   }
 }
@@ -175,12 +170,11 @@ const deleteClient = async (req, res, type) => {
 // Response for GET clients request
 //------------------------------------------------------
 const editClients = async (req, res, type) => {
+  let types = Client.getPluralName(type),
+      title = _.capitalize(types), 
+      filter = {}
 
-  if (flashParamsRedirect(req, res, 'clients')) return
-
-  let 
-    sidebar = DASHBOARD_MENU, 
-    filter = {}
+  if (flashParamsRedirect(req, res, types)) { return }
 
   if (req.query.page) { filter.page = req.query.page }
   if (req.query.search) { 
@@ -192,14 +186,15 @@ const editClients = async (req, res, type) => {
   if (req.query.pageFor) { filter.pageFor = req.query.pageFor }
 
   try {
-    let data = await Client.filter(req.params.course_id, filter)
-    res.render('edit/edit_course_clients', { 
-      records: data.records, sidebar, filter: data.filter, 
-      layout: EDIT_LAYOUT, title: 'Edit Course Client'
+    let companyId = res.locals.user.companyId,
+        data = await Client.filter({ companyId, type }, filter)
+    res.render('user/clients', { 
+      title, layout, sidebar, 
+      records: data.records, filter: data.filter, type, types
     })
   } catch (error) {
-    res.flash('error', error)
-    res.status(400).redirect('/')
+    res.flash('error', error.message || error)
+    res.status(400).redirect(res.locals.user.dashboardPath)
   }
 }
 
@@ -217,8 +212,8 @@ const deleteClients = async (req, res) => {
     }
     res.send({ 'status': 'ok', 'message': 'The client was deleted succesfully.' })
   } catch (error) {
-    res.flash('error', error)
-    res.send({ 'status': 'error', 'message': error })
+    res.flash('error', error.message || error)
+    res.send({ 'status': 'error', 'message': error.message || error })
   }
 }
 

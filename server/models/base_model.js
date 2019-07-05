@@ -2,7 +2,7 @@ const debug = require('../../utils/debug').create('cm_model.js');
 
 const _ = require('lodash')
 
-const { Model } = require('objection')
+const { Model, ref } = require('objection')
 
 //------------------------------------------------------
 // Class providing utility functions for the Objection model class.
@@ -15,6 +15,7 @@ class BaseModel extends Model {
   static get sortCols() { throw new Error('sortCols must be implemented!') }
   static get searchCols() { throw new Error('searchCols must be implemented!') }
   
+  
   //------------------------------------------------------
   // Filter, sort and paginate vocabulary records based on 
   //  the where object: { colName: colVal } for where clause
@@ -22,59 +23,7 @@ class BaseModel extends Model {
   //
   // Return: object including updated filter and records
   //------------------------------------------------------
-  static filter(where, filter = {}) {
-    return new Promise(async (resolve, reject) => {
-      let 
-        tableName = this.tableName,
-        searchCols = this.searchCols,
-        newFilt = _.cloneDeep(filter),
-        { search, pageFor } = newFilt,
-        limit = newFilt.limit || this.DEFAULT_PAGE_LIMIT,
-        filterStr = getFilterStr(tableName, where, newFilt, searchCols)
-  
-      newFilt.page = newFilt.page || 1
-      
-      try {
-        let records = await this.raw(filterStr),
-            count = records.length
-  
-        if (pageFor) {
-          newFilt.page = 
-              Math.ceil((records.findIndex(rec => rec.id == pageFor) + 1) / limit)
-        } else if (search) {
-          records = searchRecords(records, search, searchCols)
-          count = records.length
-        } else {
-          // Get page count using seperate query
-          let countStr = getCountStr(tableName, where),
-              data = await this.raw(countStr)
-          count = data[0] && data[0]['count(`id`)']
-        }
-        
-        newFilt.pages = getPagesArr(count, limit)
-        if (pageFor || search) {
-          if (newFilt.pages.length > 1) { 
-            records = getPageRecords(records, newFilt) 
-          } else { newFilt.pages = null }
-          if (newFilt.pages && newFilt.page > newFilt.pages.length) { 
-            newFilt.page = newFilt.pages.length 
-          }
-        }
-  
-        resolve({ filter: newFilt, records })
-  
-      } catch (err) { reject(err) }
-    })
-  }
-
-  //------------------------------------------------------
-  // Filter, sort and paginate vocabulary records based on 
-  //  the where object: { colName: colVal } for where clause
-  //  the filter object: { search, sort, dir, page, limit, for }
-  //
-  // Return: object including updated filter and records
-  //------------------------------------------------------
-  static filterNew(where, filter = {}, eager) {
+  static filter(where, filter = {}, eager) {
     return new Promise(async (resolve, reject) => {
       try {
         let searchCols = this.searchCols,
@@ -87,13 +36,17 @@ class BaseModel extends Model {
 
         newFilt.page = newFilt.page || 1
 
+        // NOTE: Where must be set for security reasons
+        query = query.where(where)    
+
         if (eager) { query = query.eager(eager) }
-        if (where) { query = query.where(where) }
         if (newFilt.sort) { 
+          // TODO: Allow for JSON field sorting
           if (newFilt.dir === 'desc') { 
             query = query.orderByRaw(newFilt.sort + ' desc')
-          } else 
+          } else {
             query = query.orderByRaw(newFilt.sort + ' asc')
+          }
         }
         if (!(search || pageFor)) { query = query.limit(limit).offset(offset) }
 
@@ -109,8 +62,7 @@ class BaseModel extends Model {
         } else {
           // Get page count using seperate query
           let query = this.query()
-          if (where) { query = query.where(where).count() }
-          else { query = query.count() }
+          query = query.where(where).count()
           let data = await query
           count = data[0] && data[0]['count(*)']
         }
@@ -136,56 +88,6 @@ class BaseModel extends Model {
 //======================================================
 // Utils
 //======================================================
-
-//------------------------------------------------------
-// Dynamically construct the query string based on filter
-//------------------------------------------------------
-const getFilterStr = (tableName, where, filter, searchCols) => {
-  let 
-    page = filter.page || 1,
-    lower = searchCols.includes(filter.sort) ? `lower(${filter.sort})` : filter.sort,
-    sort = 
-      filter.sort 
-        ? ` order by ${lower} ${filter.dir || 'asc'}` 
-        : '',
-    limit = filter.limit || BaseModel.DEFAULT_PAGE_LIMIT,
-    offset = (page - 1) * limit,
-    str =
-      'select `' + tableName + '`.* from `' + tableName + '`' + 
-      getWhereStr(where) + 
-      sort + 
-      (!(filter.search || filter.pageFor) 
-        ? ' limit ' + limit + ' offset ' + offset 
-        : '')
-    return str
-}
-
-//------------------------------------------------------
-// Dynamically construct the count query string
-//------------------------------------------------------
-const getCountStr = (tableName, where) => {
-  let str = 
-    'select count(`id`) from `' + tableName + '`' + 
-    getWhereStr(where)
-  return str
-}
-
-//------------------------------------------------------
-// Dynamically contruct the SQL where string from 
-//  column names and values
-//------------------------------------------------------
-const getWhereStr = (where) => {
-  let str = where ? ' where' : ''
-  for (key in where) {
-    if (str !== ' where') { str += ' and' }
-    let val = 
-      typeof where[key] === 'string' 
-        ? `'${where[key]}'`
-        : where[key]
-    str += ` \`${key}\` = ${val}`
-  }
-  return str
-}
 
 //------------------------------------------------------
 // Perform a full-text search on all records

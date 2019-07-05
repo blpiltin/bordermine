@@ -224,7 +224,6 @@ const getRandomClientData = (type, companyId = 2, executiveId = 5) => {
       email: faker.internet.email(),
       title: faker.random.words()
     },
-    logo: faker.random.boolean() ? 'test_photo_1.jpg' : null,
     notes: faker.lorem.lines(),
     created: Date.now(),
     modified: Date.now()

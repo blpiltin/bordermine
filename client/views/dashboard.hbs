@@ -2,9 +2,17 @@
   <div class="col">
     <h1>This is your dashboard speaking:</h1>
     <div class="dashboard-instructions">
-    {{#unless clients}} 
-      <p>Before you do anything, you should add or import some <a href="{{user.editPath}}/client">clients.</a></p>
-    {{/unless}}
+      <ul>
+        {{#unless exporters}} 
+          <li>Before you do anything, you should add or import some <a href="{{user.editPath}}/exporter">exporters.</a></li>
+        {{/unless}}
+        {{#unless consignees}} 
+          <li>Before you do anything, you should add or import some <a href="{{user.editPath}}/consignee">consignees.</a></li>
+        {{/unless}}
+        {{#unless shippers}} 
+          <li>Before you do anything, you should add or import some <a href="{{user.editPath}}/shipper">shippers.</a></li>
+        {{/unless}}
+      </ul>
     </div>
   </div>
 </div>

@@ -1,0 +1,149 @@
+<div class="row">
+  <div class="col-auto">
+    <h1 class="title-heading"><span class="cm-pre-title">{{#is mode 'new'}}New {{/is}}</span>{{#if title}}{{title}}{{else}}{{getTitle}}{{/if}}<span class="cm-post-title">{{#isnt mode 'new'}} Details{{/isnt}}</span></h1>
+  </div>
+</div>
+<form class="needs-validation" novalidate enctype="multipart/form-data" action="" method="post">
+  <div class="form-group form-row">
+    <label for="name" class="col-sm-4 col-lg-2 col-form-label">Name</label>
+    <div class="col-sm-8 col-lg-10">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="name" class="form-control" type="text" name="name" placeholder="Enter the {{fields.type}} name" value="{{fields.name}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} name.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="address.line1" class="col-sm-4 col-lg-2 col-form-label">Address Line 1</label>
+    <div class="col-sm-8 col-lg-10">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.line1" class="form-control" type="text" name="address.line1" placeholder="Enter the {{fields.type}} address line 1" value="{{fields.address.line1}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} address line 1.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="address.line2" class="col-sm-4 col-lg-2 col-form-label">Address Line 2</label>
+    <div class="col-sm-8 col-lg-10">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.line2" class="form-control" type="text" name="address.line2" placeholder="Enter the {{fields.type}} address line 2" value="{{fields.address.line2}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="address.city" class="col-sm-4 col-lg-2 col-form-label">City</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.city" class="form-control" type="text" name="address.city" placeholder="Enter the {{fields.type}} city" value="{{fields.address.city}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} city.</div>
+    </div>
+    <label for="address.state" class="col-sm-4 col-lg-2 col-form-label">State or Province</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.state" class="form-control" type="text" name="address.state" placeholder="Enter the {{fields.type}} state or province" value="{{fields.address.state}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} state or province.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="address.postalCode" class="col-sm-4 col-lg-2 col-form-label">Postal Code</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.postalCode" class="form-control" type="text" name="address.postalCode" placeholder="Enter the {{fields.type}} postal or zip code" value="{{fields.address.postalCode}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} postal or zip code.</div>
+    </div>
+    <label for="address.country" class="col-sm-4 col-lg-2 col-form-label">Country</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="address.country" class="form-control" type="text" name="address.country" placeholder="Enter the {{fields.type}} country" value="{{fields.address.country}}" required>
+      <div class="invalid-feedback">Please enter the {{fields.type}} country.</div>
+    </div>
+  </div>
+  <hr/>
+  <div class="form-group form-row">
+    <label for="contact.firstName" class="col-sm-4 col-lg-2 col-form-label">Contact First Name</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.firstName" class="form-control" type="text" name="contact.firstName" placeholder="Enter the contact's first name" value="{{fields.contact.firstName}}">
+    </div>
+    <label for="contact.lastName" class="col-sm-4 col-lg-2 col-form-label">Contact Last Name</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.lastName" class="form-control" type="text" name="contact.lastName" placeholder="Enter the contact's last name" value="{{fields.contact.lastName}}">
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="contact.title" class="col-sm-4 col-lg-2 col-form-label">Contact Title</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.title" class="form-control" type="text" name="contact.title" placeholder="Enter the contact's position or title" value="{{fields.contact.title}}">
+    </div>
+    <label for="contact.email" class="col-sm-4 col-lg-2 col-form-label">Contact Email Address</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.email" class="form-control" type="email" name="contact.email" placeholder="Enter the contact's email address" pattern="[\w-]+@([\w-]+\.)+[\w-]+" value="{{fields.contact.email}}">
+      <div class="invalid-feedback">Please provide a valid contact email address.</div>
+    </div>
+  </div>
+  <div class="form-group form-row">
+    <label for="contact.phone" class="col-sm-4 col-lg-2 col-form-label">Contact Phone</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.phone" class="form-control" type="text" name="contact.phone" placeholder="Enter the contact's phone or extension" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{4})(?:[-.x ]*(\d+))?)\s*$" value="{{fields.contact.phone}}">
+      <div class="invalid-feedback">Please enter the contact's phone number beginning with the area code. Use the letter "x" for the extension.</div>
+    </div>
+    <label for="contact.fax" class="col-sm-4 col-lg-2 col-form-label">Contact Fax</label>
+    <div class="col-sm-2 col-lg-4">
+      <input {{#isnt mode 'new'}}readonly{{/isnt}} id="contact.fax" class="form-control" type="text" name="contact.fax" placeholder="Enter the contact's fax number" pattern="^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{4})(?:[-.x ]*(\d+))?)\s*$" value="{{fields.contact.fax}}">
+      <div class="invalid-feedback">Please enter the contact's fax number beginning with the area code.</div>
+    </div>
+  </div>
+  <hr/>
+  <div class="form-group form-row">
+    <label for="notes" class="col-sm-4 col-lg-2 col-form-label">Notes</label>
+    <div class="col">
+      <textarea {{#isnt mode 'new'}}readonly{{/isnt}} id="notes" class="form-control" name="notes" placeholder="Enter notes for this {{fields.type}}">{{fields.notes}}</textarea>
+    </div>
+  </div>
+  {{#is mode 'new'}}
+    <button type="submit" class="btn btn-primary" id="btnSave">Save</button>
+  {{else}}
+    <button type="button" class="btn btn-primary" id="btnEdit" onclick="setMode('edit')">Edit</button>
+    <button type="submit" class="btn btn-primary cm-hidden" id="btnSave">Save</button>
+  {{/is}}
+  <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Saving...
+  </button>
+  <button type="button" class="btn btn-secondary" id="btnCancel" onclick="location.href='{{user.editPath}}/{{fields.type}}s'">{{#is mode 'new'}}Cancel{{else}}Back{{/is}}</button>
+</form>
+
+<script>
+
+  //------------------------------------------------------
+  // Handle key events
+  //------------------------------------------------------
+  $(document).keydown(function(e) {
+    console.log(e.keyCode)
+    if (e.keyCode === 83 && e.ctrlKey) {    // ctrl S
+      $('#btnSave').click()
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (e.keyCode === 27) $('#btnCancel').click()     // esc
+    if (e.keyCode === 47) $('#btnDelete').click()     // delete
+  })
+
+  if ($('#name').val()) {
+    $('#btnCancel').focus()
+  } else {
+    $('#name').focus()
+  }
+
+  const setMode = function (mode) {
+    if (mode === 'view') {
+      $('.cm-post-title').html(' Details')
+      $('.cm-pre-title').html('')
+      $('.form-control').prop('readonly', true)
+      $('#btnEdit').removeClass('cm-hidden')
+      $('#btnSave').addClass('cm-hidden')
+      $('#btnCancel').html('Back')
+      $('#btnCancel').on('click', function () { location.href='{{user.editPath}}/{{fields.type}}s' })
+    } else {
+      $('.cm-post-title').html('')
+      $('.cm-pre-title').html('Edit ')
+      $('.form-control').prop('readonly', false)
+      $('#btnEdit').addClass('cm-hidden')
+      $('#btnSave').removeClass('cm-hidden')
+      $('#btnCancel').html('Cancel')
+      $('#btnCancel').attr('onclick', false)
+      $('#btnCancel').off('click')
+      $('#btnCancel').on('click', function () { setMode('view') })
+    }
+  }
+
+</script>

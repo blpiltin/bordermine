@@ -44,7 +44,7 @@ const permit = (users, roles) => {
         reject = false
       }
 
-      if (roles) { reject = !canRole(res.locals.user.role, roles) }
+      if (roles && !reject) { reject = !canRole(res.locals.user.role, roles) }
 
       if (reject) {
         return next(createError(404))

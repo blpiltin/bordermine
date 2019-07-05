@@ -73,7 +73,9 @@ const isView = (name) => name === obj.data.exphbs.view
 // Determine which sidebar submenu is shown based on path
 //------------------------------------------------------
 const getMenuShow = (menu, path) => {
-	return typeof path === 'string' && path.split('/')[6].match(menu) ? 'show' : ''
+  let segs = path.split('/')
+  if (segs[5] && segs[5].match(menu)) { return 'show' }
+  return ''
 }
 
 //------------------------------------------------------

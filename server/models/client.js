@@ -1,7 +1,21 @@
 //======================================================
 // company.js 
 // 
-// Description: Defines the company model.
+// Description: Defines the company model. According to
+//  the following schema:
+// table.increments('id')
+// table.integer('companyId').notNullable().references('companies.id')
+// table.integer('executiveId').notNullable().references('users.id')
+// table.enu('type', Client.types).notNullable()
+// table.string('name').notNullable()
+// table.jsonb('address')
+// table.jsonb('contact')
+// table.jsonb('extra')
+// table.text('notes')
+// table.boolean('archive')
+// table.timestamp('created').defaultTo(knex.fn.now())
+// table.timestamp('modified').defaultTo(knex.fn.now())
+// table.unique(['companyId', 'name'])
 // 
 // Author: Brian Piltin
 // Copyright: (C) 2019 Brian Piltin. All rights reserved.
@@ -14,8 +28,6 @@
 const debug = require('../../utils/debug').create('client.js');
 
 const _ = require('lodash')
-
-const { nullifyEmpty } = require('./model_utils')
 
 const { BaseModel } = require('./base_model')
 
@@ -30,6 +42,10 @@ class Client extends BaseModel {
   static getPluralName(type) { return type + 's' }
 
   static get jsonAttributes() { return ['address', 'contact', 'extra'] }
+
+  static get virtualAttributes() { return [
+    'contactName', 'contactPhone', 'contactEmail', 'country'
+  ] }
 
   static get relationMappings() {
     const { User } = require('./user')
@@ -52,12 +68,21 @@ class Client extends BaseModel {
     return new ModelValidator(forms['edit_client']) 
   }
 
-  static get sortCols() { return ['executiveId', 'name'] }
+  static get sortCols() { return ['executiveId', 'name', 'contact.name'] }
 
   static get searchCols() { return ['executive.profile', 'name', 'address', 'contact', 'notes'] }
 
   static get uploadsDir() { return path.join(__dirname, '../../client/uploads') }
 
+  get contactName() { 
+    return this.contact && `${this.contact.firstName} ${this.contact.lastName}`
+  }
+
+  get contactPhone() { return this.contact && `${this.contact.phone}` }
+
+  get contactEmail() { return this.contact && `${this.contact.email}` }
+
+  get country() { return this.address && `${this.address.country}` }
 
   static create(companyId, executiveId, type, json) {
 
@@ -70,10 +95,11 @@ class Client extends BaseModel {
             _.pick(json.contact, [
               'firstName', 'lastName', 'email', 'phone', 'fax', 'title'
             ]),
-          data = _.pick(json, ['name', 'logo', 'notes'])
+          data = _.pick(json, ['name', 'notes'])
 
-      data.address = address
-      data.contact = contact
+      if (!_.isEmpty(address)) { data.address = address }
+      if (!_.isEmpty(contact)) { data.contact = contact }
+
       data.created = Date.now()
       data.modified = Date.now()
       
@@ -121,10 +147,11 @@ class Client extends BaseModel {
             _.pick(json.contact, [
               'firstName', 'lastName', 'email', 'phone', 'fax', 'title'
             ]),
-          data = _.pick(json, ['name', 'logo', 'notes'])
+          data = _.pick(json, ['name', 'notes'])
       
-      data.address = address
-      data.contact = contact
+      if (!_.isEmpty(address)) { data.address = address }
+      if (!_.isEmpty(contact)) { data.contact = contact }
+
       data.modified = Date.now()
 
       try {

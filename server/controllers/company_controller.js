@@ -22,12 +22,14 @@ const { coalesce } = require('../utils/server_utils')
 const { FormValidator }  = require('../utils/forms/form_validator')
 const forms = require('../utils/forms/company_forms.json')
 
-const edit_layout = 'dashboard_layout'
+const { DASHBOARD_MENU } = require('./dashboard_controller')
 
+const layout = 'dashboard_layout'
+const sidebar = DASHBOARD_MENU
 
 const editCompany = (req, res) => {
-  res.render('edit/edit_company', { 
-    fields: res.locals.user.company, layout: edit_layout 
+  res.render('user/company', { 
+    layout, sidebar, fields: res.locals.user.company
   })
 }
 
@@ -37,8 +39,8 @@ const saveCompany = async (req, res) => {
       fields = coalesce(req.fields)
 
 	if (errors) {
-		res.status(400).render('edit/edit_company', { 
-      fields, errors, layout: edit_layout 
+		res.status(400).render('user/company', { 
+      layout, sidebar, fields, errors
     })
 	} else {
 		try {
@@ -56,12 +58,12 @@ const saveCompany = async (req, res) => {
       }
       company = await company.update(fields)
       let message = 'Company was updated succesfully.'
-			res.render('edit/edit_company', { 
-        fields, message, layout: edit_layout 
+			res.render('user/company', { 
+        layout, sidebar, fields, message
       })
 		} catch(error) {
-			res.status(400).render('edit/edit_company', { 
-        fields, error, layout: edit_layout 
+			res.status(400).render('user/company', { 
+        layout, sidebar, fields, error
       })
 		}
 	}

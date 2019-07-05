@@ -42,14 +42,10 @@ const populate = async (req, res, next) => {
 		
 		res.locals.user = user
 		res.locals.user.domain = user.companyId
-		res.locals.user.userPath = 
-			`company/${user.companyId}/user/${user.id}`
-		res.locals.user.dashboardPath = 
-			`company/${user.companyId}/user/${user.id}/dashboard`
-		res.locals.user.editPath = 
-			`company/${user.companyId}/user/${user.id}/edit`
-		res.locals.user.uploadsPath = '/uploads/' + user.id
-		res.locals.user.uploadsDir = User.uploadsDir + '/' + user.id + '/'
+		res.locals.user.editPath = `/company/${user.companyId}/user/${user.id}`
+		res.locals.user.dashboardPath = `${res.locals.user.editPath}/dashboard`
+		res.locals.user.uploadsPath = `/uploads/${user.id}`
+		res.locals.user.uploadsDir = `${User.uploadsDir}/${user.id}/`
 	}
 
 	res.locals.message = res.locals.flash.message

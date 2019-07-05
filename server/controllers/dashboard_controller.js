@@ -11,7 +11,8 @@ const DASHBOARD_MENU = {
   settings: true
 }
 
-const viewDashboard = (req, res) => res.render('dashboard', { layout });
+const viewDashboard = (req, res) => 
+  res.render('dashboard', { layout, sidebar: DASHBOARD_MENU });
 
 
 module.exports = {

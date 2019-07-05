@@ -1,22 +1,22 @@
 <nav class="sidebar bg-dark rounded-right">
   <ul id="sidebar" class="nav nav-pills flex-column">
     <li class="nav-item">
-      <a class="nav-link" href="{{home}}">
+      <a class="nav-link" href="{{user.editPath}}/dashboard">
         {{icon "fa-home"}}<span class="hide ml-2">Home</span>
       </a>
     </li>
     {{#if sidebar.manifests}}
       <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#manifests-menu">
-          {{icon "fa-clipboard-list"}}<span class="hide ml-2">Manifest</span>
+          {{icon "fa-clipboard-list"}}<span class="hide ml-2">Manifests</span>
         </a>
-        <div id="#manifests-menu" class="sub-menu collapse {{getMenuShow "manifest" path}}"  data-parent="#sidebar" aria-expanded="false">
+        <div id="manifests-menu" class="sub-menu collapse {{getMenuShow "manifest" path}}"  data-parent="#sidebar" aria-expanded="false">
           <ul class="nav flex-column ml-3">
             <li class="nav-item">
-              <a class="nav-link" href="manifests"><span class="hide">View All</span>{{icon "fa-list"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/manifests"><span class="hide">View</span>{{icon "fa-list"}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="manifest"><span class="hide">Add New</span>{{icon "fa-plus"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/manifest"><span class="hide">New</span>{{icon "fa-plus"}}</a>
             </li>
           </ul>
         </div>
@@ -27,13 +27,13 @@
         <a class="nav-link" data-toggle="collapse" href="#exporters-menu">
           {{icon "fa-share-square"}}<span class="hide">Exporters</span>
         </a>
-        <div id="#exporters-menu" class="sub-menu collapse {{getMenuShow "exporter" path}}" data-parent="#sidebar" aria-expanded="false">
+        <div id="exporters-menu" class="sub-menu collapse {{getMenuShow "exporter" path}}" data-parent="#sidebar" aria-expanded="false">
           <ul class="nav flex-column ml-3">
             <li class="nav-item">
-              <a class="nav-link" href="exporters"><span class="hide">View All</span>{{icon "fa-list"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/exporters"><span class="hide">View</span>{{icon "fa-list"}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="exporter"><span class="hide">Add New</span>{{icon "fa-plus"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/exporter"><span class="hide">New</span>{{icon "fa-plus"}}</a>
             </li>
           </ul>
         </div>
@@ -47,10 +47,10 @@
         <div id="consignees-menu" class="sub-menu collapse {{getMenuShow "consignee" path}}" data-parent="#sidebar" aria-expanded="false">
           <ul class="nav flex-column ml-3">
             <li class="nav-item">
-              <a class="nav-link" href="consignees"><span class="hide">View All</span>{{icon "fa-list"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/consignees"><span class="hide">View</span>{{icon "fa-list"}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="consignee"><span class="hide">Add New</span>{{icon "fa-plus"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/consignee"><span class="hide">New</span>{{icon "fa-plus"}}</a>
             </li>
           </ul>
         </div>
@@ -64,10 +64,10 @@
         <div id="shippers-menu" class="sub-menu collapse {{getMenuShow "shipper" path}}" data-parent="#sidebar" aria-expanded="false">
           <ul class="nav flex-column ml-3">
             <li class="nav-item">
-              <a class="nav-link" href="shippers"><span class="hide">View All</span>{{icon "fa-list"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/shippers"><span class="hide">View</span>{{icon "fa-list"}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="shipper"><span class="hide">Add New</span>{{icon "fa-plus"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/shipper"><span class="hide">New</span>{{icon "fa-plus"}}</a>
             </li>
           </ul>
         </div>
@@ -81,10 +81,10 @@
         <div id="users-menu" class="sub-menu collapse {{getMenuShow "user" path}}" data-parent="#sidebar" aria-expanded="false">
           <ul class="nav flex-column ml-3">
             <li class="nav-item">
-              <a class="nav-link" href="users"><span class="hide">View All</span>{{icon "fa-list"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/users"><span class="hide">View</span>{{icon "fa-list"}}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="user"><span class="hide">Add New</span>{{icon "fa-plus"}}</a>
+              <a class="nav-link" href="{{user.editPath}}/user"><span class="hide">New</span>{{icon "fa-plus"}}</a>
             </li>
           </ul>
         </div>
@@ -92,7 +92,7 @@
     {{/if}}
     {{#if sidebar.settings}}
       <li class="nav-item">
-        <a class="nav-link" href="settings">
+        <a class="nav-link" href="{{user.editPath}}/settings">
           {{icon "fa-cog"}}<span class="hide">Settings</span>
         </a>
       </li>

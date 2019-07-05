@@ -152,7 +152,7 @@ mailer.test()
 app.use('/', require('./routers/home_router'))
 
 //------------------------------------------------------
-// User edit routess
+// User (authenticated) routess
 //------------------------------------------------------
 app.use('/company/:companyId/user/:userId', require('./routers/user_router'))
 

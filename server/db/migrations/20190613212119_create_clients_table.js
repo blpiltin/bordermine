@@ -29,7 +29,6 @@ exports.up = function(knex, Promise) {
     table.jsonb('address')
     table.jsonb('contact')
     table.jsonb('extra')
-    table.string('logo')
     table.text('notes')
 
     table.boolean('archive')

@@ -17,6 +17,9 @@ const _ = require('lodash')
 
 const { Client } = require('./client')
 
+const { ModelValidator }  = require('../utils/model_validator')
+const forms = require('../utils/forms/client_forms.json')
+
 
 class Exporter extends Client {
 
@@ -38,7 +41,9 @@ class Exporter extends Client {
   // }
 
   static createValidator() { 
-    return new ModelValidator(super.forms['edit_client'].replace('{{fields.type}}', 'exporter')) 
+    let str = JSON.stringify(forms['edit_client']).replace(/{{fields\.type}}/g, 'exporter'),
+        json = JSON.parse(str)
+    return new ModelValidator(json)
   }
 
   static create(companyId, executiveId, json) {
