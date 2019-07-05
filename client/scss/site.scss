@@ -16,6 +16,33 @@
 // @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,900);
 // @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800);
 
+//------------------------------------------------------
+// Text scaling
+//------------------------------------------------------
+html {
+  font-size: 0.80rem;
+}
+
+.mine-scale {
+  font-size: 0.80rem;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 0.80rem;
+  }
+
+  .mine-scale {
+    font-size: 0.80rem;
+  }
+}
+
+//------------------------------------------------------
+// Contain max image size
+//------------------------------------------------------
+img {
+  max-width: 100%;
+}
 
 // Variable overrides
 //======================================================
