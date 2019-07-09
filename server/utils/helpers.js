@@ -70,7 +70,7 @@ const icon = (name) => {
 const isView = (name) => name === obj.data.exphbs.view
 
 //------------------------------------------------------
-// Determine which sidebar submenu is shown based on path
+// Determine which dashbar submenu is shown based on path
 //------------------------------------------------------
 const getMenuShow = (menu, path) => {
   let segs = path.split('/')

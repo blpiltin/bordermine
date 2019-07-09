@@ -12,7 +12,7 @@ const DASHBOARD_MENU = {
 }
 
 const viewDashboard = (req, res) => 
-  res.render('dashboard', { layout, sidebar: DASHBOARD_MENU });
+  res.render('dashboard', { layout, dashbar: DASHBOARD_MENU });
 
 
 module.exports = {

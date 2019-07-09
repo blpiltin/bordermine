@@ -1,17 +1,30 @@
-<nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-dark" id="dashbar-top">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top mine-navbar">
   <a class="navbar-brand" id="lbl-dashbar-logo" href="/">{{#if host}}{{host}}{{else}}Bordermine{{/if}}</a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dashbarContent">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div id="dashbarContent" class="collapse navbar-collapse">
+    <ul class="navbar-nav ml-auto d-block d-sm-none">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="collapse" href="#dashbarTop">
+          Jewels
+        </a>
+        <div id="dashbarTop" class="sub-menu collapse mine-dashbar-top" data-parent="#dashbarContent">
+          {{> dashbar_top this }}
+        </div>
+      </li>
+    </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+        <a class="nav-link dropdown-toggle d-block d-sm-none" href="#userbar" id="navbarDropdown" data-toggle="collapse">
           Welcome {{#if user.profile.firstName}}{{user.profile.firstName}}{{else}}{{user.email}}{{/if}}
         </a>
-        <div class="dropdown-menu">
+        <a class="nav-link dropdown-toggle d-none d-sm-block" href="#" id="navbarDropdown" data-toggle="dropdown">
+          Welcome {{#if user.profile.firstName}}{{user.profile.firstName}}{{else}}{{user.email}}{{/if}}
+        </a>
+        <div id="userbar" class="dropdown-menu sub-menu" data-parent="#dashbarContent">
           <a class="dropdown-item" id="lnkProfile" href="{{user.editPath}}/profile">Profile</a>
           <a class="dropdown-item" id="lnkAccount" href="{{user.editPath}}/account">Account</a>
           {{#is user.role "owner"}}

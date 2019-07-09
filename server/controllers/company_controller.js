@@ -25,11 +25,11 @@ const forms = require('../utils/forms/company_forms.json')
 const { DASHBOARD_MENU } = require('./dashboard_controller')
 
 const layout = 'dashboard_layout'
-const sidebar = DASHBOARD_MENU
+const dashbar = DASHBOARD_MENU
 
 const editCompany = (req, res) => {
   res.render('user/company', { 
-    layout, sidebar, fields: res.locals.user.company
+    layout, dashbar, fields: res.locals.user.company
   })
 }
 
@@ -40,7 +40,7 @@ const saveCompany = async (req, res) => {
 
 	if (errors) {
 		res.status(400).render('user/company', { 
-      layout, sidebar, fields, errors
+      layout, dashbar, fields, errors
     })
 	} else {
 		try {
@@ -59,11 +59,11 @@ const saveCompany = async (req, res) => {
       company = await company.update(fields)
       let message = 'Company was updated succesfully.'
 			res.render('user/company', { 
-        layout, sidebar, fields, message
+        layout, dashbar, fields, message
       })
 		} catch(error) {
 			res.status(400).render('user/company', { 
-        layout, sidebar, fields, error
+        layout, dashbar, fields, error
       })
 		}
 	}

@@ -26,7 +26,7 @@ const { Client } = require('../models/client')
 const { DASHBOARD_MENU } = require('./dashboard_controller')
 
 const layout = 'dashboard_layout'
-const sidebar = DASHBOARD_MENU
+const dashbar = DASHBOARD_MENU
 
 
 //======================================================
@@ -40,7 +40,7 @@ const newClient = async (req, res, type) => {
   let mode = 'new', 
       title = `${_.capitalize(type)}`, 
       fields = { type }
-  res.render('user/client', { mode, title, layout, sidebar, fields })
+  res.render('user/client', { mode, title, layout, dashbar, fields })
 }
 
 //------------------------------------------------------
@@ -62,7 +62,7 @@ const createClient = async (req, res, type) => {
       res.redirect(type + '?' + serialize(req.query))
     } else {
       res.status(400).render('user/client', { 
-        mode, title, layout, sidebar, fields, errors 
+        mode, title, layout, dashbar, fields, errors 
       })
     }
   } else {
@@ -80,7 +80,7 @@ const createClient = async (req, res, type) => {
         res.redirect(types + '?' + serialize(req.query))
       } else {
         res.status(400).render('user/client', { 
-          mode, title, layout, sidebar, fields, error 
+          mode, title, layout, dashbar, fields, error 
         })
       }
     }
@@ -96,7 +96,7 @@ const editClient = async (req, res, type) => {
     let companyId = res.locals.user.companyId,
         clientId = res.locals.route.clientId,
         fields = await Client.readByCompany(companyId, clientId)
-    res.render('user/client', { title, layout, sidebar, fields })
+    res.render('user/client', { title, layout, dashbar, fields })
   } catch (error) {
     res.flash('error', error.message || error)
     res.status(404).redirect(`../${Client.getPluralName(type)}`)
@@ -121,7 +121,7 @@ const saveClient = async (req, res, type) => {
       res.redirect(`../${types}` + '?' + serialize(req.query))
     } else {
       res.status(400).render('user/client', { 
-        title, layout, sidebar, fields, errors
+        title, layout, dashbar, fields, errors
       })
     }
   } else {
@@ -144,7 +144,7 @@ const saveClient = async (req, res, type) => {
         res.redirect(`../${types}` + '?' + serialize(req.query))
       } else {
         res.status(400).render('user/client', { 
-          title, layout, sidebar, fields, error: error.message || error 
+          title, layout, dashbar, fields, error: error.message || error 
         })
       }
     }
@@ -189,7 +189,7 @@ const editClients = async (req, res, type) => {
     let companyId = res.locals.user.companyId,
         data = await Client.filter({ companyId, type }, filter)
     res.render('user/clients', { 
-      title, layout, sidebar, 
+      title, layout, dashbar, 
       records: data.records, filter: data.filter, type, types
     })
   } catch (error) {

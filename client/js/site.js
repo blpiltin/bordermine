@@ -26,9 +26,10 @@
   }, false);
 })();
 
+var scaleDir = 0
 
 $(document).ready(() => {
-  
+
   //------------------------------------------------------
   // Fade alert messages after 4 seconds or hide on click.
   //------------------------------------------------------
@@ -38,14 +39,12 @@ $(document).ready(() => {
     setTimeout(() => $('.alert').hide(500), delay); 
   }
 
-  //======================================================
+  //------------------------------------------------------
   // Setup form specific event handlers.
-  //======================================================
+  //------------------------------------------------------
   if ($('form')) {
 
-    //------------------------------------------------------
     // Add listener to form classes to check if dirty
-    //------------------------------------------------------
     $('form').keypress(() => {
       $('#btnView').hide();
     });
@@ -53,7 +52,19 @@ $(document).ready(() => {
       $('#btnView').hide();
     });
   }
+
+  //------------------------------------------------------
+  // Scale text .mine-scale classes for smaller screens
+  //------------------------------------------------------
+  scaleText();
+
 });
+
+//------------------------------------------------------
+// Scale the text on a window resize as well as document load
+//------------------------------------------------------
+$(window).resize(function () { scaleText() })
+
 
 //------------------------------------------------------
 // HACK to prevent enter key from submitting delete photo form
@@ -64,3 +75,30 @@ function submitHidden(field) {
   )
   $("form").submit() 
 }
+
+//------------------------------------------------------
+// Scale font sizes for .mine-scale classes based on screen width
+//------------------------------------------------------
+const scaleText = function() {
+  let curWidth = $('html').width()
+
+  if (curWidth < 576 && scaleDir >= 0) {
+    // Scale down once
+    $('.mine-scale').map((i, elem) => {
+      let curSize = $(elem).css('font-size').match(/\d+/)[0],
+          newSize = Math.round(parseInt(curSize) * 0.8)
+      $(elem).css('font-size', newSize)
+    })
+    scaleDir = -1
+  } else if (curWidth >= 576 && scaleDir === -1) {
+    // Scale up once
+    $('.mine-scale').map((i, elem) => {
+      let curSize = $(elem).css('font-size').match(/\d+/)[0],
+          newSize = Math.round(parseInt(curSize) * (1.0 / 0.8))
+      $(elem).css('font-size', newSize)
+    })
+    scaleDir = 0
+  }
+}
+
+  

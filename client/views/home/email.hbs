@@ -6,9 +6,9 @@
   {{> errors }}
   
   {{#is for "password"}}
-    <h1 class="pl-4 py-2 title-heading">Reset Password</h1>
+    <h1 class="pl-4 py-2 title-heading mine-scale">Reset Password</h1>
   {{else}}
-    <h1 class="pl-4 py-2 title-heading">Resend Activation Link</h1>
+    <h1 class="pl-4 py-2 title-heading mine-scale">Resend Activation</h1>
   {{/is}}
   
   <div class="px-4">
@@ -23,7 +23,7 @@
           <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button> 
           <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Submitting...
+            Submit
           </button>
         </div>
         <div class="col-auto">

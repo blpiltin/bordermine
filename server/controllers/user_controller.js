@@ -11,11 +11,11 @@ const forms = require('../utils/forms/user_forms.json')
 const { DASHBOARD_MENU } = require('./dashboard_controller')
 
 const layout = 'dashboard_layout'
-const sidebar = DASHBOARD_MENU
+const dashbar = DASHBOARD_MENU
 
 const editUser = async (req, res) => {
   let fields = { role: res.locals.user.role }
-  res.render('user/account', { layout, sidebar, fields })
+  res.render('user/account', { layout, dashbar, fields })
 }
 
 const saveUser = async (req, res) => {
@@ -24,7 +24,7 @@ const saveUser = async (req, res) => {
 
 	if (errors) {
     res.status(400).render('user/account', {
-      layout, sidebar, fields, errors
+      layout, dashbar, fields, errors
     })
 	} else {
 		try {
@@ -35,7 +35,7 @@ const saveUser = async (req, res) => {
 			res.redirect(res.locals.user.dashboardPath)
 		} catch(error) {
       res.status(400).render('user/account', { 
-        layout, sidebar, fields, error
+        layout, dashbar, fields, error
       })
 		}
 	}
@@ -49,11 +49,11 @@ const editUserProfile = async (req, res) => {
   try {
     let user = await User.read(req.session.userId)
     res.render('user/profile', { 
-      layout, sidebar, fields: user.profile
+      layout, dashbar, fields: user.profile
     })
   } catch(error) {
     res.status(400).render('user/profile', { 
-      layout, sidebar, fields: req.fields, error
+      layout, dashbar, fields: req.fields, error
     })
   }
 }
@@ -62,7 +62,7 @@ const saveUserProfile = async (req, res) => {
   let errors = new FormValidator(forms['edit_user_profile']).validate(req.fields, req.files)
 	if (errors) {
 		res.status(400).render('user/profile', { 
-      layout, sidebar, fields: req.fields, errors 
+      layout, dashbar, fields: req.fields, errors 
     })
 	} else {
 		try {
@@ -81,11 +81,11 @@ const saveUserProfile = async (req, res) => {
       user = await user.update({ profile: req.fields })
       let message = 'Your profile was updated succesfully.'
 			res.render('user/profile', { 
-        layout, sidebar, fields: req.fields, message
+        layout, dashbar, fields: req.fields, message
       })
 		} catch(error) {
 			res.status(400).render('user/profile', { 
-        layout, sidebar, fields: req.fields, error
+        layout, dashbar, fields: req.fields, error
       })
 		}
 	}

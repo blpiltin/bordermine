@@ -1,0 +1,103 @@
+<ul id="dashbar" class="nav flex-column mine-dashbar">
+  <li class="nav-item">
+    <a class="nav-link" href="{{user.editPath}}/dashboard">
+      {{icon "fa-home"}}<span class="hide mine-menu-item">Dashboard</span>
+    </a>
+  </li>
+  {{#if dashbar.manifests}}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#manifestsMenu">
+        {{icon "fa-clipboard-list"}}<span class="hide mine-menu-item">Manifests</span>
+      </a>
+      <div id="manifestsMenu" class="sub-menu collapse {{getMenuShow "manifest" path}}" data-parent="#dashbarSide, #dashbar" aria-expanded="false">
+        <ul class="nav flex-column ml-3">
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/manifests">{{icon "fa-list"}}<span class="hide mine-menu-item-text">View</span></a>
+          </li>
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/manifest">{{icon "fa-plus"}}<span class="hide mine-menu-item-text">New</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {{/if}}
+  {{#if dashbar.exporters}}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#exportersMenu">
+        {{icon "fa-share-square"}}<span class="hide mine-menu-item">Exporters</span>
+      </a>
+      <div id="exportersMenu" class="sub-menu collapse {{getMenuShow "exporter" path}}" data-parent="#dashbarSide, #dashbar" aria-expanded="false">
+        <ul class="nav flex-column ml-3">
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/exporters">{{icon "fa-list"}}<span class="hide mine-menu-item-text">View</span></a>
+          </li>
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/exporter">{{icon "fa-plus"}}<span class="hide mine-menu-item-text">New</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {{/if}}
+  {{#if dashbar.consignees}}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#consigneesMenu">
+        {{icon "fa-handshake"}}<span class="hide mine-menu-item">Consignees</span>
+      </a>
+      <div id="consigneesMenu" class="sub-menu collapse {{getMenuShow "consignee" path}}" data-parent="#dashbarSide, #dashbar" aria-expanded="false">
+        <ul class="nav flex-column ml-3">
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/consignees">{{icon "fa-list"}}<span class="hide mine-menu-item-text">View</span></a>
+          </li>
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/consignee">{{icon "fa-plus"}}<span class="hide mine-menu-item-text">New</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {{/if}}
+  {{#if dashbar.shippers}}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#shippersMenu">
+        {{icon "fa-truck-moving"}}<span class="hide mine-menu-item">Shippers</span>
+      </a>
+      <div id="shippersMenu" class="sub-menu collapse {{getMenuShow "shipper" path}}" data-parent="#dashbarSide, #dashbar" aria-expanded="false">
+        <ul class="nav flex-column ml-3">
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/shippers">{{icon "fa-list"}}<span class="hide mine-menu-item-text">View</span></a>
+          </li>
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/shipper">{{icon "fa-plus"}}<span class="hide mine-menu-item-text">New</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {{/if}}
+  {{#if dashbar.users}}
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="collapse" href="#usersMenu">
+        {{icon "fa-users"}}<span class="hide mine-menu-item">Users</span>
+      </a>
+      <div id="usersMenu" class="sub-menu collapse {{getMenuShow "user" path}}" data-parent="#dashbarSide, #dashbar" aria-expanded="false">
+        <ul class="nav flex-column ml-3">
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/users">{{icon "fa-list"}}<span class="hide mine-menu-item-text">View</span></a>
+          </li>
+          <li class="nav-item  mine-sub-menu-item">
+            <a class="nav-link" href="{{user.editPath}}/user">{{icon "fa-plus"}}<span class="hide mine-menu-item-text">New</span></a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  {{/if}}
+  {{#if dashbar.settings}}
+    <li class="nav-item">
+      <a class="nav-link" href="{{user.editPath}}/settings">
+        {{icon "fa-cog"}}<span class="hide mine-menu-item">Settings</span>
+      </a>
+    </li>
+  {{/if}}
+  <li class="nav-item d-none d-sm-block">
+      <a id="btnCollapse" class="nav-link btn-expand-collapse hide">{{icon "arrow-left-alt"}}</a>
+      <a id="btnExpand" class="nav-link btn-expand-collapse hide mine-menu-item cm-hidden">{{icon "arrow-right-alt"}}</a>
+  </li>
+</ul>

@@ -1,17 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Pacifico:400);
 @import url(https://fonts.googleapis.com/css?family=Noto+Sans+KR:500,700);
-html {
-  font-size: 0.80rem; }
-
-.mine-scale {
-  font-size: 0.80rem; }
-
-@media (min-width: 576px) {
-  html {
-    font-size: 0.80rem; }
-  .mine-scale {
-    font-size: 0.80rem; } }
-
 img {
   max-width: 100%; }
 
@@ -44,10 +32,10 @@ li.nav-item {
   padding-top: 10px;
   font-size: 10pt; }
 
-#dashbar-top li {
+.mine-navbar li {
   font-size: 14pt; }
 
-#dashbar-top .dropdown-item {
+.mine-navbar .dropdown-item {
   font-size: 12pt; }
 
 a#lbl-dashbar-logo.navbar-brand {

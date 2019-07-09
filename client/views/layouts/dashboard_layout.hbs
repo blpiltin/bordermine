@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="/js/jquery.min.js"></script>
   <link rel='stylesheet' href="/assets/fontawesome/css/all.css">
-  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/css/sprite.css">
   <link rel="stylesheet" href="/css/site.css">
   <link rel="stylesheet" href="/css/dashboard.css">
@@ -18,36 +18,32 @@
 
 <body>
   {{> dash_nav_top }}
-  
-  <div class="no-gutters">
-    <div class="main row">
-      {{#if sidebar}}{{> dash_nav_side }}{{/if}}
+
+  <div class="main container-fluid no-gutters">
+    <div class="row">
+      <div class="col-auto d-none d-sm-block" style="margin-left:0;padding-left:0;z-index:999">
+        {{#if dashbar}}
+          <div id="dashbarSide" class="bg-dark rounded-right mine-dashbar-side">
+            {{> dashbar_side}}
+          </div>
+        {{/if}}
+      </div>
       <div class="col">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              {{> messages}}
-              {{> errors}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              {{{body}}}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              {{> footer}}
-            </div>
-          </div>
-        </div>
+        {{> messages}}
+        {{> errors}}
+        {{{body}}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        {{> footer}}
       </div>
     </div>
   </div>
 
   <script src="/js/popper.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/sidebar.js"></script>
+  <script src="/js/dashboard.js"></script>
   <script src="/js/site.js"></script>
 </body>
 

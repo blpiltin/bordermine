@@ -4,7 +4,7 @@
 
   {{> messages}}
 
-  <h1 class="pl-4 py-2 title-heading">Join {{hostName host}}</h1>
+  <h1 class="pl-4 py-2 title-heading mine-scale">Join {{hostName host}}</h1>
 
   {{> errors}}
 
@@ -109,12 +109,12 @@
           <button type="submit" class="btn btn-primary" id="btnSubmit">Submit</button>
           <button class="btn btn-primary cm-hidden" id="spinner" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Submitting...
+            Submit
           </button>
         </div>
         <div class="col text-right">
           <button id="btnLogin" type="button" class="btn btn-outline-secondary  mb-sm-0 mb-2" onclick="location.href='/login'">Login</button>
-          <button id="btnSendActivation" type="button" class="btn btn-outline-secondary" onclick="location.href='/email/activation'">Resend Activation Link</button>
+          <button id="btnSendActivation" type="button" class="btn btn-outline-secondary" onclick="location.href='/email/activation'">Resend Activation</button>
         </div>
       </div>
     </form>
