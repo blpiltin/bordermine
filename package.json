@@ -39,7 +39,7 @@
     "handlebars": "^4.1.2",
     "handlebars-helpers": "^0.10.0",
     "http-errors": "^1.7.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "knex": "^0.16.3",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
