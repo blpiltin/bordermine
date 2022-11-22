@@ -14,7 +14,7 @@
   "author": "Brian Piltin",
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.26.7",
+    "browser-sync": "^2.27.10",
     "chai": "^4.2.0",
     "chai-sorted": "^0.2.0",
     "chromedriver": "^2.45.0",
