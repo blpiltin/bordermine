@@ -40,7 +40,7 @@
     "handlebars-helpers": "^0.10.0",
     "http-errors": "^1.7.2",
     "jquery": "^3.4.1",
-    "knex": "^0.16.3",
+    "knex": "^2.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "nodemailer": "^5.1.1",
